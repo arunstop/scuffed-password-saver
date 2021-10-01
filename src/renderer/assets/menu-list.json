@@ -1,0 +1,14 @@
+[
+    {
+        "label":"Home",
+        "icon":"mdi-home-variant-outline"
+    },
+    {
+        "label":"Settings",
+        "icon":"mdi-cog-outline"
+    },
+    {
+        "label":"Logout",
+        "icon":"mdi-logout"
+    }
+]

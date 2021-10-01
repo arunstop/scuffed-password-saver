@@ -1,15 +1,104 @@
 <template>
-  <div>
-    <!-- <app-header /> -->
-    <nuxt />
-  </div>
+  <v-app v-resize="onResize">
+    <v-main>
+      <v-app-bar color="primary" dark dense fixed clipped-left app>
+        <v-app-bar-nav-icon
+          @click.stop="toggleMainDrawer()"
+          v-if="$vuetify.breakpoint.mdAndDown"
+        />
+        <v-app-bar-title>{{ $store.state.appName }}</v-app-bar-title>
+      </v-app-bar>
+      <v-row class="d-flex fill-height" no-gutters app>
+        <v-navigation-drawer
+          v-model="drawer"
+          v-bind="{ ...drawerAttrs }"
+          floating
+        >
+          <v-app-bar
+            v-if="$vuetify.breakpoint.mdAndDown"
+            color="primary"
+            dark
+            dense
+            flat
+          >
+            <v-app-bar-title>{{ $store.state.appName }}</v-app-bar-title>
+          </v-app-bar>
+          <v-list>
+            <MenuItem
+              v-for="menu in getMenuList()"
+              :key="`sps-menu-${menu.icon}`"
+              :menu="menu"
+            />
+          </v-list>
+        </v-navigation-drawer>
+        <div class="flex-grow-1 fill-height pa-4">
+          <nuxt />
+        </div>
+      </v-row>
+      <DialogList/>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-// import appHeader from '@/components/header'
+import { mapGetters, mapState } from "vuex";
+import { remote } from "electron";
+// import SystemInformation from "@/components/SystemInformation.vue";
+
 export default {
-  // components: { appHeader }
-}
+  components: {},
+  data() {
+    return {
+      externalContent: "",
+      drawerAttrs: {},
+    };
+  },
+  computed: {
+    ...mapGetters("ui", ["getMenuList"]),
+    ...mapState("ui", ["mainDrawer"]),
+    drawer: {
+      get() {
+        if (this.$vuetify.breakpoint.mdAndDown) {
+          return this.mainDrawer;
+        } else {
+          return true;
+        }
+      },
+      set(val) {
+        this.$store.dispatch("ui/toggleDrawer", val);
+      },
+    },
+  },
+  methods: {
+    openURL(url) {
+      remote.shell.openExternal(url);
+    },
+    toggleMainDrawer() {
+      // alert(this.mainDrawer)
+      // this.drawer1 = !this.drawer1
+      this.$store.dispatch("ui/toggleDrawer", true);
+    },
+    onResize() {
+      // if(this.$vuetify.breakpoint.mdAndDown){
+      //   alert('MD AND DOWN')
+      // }
+    },
+  },
+  mounted() {
+    // this.onResize()
+  },
+  watch: {
+    "$vuetify.breakpoint.mdAndDown"(val) {
+      if (val === true) {
+        this.$store.dispatch("ui/toggleDrawer", false);
+        this.drawerAttrs = { fixed: true, temporary: true };
+      } else {
+        this.$store.dispatch("ui/toggleDrawer", true);
+        this.drawerAttrs = { permanent: true };
+      }
+    },
+  },
+};
 </script>
 
 <style>

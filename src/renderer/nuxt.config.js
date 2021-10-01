@@ -25,8 +25,8 @@ module.exports = {
   ],
   components: {
     dirs: [
-      '~/components'
-      // '~/components/Apps'
+      '~/components',
+      '~/components/Dialogs'
     ]
   },
   modules: [
