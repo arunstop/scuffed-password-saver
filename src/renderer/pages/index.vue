@@ -1,6 +1,10 @@
 <template>
   <div>
     <SystemInformation />
+      <SnackbarList/>
+<v-btn @click.stop="snack()">
+  snack
+</v-btn>
   </div>
 </template>
 
@@ -11,12 +15,18 @@ import { remote } from "electron";
 
 export default {
   components: {},
+  middleware: ['initVaultPath'],
   data() {
     return {
       externalContent: "",
       drawerAttrs: {},
     };
   },
+  methods:{
+    snack(){
+      this.$store.dispatch('ui/addSnackbar', 'snack')
+    }
+  }
 };
 </script>
 

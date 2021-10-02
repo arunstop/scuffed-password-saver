@@ -3,8 +3,8 @@
     <v-main>
       <v-app-bar color="primary" dark dense fixed clipped-left app>
         <v-app-bar-nav-icon
-          @click.stop="toggleMainDrawer()"
           v-if="$vuetify.breakpoint.mdAndDown"
+          @click.stop="toggleMainDrawer()"
         />
         <v-app-bar-title>{{ $store.state.appName }}</v-app-bar-title>
       </v-app-bar>
@@ -69,6 +69,20 @@ export default {
       },
     },
   },
+  watch: {
+    "$vuetify.breakpoint.mdAndDown"(val) {
+      if (val === true) {
+        this.$store.dispatch("ui/toggleDrawer", false);
+        this.drawerAttrs = { fixed: true, temporary: true };
+      } else {
+        this.$store.dispatch("ui/toggleDrawer", true);
+        this.drawerAttrs = { permanent: true };
+      }
+    },
+  },
+  mounted() {
+    // this.onResize()
+  },
   methods: {
     openURL(url) {
       remote.shell.openExternal(url);
@@ -82,20 +96,6 @@ export default {
       // if(this.$vuetify.breakpoint.mdAndDown){
       //   alert('MD AND DOWN')
       // }
-    },
-  },
-  mounted() {
-    // this.onResize()
-  },
-  watch: {
-    "$vuetify.breakpoint.mdAndDown"(val) {
-      if (val === true) {
-        this.$store.dispatch("ui/toggleDrawer", false);
-        this.drawerAttrs = { fixed: true, temporary: true };
-      } else {
-        this.$store.dispatch("ui/toggleDrawer", true);
-        this.drawerAttrs = { permanent: true };
-      }
     },
   },
 };

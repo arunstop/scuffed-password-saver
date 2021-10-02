@@ -19,8 +19,8 @@
           color="primary"
           block
           large
-          @click="execSetPath()"
           :disabled="!isValidPath()"
+          @click="execSetPath()"
         >
           Yep, save them right there!
         </v-btn>
@@ -50,7 +50,7 @@ export default {
       const choosenPath = await remote.dialog.showOpenDialog({
         properties: ["openDirectory"],
       });
-      this.path = choosenPath.filePaths[0];
+      this.path = choosenPath.filePaths[0] || "";
     },
     execSetPath() {
       if (this.path.includes(":\\"))
