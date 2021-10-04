@@ -6,15 +6,15 @@
         To be honest you can just close the program, boomer.
       </v-card-text>
       <v-card-actions class="d-flex justify-end pb-4">
-        <v-btn outlined @click.stop="hideDialog()"> Cancel </v-btn>
-        <v-btn color="primary" @click.stop="exitApp()"> OK </v-btn>
+        <v-btn ref="btnDialogLogoutN" outlined @click.stop="hideDialog()"> Cancel </v-btn>
+        <v-btn ref="btnDialogLogoutY" color="primary" @click.stop="exitApp()"> OK </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
-import { remote } from 'electron';
+import { remote } from "electron";
 export default {
   computed: {
     logoutDialog: {
@@ -26,15 +26,22 @@ export default {
       },
     },
   },
+  mounted() {
+    window.addEventListener("keyup", e => {
+      if (e.key==="Enter"|| e.key === " " || e.key === "Spacebar" || e.key === "Space bar") {
+        this.$refs.btnDialogLogoutY.$el.click()
+      }
+    });
+  },
   methods: {
     hideDialog() {
       this.$store.dispatch("ui/toggleLogoutDialog", false);
     },
-    exitApp(){
-    //   this.$store.dispatch("ui/toggleLogoutDialog", false);
-    // remote.getCurrentWindow().close()
-    remote.getCurrentWebContents().reload()
-    }
+    exitApp() {
+      //   this.$store.dispatch("ui/toggleLogoutDialog", false);
+      // remote.getCurrentWindow().close()
+      remote.getCurrentWebContents().reload();
+    },
   },
 };
 </script>

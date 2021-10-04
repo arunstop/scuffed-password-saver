@@ -3,14 +3,14 @@
     "label": "Home",
     "page": "index",
     "icons": {
-      "on": "mdi-home-variant-outline",
+      "on": "mdi-home-variant",
       "off": "mdi-home-variant-outline"
     }
   },
   {
     "label": "Settings",
     "page": "settings",
-    "icons": { "on": "mdi-cog-outline", "off": "mdi-cog-outline" }
+    "icons": { "on": "mdi-cog", "off": "mdi-cog-outline" }
   },
   {
     "label": "Logout",
