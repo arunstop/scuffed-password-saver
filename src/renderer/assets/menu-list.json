@@ -1,14 +1,20 @@
 [
-    {
-        "label":"Home",
-        "icon":"mdi-home-variant-outline"
-    },
-    {
-        "label":"Settings",
-        "icon":"mdi-cog-outline"
-    },
-    {
-        "label":"Logout",
-        "icon":"mdi-logout"
+  {
+    "label": "Home",
+    "page": "index",
+    "icons": {
+      "on": "mdi-home-variant-outline",
+      "off": "mdi-home-variant-outline"
     }
+  },
+  {
+    "label": "Settings",
+    "page": "settings",
+    "icons": { "on": "mdi-cog-outline", "off": "mdi-cog-outline" }
+  },
+  {
+    "label": "Logout",
+    "page": "logout",
+    "icons": { "on": "mdi-logout", "off": "mdi-logout" }
+  }
 ]

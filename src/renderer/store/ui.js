@@ -30,9 +30,9 @@ export const mutations = {
     TOGGLE_LOGOUT_DIALOG(state, val) {
         state.logoutDialog = val
     },
-    ADD_SNACKBAR(state, val) {
+    ADD_SNACKBAR(state, payload) {
         const id = state.snackbarList.length+1
-        state.snackbarList.push({ id, label: val })
+        state.snackbarList.push({ id, ...payload })
     },
     REMOVE_SNACKBAR(state, id) {
         state.snackbarList = state.snackbarList.filter(s => s.id !== id)
@@ -49,8 +49,8 @@ export const actions = {
     toggleLogoutDialog({ commit }, val) {
         commit('TOGGLE_LOGOUT_DIALOG', val)
     },
-    addSnackbar({ commit }, val) {
-        commit('ADD_SNACKBAR', val)
+    addSnackbar({ commit }, payload) {
+        commit('ADD_SNACKBAR', payload)
     },
     removeSnackbar({ commit }, id) {
         commit('REMOVE_SNACKBAR', id)

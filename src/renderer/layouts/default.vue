@@ -23,19 +23,24 @@
           >
             <v-app-bar-title>{{ $store.state.appName }}</v-app-bar-title>
           </v-app-bar>
-          <v-list>
-            <MenuItem
-              v-for="menu in getMenuList()"
-              :key="`sps-menu-${menu.icon}`"
-              :menu="menu"
-            />
+          <v-list shaped class="deep-purple--text text--darken-3">
+            <!-- <v-list-item-group v-model="drawerModel" mandatory color="primary"> -->
+              <MenuItem
+                v-for="menu in getMenuList()"
+                :key="`sps-menu-${menu.page}`"
+                :menu="menu"
+                :active="$nuxt.$route.name===menu.page"
+              />
+            <!-- </v-list-item-group> -->
           </v-list>
         </v-navigation-drawer>
         <div class="flex-grow-1 fill-height pa-4">
-          <nuxt />
+          <Nuxt />
         </div>
       </v-row>
-      <DialogList/>
+      <!-- UI LIST -->
+      <DialogList />
+      <SnackbarList />
     </v-main>
   </v-app>
 </template>
@@ -47,10 +52,12 @@ import { remote } from "electron";
 
 export default {
   components: {},
+  middleware: ["initVaultPath"],
   data() {
     return {
       externalContent: "",
       drawerAttrs: {},
+      drawerModel: 0,
     };
   },
   computed: {

@@ -13,13 +13,14 @@
     v-if="show"
     class="ma-2"
     :dark="!$vuetify.theme.dark"
+    :color="snackbar.color"
     max-height="60px"
     min-width="320px"
   >
     <div class="d-flex align-center pa-2 font-weight-regular">
       <span class="ms-4">{{ snackbar.label }}</span>
       <v-spacer />
-      <v-btn class="ms-4" color="blue" text @click="removeSnackbar()">
+      <v-btn class="ms-4" color="white" outlined text @click="removeSnackbar()">
         Close
       </v-btn>
     </div>
@@ -35,7 +36,7 @@ export default {
   },
   data: () => ({
     // snackbar: false
-    timeout: 20000,
+    // timeout: 20000,
   }),
   computed: {
     ...mapGetters("ui", ["getSnackbarById"]),
