@@ -27,11 +27,11 @@ export default {
     },
   },
   mounted() {
-    window.addEventListener("keyup", e => {
-      if (e.key==="Enter"|| e.key === " " || e.key === "Spacebar" || e.key === "Space bar") {
-        this.$refs.btnDialogLogoutY.$el.click()
-      }
-    });
+    // window.addEventListener("keyup", e => {
+    //   if (e.key==="Enter"|| e.key === " " || e.key === "Spacebar" || e.key === "Space bar") {
+    //     this.$refs.btnDialogLogoutY.$el.click()
+    //   }
+    // });
   },
   methods: {
     hideDialog() {

@@ -2,6 +2,7 @@
   <div>
     <DialogInitFolder />
     <DialogLogout />
+    <DialogAddApp />
   </div>
 </template>
 

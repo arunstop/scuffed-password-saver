@@ -1,0 +1,54 @@
+[
+    {
+        "name": "Google",
+        "urls": ["www.google.com"]
+    },
+    {
+        "name": "Facebook",
+        "urls": ["www.facebook.com"]
+    },
+    {
+        "name": "Instagram",
+        "urls": ["www.instagram.com"]
+    },
+    {
+        "name": "Twitter",
+        "urls": ["www.twitter.com"]
+    },
+    {
+        "name": "Steam",
+        "urls": ["www.steamcommunity.com"]
+    },
+    {
+        "name": "Outlook",
+        "urls": ["www.outlook.live.com"]
+    },
+    {
+        "name": "Discord",
+        "urls": ["www.discord.com"]
+    },
+    {
+        "name": "Github",
+        "urls": ["www.github.com"]
+    },
+    {
+        "name": "Reddit",
+        "urls": ["www.reddit.com"]
+    },
+    {
+        "name": "Gitlab",
+        "urls": ["www.gitlab.com"]
+    },
+    {
+        "name": "Protonmail",
+        "urls": ["www.protonmail.com"]
+    },
+    {
+        "name": "Twitch",
+        "urls": ["www.twitch.com"]
+    },
+    {
+        "name": "Figma",
+        "urls": ["www.figma.com"]
+    }
+]

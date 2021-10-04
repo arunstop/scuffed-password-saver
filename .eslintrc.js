@@ -21,7 +21,7 @@ module.exports = {
     // indent: ['error', 2], // 2 spaces – for indentation
     'max-len': ['error', { code: 120 }],
     'no-console': 'off',
-    'arrow-parens': ['error', 'as-needed'],
+    // 'arrow-parens': ['error', 'as-needed'],
     // curly: ['error', 'multi-line'],
     'import/no-extraneous-dependencies': 'off',
     'require-await': 0,

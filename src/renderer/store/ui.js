@@ -1,10 +1,10 @@
-import { stat } from "original-fs"
-
 export const state = () => ({
     menuList: require("@/assets/menu-list.json"),
     mainDrawer: false,
     initFolderDialog: true,
     logoutDialog: false,
+    addAccountDialog: false,
+    addAppDialog: false,
     snackbarList: [],
 })
 
@@ -30,6 +30,12 @@ export const mutations = {
     TOGGLE_LOGOUT_DIALOG(state, val) {
         state.logoutDialog = val
     },
+    TOGGLE_ADD_ACCOUNT_DIALOG(state, val) {
+        state.addAccountDialog = val
+    },
+    TOGGLE_ADD_APP_DIALOG(state, val) {
+        state.addAppDialog = val
+    },
     ADD_SNACKBAR(state, payload) {
         const id = state.snackbarList.length+1
         state.snackbarList.push({ id, ...payload })
@@ -48,6 +54,12 @@ export const actions = {
     },
     toggleLogoutDialog({ commit }, val) {
         commit('TOGGLE_LOGOUT_DIALOG', val)
+    },
+    toggleAddAccountDialog({ commit }, val) {
+        commit('TOGGLE_ADD_ACCOUNT_DIALOG', val)
+    },
+    toggleAddAppDialog({ commit }, val) {
+        commit('TOGGLE_ADD_APP_DIALOG', val)
     },
     addSnackbar({ commit }, payload) {
         commit('ADD_SNACKBAR', payload)

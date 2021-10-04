@@ -52,7 +52,7 @@ import { remote } from "electron";
 
 export default {
   components: {},
-  middleware: ["initVaultPath"],
+  middleware: ["initVaultPath","initAppList"],
   data() {
     return {
       externalContent: "",
