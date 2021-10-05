@@ -5,11 +5,18 @@
         <v-icon left>mdi-lock</v-icon>
         Save New Account
       </v-btn>
-      <v-btn class="me-4" color="primary" @click.stop="openAddAppDialog()">
+      <v-btn class="me-4" color="primary" @click.stop="openAppAddDialog()">
         <v-icon left>mdi-plus</v-icon>
         Add New Application
       </v-btn>
     </div>
+    <v-btn
+      v-for="a in $store.state.app.appList"
+      :key="a.name"
+      @click="openAppEditDialog(a.name)"
+    >
+      {{ a.name }}
+    </v-btn>
     <v-btn @click.stop="snack()"> snack </v-btn>
     <v-btn @click="doNavigate()"> settings </v-btn>
   </div>
@@ -26,7 +33,7 @@ export default {
     return {
       externalContent: "",
       drawerAttrs: {},
-      apps:{}
+      apps: {},
     };
   },
   methods: {
@@ -39,9 +46,12 @@ export default {
     doNavigate() {
       this.$router.push({ name: "settings" });
     },
-    openAddAppDialog(){
-        this.$store.dispatch('ui/toggleAddAppDialog', true)
-    }
+    openAppAddDialog() {
+      this.$store.dispatch("ui/toggleAppAddDialog", true);
+    },
+    openAppEditDialog(name) {
+      this.$store.dispatch("ui/toggleAppEditDialog", { val: true, name });
+    },
   },
 };
 </script>

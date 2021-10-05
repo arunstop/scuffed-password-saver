@@ -1,5 +1,5 @@
 <template>
-  <div class="snackbar-container" no-gutters >
+  <div class="snackbar-container" no-gutters style="z-index:203 !important;">
     <v-scale-transition group class="d-flex flex-column flex-column-reverse align-center" origin="center center">
     <SnackbarItem
       v-for="snackbar in getSnackbarList()"
@@ -22,7 +22,7 @@ export default {
 
 <style scoped>
 .snackbar-container{
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;

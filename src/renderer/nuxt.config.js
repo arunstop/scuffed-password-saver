@@ -16,6 +16,7 @@ module.exports = {
   plugins: [
     { ssr: true, src: '@/plugins/icons.js' },
     '~/plugins/local-storage',
+    '~/plugins/globals',
 
   ],
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
@@ -28,7 +29,8 @@ module.exports = {
   components: {
     dirs: [
       '~/components',
-      '~/components/Dialogs'
+      '~/components/Dialogs',
+      '~/components/Dialogs/App',
     ]
   },
   modules: [

@@ -1,6 +1,6 @@
 <template>
-  <v-dialog v-model="addAppDialog" max-width="480">
-    <v-form ref="formAddApp" v-model="formAddApp">
+  <v-dialog v-model="appAddDialog" max-width="480">
+    <v-form ref="formAddApp" v-model="formAddApp" @submit="addApp()">
       <v-card>
         <v-card-title>Add New Application</v-card-title>
         <v-card-text class="mt-4">
@@ -56,20 +56,21 @@ export default {
   }),
   computed: {
     ...mapGetters("app", ["getAppByName"]),
-    addAppDialog: {
+    appAddDialog: {
       get() {
-        return this.$store.state.ui.addAppDialog;
+        return this.$store.state.ui.appAddDialog;
       },
       set(v) {
-        this.$store.dispatch("ui/toggleAddAppDialog", v);
+        this.$store.dispatch("ui/toggleAppAddDialog", v);
       },
     },
     appNameRules() {
       return [
         // IF appName is falsey (null,0,undefined) then it's error
-        (v) => !!(v||"").trim() || "Application name is required!",
+        (v) => !!(v || "").trim() || "Application name is required!",
         // IF getAppByName() has value, then it's error
-        (v) => !this.getAppByName((v||"").trim()) || "Application already exists!",
+        (v) =>
+          !this.getAppByName((v || "").trim()) || "Application already exists!",
       ];
     },
   },
@@ -87,16 +88,20 @@ export default {
   },
   methods: {
     hideDialog() {
-      this.$store.dispatch("ui/toggleAddAppDialog", false);
+      this.$store.dispatch("ui/toggleAppAddDialog", false);
     },
     addApp() {
       this.$refs.formAddApp.validate();
       if (this.formAddApp) {
         this.$store.dispatch("app/addApp", {
           name: this.appName,
-          urls: this.appUrls.split("\n"),
+          urls: this.$globals.lodash.compact(this.appUrls.trim().split("\n")),
         });
-        this.$refs.formAddApp.reset()
+        // this.$store.dispatch("ui/addSnackbar", {
+        //   label: this.appName + "has been added",
+        //   color: "success",
+        // });
+        this.$refs.formAddApp.reset();
       }
     },
   },

@@ -1,10 +1,12 @@
 export const state = () => ({
     menuList: require("@/assets/menu-list.json"),
-    mainDrawer: false,
+    mainDrawer: true,
     initFolderDialog: true,
     logoutDialog: false,
     addAccountDialog: false,
-    addAppDialog: false,
+    appAddDialog: false,
+    appEditDialog: false,
+    appEditValue: "",
     snackbarList: [],
 })
 
@@ -33,11 +35,14 @@ export const mutations = {
     TOGGLE_ADD_ACCOUNT_DIALOG(state, val) {
         state.addAccountDialog = val
     },
-    TOGGLE_ADD_APP_DIALOG(state, val) {
-        state.addAppDialog = val
+    TOGGLE_APP_ADD_DIALOG(state, val) {
+        state.appAddDialog = val
+    },
+    TOGGLE_APP_EDIT_DIALOG(state, val) {
+        state.appEditDialog = val
     },
     ADD_SNACKBAR(state, payload) {
-        const id = state.snackbarList.length+1
+        const id = state.snackbarList.length + 1
         state.snackbarList.push({ id, ...payload })
     },
     REMOVE_SNACKBAR(state, id) {
@@ -58,8 +63,17 @@ export const actions = {
     toggleAddAccountDialog({ commit }, val) {
         commit('TOGGLE_ADD_ACCOUNT_DIALOG', val)
     },
-    toggleAddAppDialog({ commit }, val) {
-        commit('TOGGLE_ADD_APP_DIALOG', val)
+    toggleAppAddDialog({ commit }, val) {
+        commit('TOGGLE_APP_ADD_DIALOG', val)
+    },
+    toggleAppEditDialog({ commit, dispatch }, payload) {
+        if (payload?.name) {
+            commit('TOGGLE_APP_EDIT_DIALOG', payload.val)
+            dispatch('app/setAppEditValue', payload.name, { root: true })
+        } else {
+            commit('TOGGLE_APP_EDIT_DIALOG', payload.val)
+            if (payload.val === false) dispatch('app/setAppEditValue', "", { root: true })
+        }
     },
     addSnackbar({ commit }, payload) {
         commit('ADD_SNACKBAR', payload)

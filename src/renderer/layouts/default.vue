@@ -1,47 +1,53 @@
 <template>
-  <v-app v-resize="onResize">
-    <v-main>
-      <v-app-bar color="primary" dark dense fixed clipped-left app>
-        <v-app-bar-nav-icon
-          v-if="$vuetify.breakpoint.mdAndDown"
-          @click.stop="toggleMainDrawer()"
-        />
+  <!-- App.vue -->
+  <v-app>
+    <v-navigation-drawer v-model="drawer" floating app clipped>
+      <v-app-bar
+        v-if="$vuetify.breakpoint.mdAndDown"
+        color="primary"
+        dark
+        dense
+        flat
+      >
         <v-app-bar-title>{{ $store.state.appName }}</v-app-bar-title>
       </v-app-bar>
-      <v-row class="d-flex fill-height" no-gutters app>
-        <v-navigation-drawer
-          v-model="drawer"
-          v-bind="{ ...drawerAttrs }"
-          floating
-        >
-          <v-app-bar
-            v-if="$vuetify.breakpoint.mdAndDown"
-            color="primary"
-            dark
-            dense
-            flat
-          >
-            <v-app-bar-title>{{ $store.state.appName }}</v-app-bar-title>
-          </v-app-bar>
-          <v-list shaped class="deep-purple--text text--darken-3">
-            <!-- <v-list-item-group v-model="drawerModel" mandatory color="primary"> -->
-              <MenuItem
-                v-for="menu in getMenuList()"
-                :key="`sps-menu-${menu.page}`"
-                :menu="menu"
-                :active="$nuxt.$route.name===menu.page"
-              />
-            <!-- </v-list-item-group> -->
-          </v-list>
-        </v-navigation-drawer>
-        <div class="flex-grow-1 fill-height pa-4">
+      <v-list shaped class="deep-purple--text text--darken-3">
+        <!-- <v-list-item-group v-model="drawerModel" mandatory color="primary"> -->
+        <MenuItem
+          v-for="menu in getMenuList()"
+          :key="`sps-menu-${menu.page}`"
+          :menu="menu"
+          :active="$nuxt.$route.name === menu.page"
+        />
+        <!-- </v-list-item-group> -->
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-app-bar color="primary" dark dense fixed app clipped-left>
+      <v-app-bar-nav-icon
+        v-if="$vuetify.breakpoint.mdAndDown"
+        @click.stop="toggleMainDrawer()"
+      />
+      <v-app-bar-title>{{ $store.state.appName }}</v-app-bar-title>
+    </v-app-bar>
+
+    <!-- Sizes your content based upon application components -->
+    <v-main>
+      <!-- Provides the application the proper gutter -->
+      <v-container fluid>
+        <!-- If using vue-router -->
+        <v-fade-transition>
           <Nuxt />
-        </div>
-      </v-row>
-      <!-- UI LIST -->
-      <DialogList />
-      <SnackbarList />
+        </v-fade-transition>
+      </v-container>
     </v-main>
+
+    <v-footer app>
+      <!-- -->
+    </v-footer>
+
+    <DialogList />
+    <SnackbarList />
   </v-app>
 </template>
 
@@ -52,7 +58,7 @@ import { remote } from "electron";
 
 export default {
   components: {},
-  middleware: ["initVaultPath","initAppList"],
+  middleware: ["initVaultPath", "initAppList"],
   data() {
     return {
       externalContent: "",
@@ -65,11 +71,7 @@ export default {
     ...mapState("ui", ["mainDrawer"]),
     drawer: {
       get() {
-        if (this.$vuetify.breakpoint.mdAndDown) {
-          return this.mainDrawer;
-        } else {
-          return true;
-        }
+        return this.mainDrawer;
       },
       set(val) {
         this.$store.dispatch("ui/toggleDrawer", val);
@@ -109,6 +111,9 @@ export default {
 </script>
 
 <style>
+html {
+  overflow-y: auto;
+}
 body {
   margin: 0 !important;
 }
