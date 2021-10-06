@@ -12,8 +12,9 @@
     </div>
     <v-btn
       v-for="a in $store.state.app.appList"
-      :key="a.name"
+      :key="a.name+'0'"
       @click="openAppEditDialog(a.name)"
+      @contextmenu.prevent="deleteApp(a.name)"
     >
       {{ a.name }}
     </v-btn>
@@ -38,7 +39,7 @@ export default {
   },
   methods: {
     snack() {
-      this.$store.dispatch("ui/addSnackbar", {
+      this.$store.dispatch("ui/showSnackbar", {
         label: "snack",
         color: "success",
       });
@@ -52,6 +53,9 @@ export default {
     openAppEditDialog(name) {
       this.$store.dispatch("ui/toggleAppEditDialog", { val: true, name });
     },
+    deleteApp(name){
+      this.$store.dispatch("app/deleteApp", name)
+    }
   },
 };
 </script>

@@ -24,6 +24,6 @@ export const actions = {
         commit('SET_PATH', path)
         dispatch('ui/toggleInitFolderDialog', false, { root: true })
         const snackbar = { label: "Vault folder is set! But, shhh! Don't tell anyone ;)", color: "success" }
-        dispatch('ui/addSnackbar', snackbar, { root: true })
+        dispatch('ui/showSnackbar', snackbar, { root: true })
     }
 }

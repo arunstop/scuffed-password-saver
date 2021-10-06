@@ -11,7 +11,7 @@
 
   <v-card
     v-if="show"
-    class="ma-2"
+    class="ma-2 pointer-events"
     :dark="!$vuetify.theme.dark"
     :color="snackbar.color"
     max-height="60px"
@@ -37,6 +37,7 @@ export default {
   data: () => ({
     // snackbar: false
     // timeout: 20000,
+    hover:false,
   }),
   computed: {
     ...mapGetters("ui", ["getSnackbarById"]),
@@ -52,7 +53,7 @@ export default {
   mounted() {
     setTimeout(() => {
       this.$store.dispatch("ui/removeSnackbar", this.snackbar.id);
-    }, 4200);
+    }, 2121);
   },
   methods: {
     removeSnackbar() {
@@ -69,4 +70,8 @@ export default {
 </script>
 
 <style>
+
+.pointer-events {
+  pointer-events: all;
+}
 </style>

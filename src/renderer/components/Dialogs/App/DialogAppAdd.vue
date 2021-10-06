@@ -97,7 +97,7 @@ export default {
           name: this.appName,
           urls: this.$globals.lodash.compact(this.appUrls.trim().split("\n")),
         });
-        // this.$store.dispatch("ui/addSnackbar", {
+        // this.$store.dispatch("ui/showSnackbar", {
         //   label: this.appName + "has been added",
         //   color: "success",
         // });

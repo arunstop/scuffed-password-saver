@@ -41,7 +41,7 @@ export const mutations = {
     TOGGLE_APP_EDIT_DIALOG(state, val) {
         state.appEditDialog = val
     },
-    ADD_SNACKBAR(state, payload) {
+    SHOW_SNACKBAR(state, payload) {
         const id = state.snackbarList.length + 1
         state.snackbarList.push({ id, ...payload })
     },
@@ -75,8 +75,8 @@ export const actions = {
             if (payload.val === false) dispatch('app/setAppEditValue', "", { root: true })
         }
     },
-    addSnackbar({ commit }, payload) {
-        commit('ADD_SNACKBAR', payload)
+    showSnackbar({ commit }, payload) {
+        commit('SHOW_SNACKBAR', payload)
     },
     removeSnackbar({ commit }, id) {
         commit('REMOVE_SNACKBAR', id)

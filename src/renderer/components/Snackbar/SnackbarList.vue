@@ -1,11 +1,15 @@
 <template>
-  <div class="snackbar-container" no-gutters style="z-index:203 !important;">
-    <v-scale-transition group class="d-flex flex-column flex-column-reverse align-center" origin="center center">
-    <SnackbarItem
-      v-for="snackbar in getSnackbarList()"
-      :key="snackbar.id"
-      :snackbar="snackbar"
-    />
+  <div class="snackbar-container" no-gutters style="z-index: 203 !important">
+    <v-scale-transition
+      group
+      class="d-flex flex-column flex-column-reverse align-center"
+      origin="center center"
+    >
+      <SnackbarItem
+        v-for="snackbar in getSnackbarList()"
+        :key="snackbar.id"
+        :snackbar="snackbar"
+      />
     </v-scale-transition>
   </div>
 </template>
@@ -21,10 +25,11 @@ export default {
 </script>
 
 <style scoped>
-.snackbar-container{
+.snackbar-container {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
+  pointer-events: none;
 }
 </style>

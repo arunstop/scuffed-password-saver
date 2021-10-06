@@ -5,6 +5,9 @@ const winHandler = new BrowserWinHandler({
   width: 600,
   minHeight: 600,
   minWidth: 600,
+  // titleBarStyle:'hidden',
+  frame:false,
+
 })
 
 winHandler.onCreated(_browserWindow => {
