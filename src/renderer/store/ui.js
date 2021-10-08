@@ -1,11 +1,12 @@
 export const state = () => ({
     menuList: require("@/assets/menu-list.json"),
-    mainDrawer: true,
+    mainDrawer: false,
     initFolderDialog: true,
     logoutDialog: false,
-    addAccountDialog: false,
     appAddDialog: false,
     appEditDialog: false,
+    accountAddDialog: false,
+    accountEditDialog: false,
     appEditValue: "",
     snackbarList: [],
 })
@@ -32,14 +33,17 @@ export const mutations = {
     TOGGLE_LOGOUT_DIALOG(state, val) {
         state.logoutDialog = val
     },
-    TOGGLE_ADD_ACCOUNT_DIALOG(state, val) {
-        state.addAccountDialog = val
-    },
     TOGGLE_APP_ADD_DIALOG(state, val) {
         state.appAddDialog = val
     },
     TOGGLE_APP_EDIT_DIALOG(state, val) {
         state.appEditDialog = val
+    },
+    TOGGLE_ACCOUNT_ADD_DIALOG(state, val) {
+        state.accountAddDialog = val
+    },
+    TOGGLE_ACCOUNT_EDIT_DIALOG(state, val) {
+        state.accountEditDialog = val
     },
     SHOW_SNACKBAR(state, payload) {
         const id = state.snackbarList.length + 1
@@ -60,9 +64,6 @@ export const actions = {
     toggleLogoutDialog({ commit }, val) {
         commit('TOGGLE_LOGOUT_DIALOG', val)
     },
-    toggleAddAccountDialog({ commit }, val) {
-        commit('TOGGLE_ADD_ACCOUNT_DIALOG', val)
-    },
     toggleAppAddDialog({ commit }, val) {
         commit('TOGGLE_APP_ADD_DIALOG', val)
     },
@@ -73,6 +74,18 @@ export const actions = {
         } else {
             commit('TOGGLE_APP_EDIT_DIALOG', payload.val)
             if (payload.val === false) dispatch('app/setAppEditValue', "", { root: true })
+        }
+    },
+    toggleAccountAddDialog({ commit }, val) {
+        commit('TOGGLE_ACCOUNT_ADD_DIALOG', val)
+    },
+    toggleAccountEditDialog({ commit, dispatch }, payload) {
+        if (payload?.name) {
+            commit('TOGGLE_ACCOUNT_EDIT_DIALOG', payload.val)
+            dispatch('account/setAccountEditValue', payload.name, { root: true })
+        } else {
+            commit('TOGGLE_ACCOUNT_EDIT_DIALOG', payload.val)
+            if (payload.val === false) dispatch('account/setAccountEditValue', "", { root: true })
         }
     },
     showSnackbar({ commit }, payload) {

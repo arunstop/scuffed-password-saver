@@ -1,5 +1,5 @@
 <template>
-  <div class="snackbar-container" no-gutters style="z-index: 203 !important">
+  <div class="snackbar-container mb-4" no-gutters style="z-index: 203 !important">
     <v-scale-transition
       group
       class="d-flex flex-column flex-column-reverse align-center"
@@ -17,7 +17,7 @@
 <script>
 import { mapGetters } from "vuex";
 
-export default {
+export default {  
   computed: {
     ...mapGetters("ui", ["getSnackbarList"]),
   },

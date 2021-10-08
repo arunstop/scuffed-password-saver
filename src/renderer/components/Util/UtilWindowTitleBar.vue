@@ -1,5 +1,5 @@
 <template>
-  <div class="v-application theme--dark">
+  <div v-resize="onResize" class="v-application theme--dark">
     <v-row
       no-gutters
       class="primary darken-4 window-title-bar"
@@ -8,34 +8,16 @@
       <span class="pl-2" style="height: auto">{{ $store.state.appName }} </span>
       <v-spacer />
       <v-btn
+        v-for="(btn, index) in windowButtonList"
+        :key="'window-button-' + index"
         small
         depressed
         class="px-0 window-btn"
-        color="transparent"
+        :color="btn[minmax].action === 'close' ? 'red' : 'transparent'"
         tabindex="-1"
-        @click="minimize()"
+        @click="windowButtonAction(btn[minmax].action)"
       >
-        <v-icon small color="white">mdi-window-minimize</v-icon>
-      </v-btn>
-      <v-btn
-        small
-        depressed
-        class="px-0 window-btn"
-        color="transparent"
-        tabindex="-1"
-        @click="maximize()"
-      >
-        <v-icon small color="white">mdi-window-maximize</v-icon>
-      </v-btn>
-      <v-btn
-        small
-        depressed
-        class="px-0 window-btn"
-        color="red"
-        tabindex="-1"
-        @click="close()"
-      >
-        <v-icon small color="white">mdi-close-thick</v-icon>
+        <v-icon small color="white">{{ btn[minmax].icon }}</v-icon>
       </v-btn>
     </v-row>
   </div>
@@ -46,22 +28,52 @@ import { remote } from "electron";
 export default {
   data() {
     return {
-      window: remote.getCurrentWindow(),
+      minmax: "",
+      windowButtonList: [
+        {
+          min: { icon: "mdi-window-minimize", action: "minimize" },
+          max: { icon: "mdi-window-minimize", action: "minimize" },
+        },
+        {
+          min: { icon: "mdi-window-maximize", action: "maximize" },
+          max: { icon: "mdi-window-restore", action: "unmaximize" },
+        },
+        {
+          min: { icon: "mdi-close-thick", action: "close" },
+          max: { icon: "mdi-close-thick", action: "close" },
+        },
+      ],
     };
   },
+  created(){
+    // initialize minmax
+    this.onResize();
+  },
+  mounted() {
+    // this.onResize();
+  },
   methods: {
-    minimize() {
-      this.window.minimize();
-    },
-    maximize() {
-      if (this.window.isMaximized()) {
-        this.window.unmaximize();
+    onResize() {
+      if (remote.getCurrentWindow().isMaximized()) {
+        this.minmax = "max";
+        // alert("max");
       } else {
-        this.window.maximize();
+        this.minmax = "min";
+        // alert("min");
       }
     },
-    close() {
-      this.window.reload();
+    windowButtonAction(action) {
+      console.log(action);
+      const window = remote.getCurrentWindow();
+      if (action === "minimize") {
+        window.minimize();
+      } else if (action === "maximize") {
+        window.maximize();
+      } else if (action === "unmaximize") {
+        window.unmaximize();
+      } else if (action === "close") {
+        window.reload();
+      }
     },
   },
 };

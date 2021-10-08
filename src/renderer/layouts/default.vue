@@ -60,7 +60,7 @@ import { remote } from "electron";
 
 export default {
   components: {},
-  middleware: ["initVaultPath", "initAppList"],
+  middleware: ["initVaultPath", "initAppList", "initAccountList"],
   data() {
     return {
       externalContent: "",
@@ -73,7 +73,11 @@ export default {
     ...mapState("ui", ["mainDrawer"]),
     drawer: {
       get() {
-        return this.mainDrawer;
+        if (this.$vuetify.breakpoint.mdAndDown) {
+          return this.mainDrawer;
+        } else {
+          return true;
+        }
       },
       set(val) {
         this.$store.dispatch("ui/toggleDrawer", val);

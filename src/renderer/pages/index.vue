@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="d-flex">
-      <v-btn class="me-4" color="success">
+      <v-btn class="me-4" color="success" @click.stop="openAccountAddDialog()">
         <v-icon left>mdi-lock</v-icon>
         Save New Account
       </v-btn>
@@ -52,6 +52,9 @@ export default {
     },
     openAppEditDialog(name) {
       this.$store.dispatch("ui/toggleAppEditDialog", { val: true, name });
+    },
+    openAccountAddDialog() {
+      this.$store.dispatch("ui/toggleAccountAddDialog", true);
     },
     deleteApp(name){
       this.$store.dispatch("app/deleteApp", name)

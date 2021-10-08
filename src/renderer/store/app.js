@@ -9,6 +9,9 @@ export const getters = {
     getAppByName: state => (name) => {
         return state.appList.find(e => e.name.toLowerCase() === name.toLowerCase())
     },
+    getAppList:state=>()=>{
+        return state.appList
+    }
 }
 
 export const mutations = {

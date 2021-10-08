@@ -31,6 +31,7 @@ module.exports = {
       '~/components',
       '~/components/Dialogs',
       '~/components/Dialogs/App',
+      '~/components/Dialogs/Account',
     ]
   },
   modules: [
