@@ -133,11 +133,14 @@ export default {
       if (!this.appNameSearch) return null;
       else {
         const selectedApp = this.getAppByName(this.appNameSearch);
+        const successMsgUrlNotNull =
+          this.$globals.lodash.isEmpty(selectedApp?.urls)
+            ? ""
+            : ", this account will work on : " +
+              selectedApp?.urls.toString().replaceAll(",", " | ");
         return !selectedApp
-          ? this.appNameSearch + " will be created"
-          : this.appNameSearch +
-              " is selected, this account will work on : " +
-              selectedApp.urls.toString().replaceAll(",", " | ");
+          ? "Application : " + this.appNameSearch + " will be created"
+          : this.appNameSearch + " is selected" + successMsgUrlNotNull;
       }
     },
   },
@@ -169,6 +172,13 @@ export default {
     accountAdd() {
       this.$refs.formAccountAdd.validate();
       if (this.formAccountAdd) {
+        const app = this.appName.name || this.appName
+        if (!this.getAppByName(app)) {
+          this.$store.dispatch("app/addApp", {
+            name: app,
+            urls: [],
+          });
+        }
         this.$store.dispatch("account/addAccount", {
           appName: this.appName.name,
           accountId: this.accountId,

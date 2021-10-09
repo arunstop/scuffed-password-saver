@@ -20,6 +20,7 @@
     </v-btn>
     <v-btn @click.stop="snack()"> snack </v-btn>
     <v-btn @click="doNavigate()"> settings </v-btn>
+    <AccountList/>
   </div>
 </template>
 

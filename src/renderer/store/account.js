@@ -13,7 +13,7 @@ export const getters = {
             e.appName.toLowerCase() === appName.toLowerCase() &&
             e.accountId === accountId
         )
-        console.log(res)
+        // console.log(res)
         return res
     },
     getAccountList: state => () => {
@@ -25,7 +25,7 @@ export const mutations = {
     INIT_ACCOUNT_LIST(state, payload) {
         state.accountList = payload
         this.$localStorage.set('accountList', state.accountList)
-        // console.log(this.$localStorage.get('accountList'))
+        console.log(state.accountList)
     },
     SET_ACCOUNT_EDIT_VALUE(state, name) {
         state.accountEditValue = state.accountList.find(e => e.name.toLowerCase() === name.toLowerCase())

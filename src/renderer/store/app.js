@@ -7,6 +7,7 @@ export const state = function () {
 
 export const getters = {
     getAppByName: state => (name) => {
+        console.log(name)
         return state.appList.find(e => e.name.toLowerCase() === name.toLowerCase())
     },
     getAppList:state=>()=>{
@@ -53,7 +54,7 @@ export const actions = {
         // console.log(payload)
         commit('ADD_APP', payload)
         dispatch("ui/showSnackbar", {
-            label: payload.name + " has been added",
+            label: "App : " + payload.name + " has been added",
             color: "success",
         },
             { root: true })

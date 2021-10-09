@@ -35,6 +35,9 @@ module.exports = {
 
     'vue/max-attributes-per-line': 'off',
     'vue/singleline-html-element-content-newline': 0,
+    'vue/valid-v-slot': ['error', {
+      allowModifiers: true,
+    }],
     'no-unused-vars': 'off',
   }
 }
