@@ -41,7 +41,10 @@ export default {
   },
   methods: {
     editItem(item) {
-      alert("edit" + item.appName);
+      this.$store.dispatch("ui/toggleAccountEditDialog", {
+        val: true,
+        account: item,
+      });
     },
     deleteItem(item) {
       alert("delete" + item.accountId);

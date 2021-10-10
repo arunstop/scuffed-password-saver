@@ -80,9 +80,10 @@ export const actions = {
         commit('TOGGLE_ACCOUNT_ADD_DIALOG', val)
     },
     toggleAccountEditDialog({ commit, dispatch }, payload) {
-        if (payload?.name) {
+        // alert(payload.name)
+        if (payload?.account) {
             commit('TOGGLE_ACCOUNT_EDIT_DIALOG', payload.val)
-            dispatch('account/setAccountEditValue', payload.name, { root: true })
+            dispatch('account/setAccountEditValue', payload.account, { root: true })
         } else {
             commit('TOGGLE_ACCOUNT_EDIT_DIALOG', payload.val)
             if (payload.val === false) dispatch('account/setAccountEditValue', "", { root: true })

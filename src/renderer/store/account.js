@@ -27,19 +27,22 @@ export const mutations = {
         this.$localStorage.set('accountList', state.accountList)
         console.log(state.accountList)
     },
-    SET_ACCOUNT_EDIT_VALUE(state, name) {
-        state.accountEditValue = state.accountList.find(e => e.name.toLowerCase() === name.toLowerCase())
-        // console.log(name)
+    SET_ACCOUNT_EDIT_VALUE(state, account) {
+        // alert(state.accountList)
+        state.accountEditValue = state.accountList.find(e =>
+            e.appName.toLowerCase() === account.appName.toLowerCase() &&
+            e.accountId === account.accountId
+        )
+        console.log(state.accountEditValue)
     },
     ADD_ACCOUNT(state, payload) {
         state.accountList.push(payload)
         this.$localStorage.set('accountList', state.accountList)
         // console.log(this.$localStorage.get('accountList'))
     },
-    EDIT_ACCOUNT(state, payload) {
-        const targetedAccount = state.accountList.find(e => e.name.toLowerCase() === payload.oldName.toLowerCase())
-        targetedAccount.name = payload.name
-        targetedAccount.urls = payload.urls
+    EDIT_ACCOUNT(state, account) {
+        let targetedAccount = state.accountList.find(e =>e===account)
+        targetedAccount=account
         this.$localStorage.set('accountList', state.accountList)
         // console.log(targetedAccount)
     },
@@ -60,7 +63,7 @@ export const actions = {
         // console.log(payload)
         commit('ADD_ACCOUNT', payload)
         dispatch("ui/showSnackbar", {
-            label: "A new account for "+payload.appName+" has been added",
+            label: "A new account for " + payload.appName + " has been added",
             color: "success",
         },
             { root: true })
@@ -70,7 +73,7 @@ export const actions = {
         commit('EDIT_ACCOUNT', payload)
         dispatch("ui/showSnackbar",
             {
-                label: payload.oldName + " has been updated",
+                label: "Account has been updated",
                 color: "success",
             },
             { root: true })

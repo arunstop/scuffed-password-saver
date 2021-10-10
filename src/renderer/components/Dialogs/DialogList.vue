@@ -6,7 +6,7 @@
     <DialogAppEdit v-if="$store.state.ui.appEditDialog" />
 
     <DialogAccountAdd v-if="$store.state.ui.accountAddDialog" />
-    <!-- <DialogAppEdit v-if="$store.state.ui.appEditDialog" /> -->
+    <DialogAccountEdit v-if="$store.state.ui.accountEditDialog" />
   </div>
 </template>
   
