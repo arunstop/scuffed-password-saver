@@ -43,11 +43,23 @@ export default {
     editItem(item) {
       this.$store.dispatch("ui/toggleAccountEditDialog", {
         val: true,
-        account: item,
+        id: item.id,
       });
     },
     deleteItem(item) {
-      alert("delete" + item.accountId);
+      this.$store.dispatch("ui/toggleConfirmationDialog", {
+        val: true,
+        color : 'error',
+        template:{
+          title: 'Delete account',
+          desc: 'Are u sure you want to delete this '+item.appName+' account (ID : '+item.accountId+') ?'
+        },
+        actions: {
+          y: () => {
+            this.$store.dispatch("account/deleteAccount", item.id);
+          },
+        },
+      });
     },
   },
 };

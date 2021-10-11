@@ -27,27 +27,28 @@ export const mutations = {
         this.$localStorage.set('accountList', state.accountList)
         console.log(state.accountList)
     },
-    SET_ACCOUNT_EDIT_VALUE(state, account) {
+    SET_ACCOUNT_EDIT_VALUE(state, id) {
         // alert(state.accountList)
-        state.accountEditValue = state.accountList.find(e =>
-            e.appName.toLowerCase() === account.appName.toLowerCase() &&
-            e.accountId === account.accountId
-        )
-        console.log(state.accountEditValue)
+        state.accountEditValue = state.accountList.find(e => e.id === id)
+        // console.log(state.accountEditValue)
     },
     ADD_ACCOUNT(state, payload) {
-        state.accountList.push(payload)
+        const id = 'ACC' + (state.accountList.length + 1)
+        const now = this.$date.now
+        const dates = { created: now, edited: now }
+        state.accountList.push({ id, ...payload, ...dates })
         this.$localStorage.set('accountList', state.accountList)
         // console.log(this.$localStorage.get('accountList'))
     },
-    EDIT_ACCOUNT(state, account) {
-        let targetedAccount = state.accountList.find(e =>e===account)
-        targetedAccount=account
+    EDIT_ACCOUNT(state, payload) {
+        // console.log(payload)
+        state.accountList = state.accountList.filter(e => e.id !== payload.id)
+        state.accountList.push({ ...state.accountEditValue, ...payload, edited: this.$date.now })
         this.$localStorage.set('accountList', state.accountList)
         // console.log(targetedAccount)
     },
-    DELETE_ACCOUNT(state, name) {
-        state.accountList = state.accountList.filter(e => e.name.toLowerCase() !== name.toLowerCase())
+    DELETE_ACCOUNT(state, id) {
+        state.accountList = state.accountList.filter(e => e.id !== id)
         this.$localStorage.set('accountList', state.accountList)
     },
 }
@@ -56,8 +57,8 @@ export const actions = {
     initAccountList({ commit }, payload) {
         commit('INIT_ACCOUNT_LIST', payload)
     },
-    setAccountEditValue({ commit }, val) {
-        commit('SET_ACCOUNT_EDIT_VALUE', val)
+    setAccountEditValue({ commit }, id) {
+        commit('SET_ACCOUNT_EDIT_VALUE', id)
     },
     addAccount({ commit, dispatch }, payload) {
         // console.log(payload)
@@ -69,7 +70,7 @@ export const actions = {
             { root: true })
     },
     editAccount({ commit, dispatch }, payload) {
-        console.log(payload)
+        // console.log(payload)
         commit('EDIT_ACCOUNT', payload)
         dispatch("ui/showSnackbar",
             {
@@ -78,11 +79,11 @@ export const actions = {
             },
             { root: true })
     },
-    deleteAccount({ commit, dispatch }, name) {
-        commit('DELETE_ACCOUNT', name)
+    deleteAccount({ commit, dispatch }, id) {
+        commit('DELETE_ACCOUNT', id)
         dispatch("ui/showSnackbar",
             {
-                label: name + "  has been deleted",
+                label: "Account has been deleted",
                 color: "success",
             },
             { root: true })

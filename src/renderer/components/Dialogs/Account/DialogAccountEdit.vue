@@ -189,7 +189,8 @@ export default {
           });
         }
         this.$store.dispatch("account/editAccount", {
-          appName: this.appName.name,
+          id: this.accountEditValue.id,
+          appName: this.appName.name || this.appName,
           accountId: this.accountId,
           accountPw: this.accountPw,
           accountNote: this.accountNote,
@@ -199,6 +200,7 @@ export default {
         //   color: "success",
         // });
         this.$refs.formAccountEdit.reset();
+        this.hideDialog()
       }
     },
   },

@@ -17,6 +17,7 @@ module.exports = {
     { ssr: true, src: '@/plugins/icons.js' },
     '~/plugins/local-storage',
     '~/plugins/globals',
+    '~/plugins/date',
 
   ],
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules

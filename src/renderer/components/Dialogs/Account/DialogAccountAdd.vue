@@ -180,7 +180,7 @@ export default {
           });
         }
         this.$store.dispatch("account/addAccount", {
-          appName: this.appName.name,
+          appName: this.appName?.name || this.appName,
           accountId: this.accountId,
           accountPw: this.accountPw,
           accountNote: this.accountNote,

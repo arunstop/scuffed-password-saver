@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "eslint-plugin-nuxt": "^2.0.0",
+    "moment": "^2.29.1",
     "vue2-storage": "^6.1.3"
   }
 }

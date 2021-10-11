@@ -9,6 +9,7 @@ export const state = () => ({
     accountEditDialog: false,
     appEditValue: "",
     snackbarList: [],
+    confirmationDialog: null,
 })
 
 export const getters = {
@@ -51,6 +52,10 @@ export const mutations = {
     },
     REMOVE_SNACKBAR(state, id) {
         state.snackbarList = state.snackbarList.filter(s => s.id !== id)
+    },
+    TOGGLE_CONFIRMATION_DIALOG(state, payload) {
+        if (payload === false) state.confirmationDialog = null
+        else state.confirmationDialog = payload
     }
 }
 
@@ -80,14 +85,17 @@ export const actions = {
         commit('TOGGLE_ACCOUNT_ADD_DIALOG', val)
     },
     toggleAccountEditDialog({ commit, dispatch }, payload) {
-        // alert(payload.name)
-        if (payload?.account) {
+        // alert(payload.id)
+        if (payload?.id) {
             commit('TOGGLE_ACCOUNT_EDIT_DIALOG', payload.val)
-            dispatch('account/setAccountEditValue', payload.account, { root: true })
+            dispatch('account/setAccountEditValue', payload.id, { root: true })
         } else {
             commit('TOGGLE_ACCOUNT_EDIT_DIALOG', payload.val)
             if (payload.val === false) dispatch('account/setAccountEditValue', "", { root: true })
         }
+    },
+    toggleConfirmationDialog({ commit }, payload) {
+        commit('TOGGLE_CONFIRMATION_DIALOG', payload)
     },
     showSnackbar({ commit }, payload) {
         commit('SHOW_SNACKBAR', payload)
