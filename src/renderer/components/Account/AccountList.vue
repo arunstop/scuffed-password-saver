@@ -17,8 +17,8 @@
       </v-chip> -->
     </template>
     <template #[`item.actions`]="{ item }">
-      <v-icon @click="editItem(item)"> mdi-pencil </v-icon>
-      <v-icon @click="deleteItem(item)"> mdi-delete </v-icon>
+      <v-icon color="primary" @click="editItem(item)"> mdi-pencil </v-icon>
+      <v-icon color="error" @click="deleteItem(item)"> mdi-delete </v-icon>
     </template>
   </v-data-table>
 </template>

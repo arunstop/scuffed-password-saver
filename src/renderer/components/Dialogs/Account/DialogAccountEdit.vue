@@ -6,7 +6,7 @@
       @submit="accountEdit()"
     >
       <v-card>
-        <v-card-title>Edit Account</v-card-title>
+        <v-card-title>Edit Account {{ appName.name }}</v-card-title>
         <v-card-text class="mt-4">
           <v-combobox
             v-model="appName"
@@ -14,7 +14,8 @@
             :rules="appNameRules"
             :search-input.sync="appNameSearch"
             item-text="name"
-            item-value="name"
+            return-object
+            autofocus
             placeholder="Choose app/website or add a new one"
             label="Choose app"
             :success-messages="appNameSuccess"
@@ -73,6 +74,7 @@
               ref="btnDialogAccountEditY"
               class="flex-grow-1"
               large
+              :disabled="isUnchanged()"
               color="success"
               @click.stop="accountEdit()"
             >
@@ -124,6 +126,7 @@ export default {
           "ID / Username / Email / Phone number is required!",
         (v) =>
           !this.isAccountExist(this.appName?.name || "", (v || "").trim()) ||
+          v === this.accountEditValue.accountId ||
           "This ID already exists",
       ];
     },
@@ -155,8 +158,8 @@ export default {
     },
   },
   created() {
-    this.appName = this.accountEditValue.appName;
-    this.appNameSearch = this.accountEditValue.appName.name;
+    this.appName = this.getAppByName(this.accountEditValue.appName);
+    this.appNameSearch = this.appName.name;
     this.accountId = this.accountEditValue.accountId;
     this.accountPw = this.accountEditValue.accountPw;
     this.accountNote = this.accountEditValue.accountNote;
@@ -177,6 +180,17 @@ export default {
   methods: {
     hideDialog() {
       this.$store.dispatch("ui/toggleAccountEditDialog", false);
+    },
+    isUnchanged() {
+      if (
+        this.appName === this.getAppByName(this.accountEditValue.appName) &&
+        this.accountId === this.accountEditValue.accountId &&
+        this.accountPw === this.accountEditValue.accountPw &&
+        this.accountNote === this.accountEditValue.accountNote
+      ) {
+        return true;
+      }
+      return false;
     },
     accountEdit() {
       this.$refs.formAccountEdit.validate();
@@ -200,7 +214,7 @@ export default {
         //   color: "success",
         // });
         this.$refs.formAccountEdit.reset();
-        this.hideDialog()
+        this.hideDialog();
       }
     },
   },
