@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :headers="headers" :items="getAccountList()">
+  <v-data-table :headers="headers" :items="sortedAccountList">
     <template #[`item.appName`]="{ item }">
       <v-chip color="primary">
         {{ item.appName }}
@@ -12,6 +12,19 @@
       <span class="font-weight-black">
         {{ item.accountId }}
       </span>
+      <!-- <v-chip color="primary">
+        {{ index }}
+      </v-chip> -->
+    </template>
+    <template #[`item.accountPw`]="{ item }">
+      <v-hover v-slot="{ hover }">
+        <input
+          :value="item.accountPw"
+          readonly
+          :type="hover ? 'text' : 'password'"
+          style="color: black !important; width: 100%; max-width:60px;"
+        />
+      </v-hover>
       <!-- <v-chip color="primary">
         {{ index }}
       </v-chip> -->
@@ -38,6 +51,17 @@ export default {
   },
   computed: {
     ...mapGetters("account", ["getAccountList"]),
+    sortedAccountList() {
+      return this.$globals.sortById({
+        arr: this.$globals.cloneState(this.getAccountList()),
+        order: "desc",
+        prop: "id",
+        replacedWord: "ACC",
+      });
+    },
+  },
+  created() {
+    console.log(this.sortedAccountList);
   },
   methods: {
     editItem(item) {
@@ -49,10 +73,15 @@ export default {
     deleteItem(item) {
       this.$store.dispatch("ui/toggleConfirmationDialog", {
         val: true,
-        color : 'error',
-        template:{
-          title: 'Delete account',
-          desc: 'Are u sure you want to delete this '+item.appName+' account (ID : '+item.accountId+') ?'
+        color: "error",
+        template: {
+          title: "Delete account",
+          desc:
+            "Are u sure you want to delete this " +
+            item.appName +
+            " account (ID : " +
+            item.accountId +
+            ") ?",
         },
         actions: {
           y: () => {

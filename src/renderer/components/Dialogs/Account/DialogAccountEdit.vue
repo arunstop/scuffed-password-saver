@@ -15,7 +15,6 @@
             :search-input.sync="appNameSearch"
             item-text="name"
             return-object
-            autofocus
             placeholder="Choose app/website or add a new one"
             label="Choose app"
             :success-messages="appNameSuccess"
@@ -39,6 +38,7 @@
           <v-text-field
             v-model="accountId"
             :rules="accountIdRules"
+            autofocus
             placeholder="Enter ID / Username / Email / Phone number"
             label="ID / Username / Email / Phone number"
             outlined

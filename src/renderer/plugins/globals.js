@@ -1,14 +1,20 @@
 import _ from 'lodash'
 import Vue2Storage from 'vue2-storage'
 export default ({ app }, inject) => {
-
-    // Clone Vuex state
-    const cloneState = (stateVar) => {
-        return JSON.parse(JSON.stringify(stateVar))
-    }
-    
     inject('globals', {
         lodash: _,
-        cloneState
+        // Clone Vuex state
+        cloneState: (stateVar) => {
+            return JSON.parse(JSON.stringify(stateVar))
+        },
+        sortById: ({ arr, order = 'asc', prop = '', replacedWord = '' }) => {
+            return arr.sort((currEl, nextEl) => {
+                const getIdNo = (id) => id.replace(replacedWord, "");
+                const currId = getIdNo(currEl?.[prop] || currEl)
+                const nextId = getIdNo(nextEl?.[prop] || nextEl)
+                if (order.toLowerCase() === 'desc') return nextId - currId;
+                return currId - nextId;
+            })
+        }
     })
 }

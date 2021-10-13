@@ -33,7 +33,13 @@ export const mutations = {
         // console.log(state.accountEditValue)
     },
     ADD_ACCOUNT(state, payload) {
-        const id = 'ACC' + (state.accountList.length + 1)
+        const maxId = this.$globals.sortById(
+            {
+                arr: state.accountList.map(e => e.id),
+                order: "desc",
+                replacedWord: "ACC",
+            })[0].replace('ACC','')
+        const id = 'ACC' + (maxId + 1)
         const now = this.$date.now
         const dates = { created: now, edited: now }
         state.accountList.push({ id, ...payload, ...dates })
