@@ -25,7 +25,7 @@ export const mutations = {
     INIT_ACCOUNT_LIST(state, payload) {
         state.accountList = payload
         this.$localStorage.set('accountList', state.accountList)
-        console.log(state.accountList)
+        // console.log(state.accountList)
     },
     SET_ACCOUNT_EDIT_VALUE(state, id) {
         // alert(state.accountList)

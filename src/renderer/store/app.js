@@ -7,7 +7,7 @@ export const state = function () {
 
 export const getters = {
     getAppByName: state => (name) => {
-        console.log(name)
+        // console.log(name)
         return state.appList.find(e => e.name.toLowerCase() === name.toLowerCase())
     },
     getAppList:state=>()=>{

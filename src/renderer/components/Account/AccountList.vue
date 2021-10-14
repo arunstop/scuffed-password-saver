@@ -21,7 +21,7 @@
         <input
           :value="item.accountPw"
           readonly
-          :type="hover ? 'text' : 'password'"
+          :type="!hoverToShowPw || !hover ? 'password' : 'text'"
           style="color: black !important; width: 100%; max-width:60px;"
         />
       </v-hover>
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters,mapState } from "vuex";
 export default {
   data() {
     return {
@@ -51,6 +51,12 @@ export default {
   },
   computed: {
     ...mapGetters("account", ["getAccountList"]),
+     ...mapState("settings", [
+      "hoverToShowPw",
+      "dialogToDelete",
+      "dblClickToEdit",
+      "darkTheme",
+    ]),
     sortedAccountList() {
       return this.$globals.sortById({
         arr: this.$globals.cloneState(this.getAccountList()),
@@ -61,7 +67,7 @@ export default {
     },
   },
   created() {
-    console.log(this.sortedAccountList);
+    // console.log(this.sortedAccountList);
   },
   methods: {
     editItem(item) {
