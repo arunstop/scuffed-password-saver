@@ -1,5 +1,9 @@
 <template>
-  <v-dialog v-model="initFolderDialog" persistent max-width="600">
+  <v-dialog
+    v-model="initFolderDialog"
+    :persistent="!vaultPath || false"
+    max-width="600"
+  >
     <v-card>
       <v-card-title class="text-break text-center">
         Where do you want to save your passwords?
@@ -30,12 +34,14 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import { remote } from "electron";
 export default {
   data() {
     return { path: "" };
   },
   computed: {
+    ...mapState("settings", ["vaultPath"]),
     initFolderDialog: {
       get() {
         return this.$store.state.ui.initFolderDialog;
@@ -45,19 +51,26 @@ export default {
       },
     },
   },
+  created() {
+    this.path = this.vaultPath;
+    // if(this.vaultPath){
+    //   this.execChooseFolder()
+    // }
+  },
   methods: {
     async execChooseFolder() {
       const choosenPath = await remote.dialog.showOpenDialog({
         properties: ["openDirectory"],
       });
-      this.path = choosenPath.filePaths[0] || "";
+      this.path = choosenPath.filePaths[0] || this.path;
     },
     execSetPath() {
       if (this.path.includes(":\\"))
-        this.$store.dispatch("vault/setPath", this.path);
+        this.$store.dispatch("settings/setVaultPath", this.path);
     },
     isValidPath() {
-      if (this.path.includes(":\\")) return true;
+      if (this.path === this.vaultPath) return false;
+      else if (this.path.includes(":\\")) return true;
       return false;
     },
   },

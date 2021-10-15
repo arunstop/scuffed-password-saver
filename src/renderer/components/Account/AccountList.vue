@@ -1,43 +1,40 @@
 <template>
-  <v-data-table :headers="headers" :items="sortedAccountList">
-    <template #[`item.appName`]="{ item }">
-      <v-chip color="primary">
-        {{ item.appName }}
-      </v-chip>
-      <!-- <v-chip color="primary">
-        {{ index }}
-      </v-chip> -->
-    </template>
-    <template #[`item.accountId`]="{ item }">
-      <span class="font-weight-black">
-        {{ item.accountId }}
-      </span>
-      <!-- <v-chip color="primary">
-        {{ index }}
-      </v-chip> -->
-    </template>
-    <template #[`item.accountPw`]="{ item }">
-      <v-hover v-slot="{ hover }">
-        <input
-          :value="item.accountPw"
-          readonly
-          :type="!hoverToShowPw || !hover ? 'password' : 'text'"
-          style="color: black !important; width: 100%; max-width:60px;"
-        />
-      </v-hover>
-      <!-- <v-chip color="primary">
-        {{ index }}
-      </v-chip> -->
-    </template>
-    <template #[`item.actions`]="{ item }">
-      <v-icon color="primary" @click="editItem(item)"> mdi-pencil </v-icon>
-      <v-icon color="error" @click="deleteItem(item)"> mdi-delete </v-icon>
+  <v-data-table :headers="headers" :items="sortedAccountList" >
+    <template #item="{ item }">
+        <tr class="cursor-pointer" @dblclick="!dblClickToEdit || editItem(item)">
+        <td>
+          <v-chip color="primary">
+            {{ item.appName }}
+          </v-chip>
+        </td>
+        <td>
+          <span class="font-weight-black">
+            {{ item.accountId }}
+          </span>
+        </td>
+        <td>
+          <v-hover v-slot="{ hover }">
+            <div>
+              <input
+                :value="item.accountPw"
+                readonly
+                :type="!hoverToShowPw || !hover ? 'password' : 'text'"
+                style="color: black !important; width: 100%; max-width: 60px"
+              />
+            </div>
+          </v-hover>
+        </td>
+        <td>
+          <v-icon color="primary" @click="editItem(item)"> mdi-pencil </v-icon>
+          <v-icon color="error" @click="deleteItem(item)"> mdi-delete </v-icon>
+        </td>
+      </tr>
     </template>
   </v-data-table>
 </template>
 
 <script>
-import { mapGetters,mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 export default {
   data() {
     return {
@@ -51,7 +48,7 @@ export default {
   },
   computed: {
     ...mapGetters("account", ["getAccountList"]),
-     ...mapState("settings", [
+    ...mapState("settings", [
       "hoverToShowPw",
       "dialogToDelete",
       "dblClickToEdit",
@@ -101,4 +98,7 @@ export default {
 </script>
 
 <style>
+.cursor-pointer{
+  cursor: pointer;
+}
 </style>

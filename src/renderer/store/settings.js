@@ -2,7 +2,8 @@ export const state = () => ({
     hoverToShowPw: true,
     dialogToDelete: true,
     dblClickToEdit: false,
-    darkTheme: false
+    darkTheme: false,
+    vaultPath: ''
 })
 
 export const getters = {
@@ -21,6 +22,11 @@ export const mutations = {
     },
     TOGGLE_DARK_THEME(state, val) {
         state.darkTheme = val
+    },
+    SET_VAULT_PATH(state, path) {
+        const vault = { path }
+        this.$localStorage.set('vault', vault)
+        state.vaultPath = path
     }
 }
 
@@ -37,6 +43,12 @@ export const actions = {
     },
     toggleDarkTheme({ commit }, val) {
         commit('TOGGLE_DARK_THEME', val)
+    },
+    setVaultPath({ commit, dispatch }, path) {
+        commit('SET_VAULT_PATH', path)
+        dispatch('ui/toggleInitFolderDialog', false, { root: true })
+        const snackbar = { label: "Vault folder is set! But, shhh! Don't tell anyone ;)", color: "success" }
+        dispatch('ui/showSnackbar', snackbar, { root: true })
     }
 }
 

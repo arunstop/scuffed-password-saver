@@ -6,7 +6,6 @@
         <v-list-item-content>
           <v-list-item-title
             class="font-weight-black normal-white-space text-h5"
-            :class="!hoverToShowPwModel || 'primary--text'"
           >
             <v-icon
               class="mb-1"
@@ -33,7 +32,6 @@
         <v-list-item-content>
           <v-list-item-title
             class="font-weight-black normal-white-space text-h5"
-            :class="!dialogToDeleteModel || 'primary--text'"
           >
             <v-icon
               class="mb-1"
@@ -60,7 +58,6 @@
         <v-list-item-content>
           <v-list-item-title
             class="font-weight-black normal-white-space text-h5"
-            :class="!dblClickToEditModel || 'primary--text'"
           >
             <v-icon
               class="mb-1"
@@ -87,11 +84,8 @@
         <v-list-item-content>
           <v-list-item-title
             class="font-weight-black normal-white-space text-h5"
-            :class="!darkThemeModel || 'primary--text'"
           >
-            <v-icon class="mb-1" :class="!darkThemeModel || 'primary--text'">
-              mdi-brightness-6
-            </v-icon>
+            <v-icon class="primary--text mb-1"> mdi-brightness-6 </v-icon>
             Theme
           </v-list-item-title>
           <v-list-item-subtitle
@@ -120,18 +114,73 @@
       </v-list-item>
       <v-divider />
     </template>
+    <template v-if="true">
+      <v-list-item class="ps-0">
+        <v-list-item-content>
+          <v-list-item-title
+            class="font-weight-black normal-white-space text-h5"
+          >
+            <v-icon class="primary--text mb-1"> mdi-safe-square </v-icon>
+            Account Vault Location
+          </v-list-item-title>
+          <v-list-item-subtitle
+            class="text-break normal-white-space subtitle-2"
+          >
+            Currently saved at :
+            <span class="font-weight-black">{{ vaultPath }}</span>
+          </v-list-item-subtitle>
+        </v-list-item-content>
+        <v-btn
+          class="ms-2"
+          max-width="240"
+          large
+          color="primary"
+          style="text-overflow: ellipsis !important"
+          @click="openVaultPath()"
+        >
+          change
+        </v-btn>
+      </v-list-item>
+      <v-divider />
+    </template>
+    <template v-if="true">
+      <v-list-item class="ps-0">
+        <v-list-item-content>
+          <v-list-item-title
+            class="font-weight-black normal-white-space text-h5"
+          >
+            <v-icon class="primary--text mb-1"> mdi-lock-clock </v-icon>
+            Password change reminder
+          </v-list-item-title>
+          <v-list-item-subtitle
+            class="text-break normal-white-space subtitle-2"
+          >
+            Set how frequent app will be at reminding you to change your
+            password.
+          </v-list-item-subtitle>
+        </v-list-item-content>
+        <div class="ms-2" style="max-width:180px">
+          <v-select :items="reminderFreq" outlined hide-details > </v-select>
+        </div>
+      </v-list-item>
+      <v-divider />
+    </template>
   </v-list>
 </template>
 
 <script>
 import { mapState } from "vuex";
 export default {
+  data() {
+    return {};
+  },
   computed: {
     ...mapState("settings", [
       "hoverToShowPw",
       "dialogToDelete",
       "dblClickToEdit",
       "darkTheme",
+      "vaultPath",
     ]),
     hoverToShowPwModel: {
       get() {
@@ -164,6 +213,18 @@ export default {
       set(v) {
         this.$store.dispatch("settings/toggleDarkTheme", v === 1);
       },
+    },
+    reminderFreq() {
+      const rf = [];
+      for (let i = 1; i <= 12; i++) {
+        rf.push(i + " month");
+      }
+      return rf;
+    },
+  },
+  methods: {
+    openVaultPath() {
+      this.$store.dispatch("ui/toggleInitFolderDialog", true);
     },
   },
 };

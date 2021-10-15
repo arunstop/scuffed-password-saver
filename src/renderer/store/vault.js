@@ -5,9 +5,6 @@ export const state = function () {
 }
 
 export const getters = {
-    getMenuList: state => () => {
-        return state.menuList
-    }
 
 }
 

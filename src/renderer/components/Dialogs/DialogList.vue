@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DialogInitFolder />
+    <DialogInitFolder v-if="$store.state.ui.initFolderDialog"/>
     <DialogLogout v-if="$store.state.ui.logoutDialog" />
     <DialogAppAdd v-if="$store.state.ui.appAddDialog" />
     <DialogAppEdit v-if="$store.state.ui.appEditDialog" />
