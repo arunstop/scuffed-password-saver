@@ -1,9 +1,11 @@
-export default function ({ store, $localStorage }) {
+export default function ({ store, $localStorage, $globals }) {
   // If the user is not authenticated
-  if (!store.state.settings.vaultPath) {
-    const vault = $localStorage.get('vault')
-    if (vault) {
-      store.dispatch('settings/setVaultPath', vault.path)
+
+  if($localStorage.has('settings')){
+    if (!$globals.lodash.isEqual(store.state.settings, $localStorage.get('settings'))) {
+      store.dispatch('settings/initSettings', $localStorage.get('settings'))
     }
+  }else{
+    store.dispatch('settings/initSettings', '')
   }
 }

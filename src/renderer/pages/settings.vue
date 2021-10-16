@@ -159,8 +159,14 @@
             password.
           </v-list-item-subtitle>
         </v-list-item-content>
-        <div class="ms-2" style="max-width:180px">
-          <v-select :items="reminderFreq" outlined hide-details > </v-select>
+        <div class="ms-2" style="max-width: 180px">
+          <v-select
+            v-model="reminderFreqModel"
+            :items="reminderFreqItems"
+            outlined
+            hide-details
+          >
+          </v-select>
         </div>
       </v-list-item>
       <v-divider />
@@ -181,6 +187,7 @@ export default {
       "dblClickToEdit",
       "darkTheme",
       "vaultPath",
+      "reminderFreq",
     ]),
     hoverToShowPwModel: {
       get() {
@@ -214,10 +221,19 @@ export default {
         this.$store.dispatch("settings/toggleDarkTheme", v === 1);
       },
     },
-    reminderFreq() {
+    reminderFreqModel: {
+      get() {
+        const v = this.reminderFreq;
+        return v + (v === 1 ? " month" : " months");
+      },
+      set(v) {
+        this.$store.dispatch("settings/setReminderFreq", v);
+      },
+    },
+    reminderFreqItems() {
       const rf = [];
       for (let i = 1; i <= 12; i++) {
-        rf.push(i + " month");
+        rf.push(i + (i === 1 ? " month" : " months"));
       }
       return rf;
     },
