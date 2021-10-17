@@ -26,6 +26,7 @@ export const mutations = {
     },
     TOGGLE_DARK_THEME(state, val) {
         state.darkTheme = val
+        this.app.vuetify.framework.theme.dark = val
     },
     SET_VAULT_PATH(state, path) {
         const vault = { path }

@@ -40,7 +40,7 @@ export const mutations = {
                 replacedWord: "ACC",
             })[0].replace('ACC','')
         const id = 'ACC' + (maxId + 1)
-        const now = this.$date.now
+        const now = this.$date.moment()
         const dates = { created: now, edited: now }
         state.accountList.push({ id, ...payload, ...dates })
         this.$localStorage.set('accountList', state.accountList)

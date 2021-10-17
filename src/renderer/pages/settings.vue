@@ -1,8 +1,8 @@
 <template>
-  <v-list class="px-4">
+  <v-list class="py-0">
     <!-- Hover to show password -->
     <template v-if="true">
-      <v-list-item class="ps-0">
+      <v-list-item class="">
         <v-list-item-content>
           <v-list-item-title
             class="font-weight-black normal-white-space text-h5"
@@ -18,7 +18,7 @@
           <v-list-item-subtitle
             class="text-break normal-white-space subtitle-2"
           >
-            Hover mouse to password column in table of accounts to reveal the
+            Hover mouse on password column in table of accounts to reveal the
             password.
           </v-list-item-subtitle>
         </v-list-item-content>
@@ -28,7 +28,7 @@
       <v-divider />
     </template>
     <template v-if="true">
-      <v-list-item class="ps-0">
+      <v-list-item class="">
         <v-list-item-content>
           <v-list-item-title
             class="font-weight-black normal-white-space text-h5"
@@ -54,7 +54,7 @@
       <v-divider />
     </template>
     <template v-if="true">
-      <v-list-item class="ps-0">
+      <v-list-item class="">
         <v-list-item-content>
           <v-list-item-title
             class="font-weight-black normal-white-space text-h5"
@@ -80,7 +80,7 @@
       <v-divider />
     </template>
     <template v-if="true">
-      <v-list-item class="ps-0">
+      <v-list-item class="">
         <v-list-item-content>
           <v-list-item-title
             class="font-weight-black normal-white-space text-h5"
@@ -115,7 +115,7 @@
       <v-divider />
     </template>
     <template v-if="true">
-      <v-list-item class="ps-0">
+      <v-list-item class="">
         <v-list-item-content>
           <v-list-item-title
             class="font-weight-black normal-white-space text-h5"
@@ -144,7 +144,7 @@
       <v-divider />
     </template>
     <template v-if="true">
-      <v-list-item class="ps-0">
+      <v-list-item class="">
         <v-list-item-content>
           <v-list-item-title
             class="font-weight-black normal-white-space text-h5"
