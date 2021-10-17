@@ -7,7 +7,19 @@
     >
       <v-card>
         <v-card-title>Edit Account {{ appName.name }}</v-card-title>
-        <v-card-text class="mt-4">
+        <v-card-text class="">
+          <v-alert type="info" dense text border="left" icon="mdi-plus-circle">
+            Created
+            <u><b>{{dates.created.fromNow }}</b></u>
+            <br>
+            {{"On "+dates.created.fullDate+""}}
+          </v-alert>
+          <v-alert type="info" dense text border="left" icon="mdi-pencil">
+            Edited
+            <u><b>{{ dates.edited.fromNow}}</b></u>
+            <br>
+            {{"On "+dates.edited.fullDate+""}}
+          </v-alert>
           <v-combobox
             v-model="appName"
             :items="getAppList()"
@@ -147,6 +159,18 @@ export default {
           ? "Application : " + this.appNameSearch + " will be created"
           : this.appNameSearch + " is selected" + successMsgUrlNotNull;
       }
+    },
+    dates() {
+      return {
+        created: {
+          fromNow:this.$date.moment(this.accountEditValue.created).fromNow(),
+          fullDate: this.$date.moment(this.accountEditValue.created).format('dddd, DD MMMM YYYY [at] HH:mm')
+        },
+        edited: {
+          fromNow:this.$date.moment(this.accountEditValue.edited).fromNow(),
+          fullDate: this.$date.moment(this.accountEditValue.edited).format('dddd, DD MMMM YYYY [at] HH:mm')
+        },
+      };
     },
   },
   watch: {

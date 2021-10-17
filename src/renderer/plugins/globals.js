@@ -12,7 +12,7 @@ export default ({ app }, inject) => {
                 const getIdNo = (id) => id.replace(replacedWord, "");
                 const currId = getIdNo(currEl?.[prop] || currEl)
                 const nextId = getIdNo(nextEl?.[prop] || nextEl)
-                if (order.toLowerCase() === 'desc') return nextId - currId;
+                if (order.toLowerCase()     === 'desc') return nextId - currId;
                 return currId - nextId;
             })
         }
