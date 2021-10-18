@@ -5,6 +5,8 @@ export const state = () => ({
     darkTheme: false,
     vaultPath: '',
     reminderFreq: '3 months',
+    pwDuplication:false,
+    pwDupLimit:0,
 })
 
 export const getters = {
@@ -35,7 +37,13 @@ export const mutations = {
     SET_REMINDER_FREQ(state, val) {
         val = val.split(' ')[0]
         state.reminderFreq = val
-    }
+    },
+    TOGGLE_PW_DUPLICATION(state, val) {
+        state.pwDuplication = val
+    },
+    SET_PW_DUP_LIMIT(state, val) {
+        state.pwDupLimit = val
+    },
 }
 
 
@@ -48,6 +56,8 @@ export const actions = {
             dispatch('toggleDarkTheme', payload.darkTheme)
             dispatch('setVaultPath', payload.vaultPath)
             dispatch('setReminderFreq', payload.reminderFreq)
+            dispatch('togglePwDuplication', payload.pwDuplication)
+            dispatch('setPwDupLimit', payload.pwDupLimit)
         }
         commit('SET_LOCAL_SETTINGS')
 
@@ -77,6 +87,14 @@ export const actions = {
     },
     setReminderFreq({ commit }, val) {
         commit('SET_REMINDER_FREQ', val)
+        commit('SET_LOCAL_SETTINGS')
+    },
+    togglePwDuplication({ commit }, val) {
+        commit('TOGGLE_PW_DUPLICATION', val)
+        commit('SET_LOCAL_SETTINGS')
+    },
+    setPwDupLimit({commit}, val){
+        commit('SET_PW_DUP_LIMIT', val)
         commit('SET_LOCAL_SETTINGS')
     }
 }

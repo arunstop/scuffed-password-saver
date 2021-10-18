@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="appEditDialog" max-width="480" attach=".main-container">
     <v-form ref="formAppEdit" v-model="formAppEdit" @submit.prevent="editApp()">
-      <v-card>
+      <v-card outlined>
         <v-card-title
           >{{ "Edit Application " + appEditValue.name }}
         </v-card-title>

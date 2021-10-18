@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="confirmationDialog" max-width="300">
-    <v-card>
+    <v-card outlined>
       <v-card-title :class="data.color + '--text'">{{
         data.template.title
       }}</v-card-title>

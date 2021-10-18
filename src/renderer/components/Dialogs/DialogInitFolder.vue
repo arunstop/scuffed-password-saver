@@ -4,7 +4,7 @@
     :persistent="!vaultPath || false"
     max-width="600"
   >
-    <v-card>
+    <v-card outlined>
       <v-card-title class="text-break text-center">
         Where do you want to save your passwords?
       </v-card-title>

@@ -5,7 +5,7 @@
       v-model="formAccountAdd"
       @submit="accountAdd()"
     >
-      <v-card>
+      <v-card outlined>
         <v-card-title>Add New Account</v-card-title>
         <v-card-text class="mt-4">
           <v-combobox

@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="appAddDialog" max-width="480">
     <v-form ref="formAddApp" v-model="formAddApp" @submit="addApp()">
-      <v-card>
+      <v-card outlined>
         <v-card-title>Add New Application</v-card-title>
         <v-card-text class="mt-4">
           <v-text-field

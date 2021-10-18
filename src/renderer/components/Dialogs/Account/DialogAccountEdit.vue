@@ -5,7 +5,7 @@
       v-model="formAccountEdit"
       @submit="accountEdit()"
     >
-      <v-card>
+      <v-card outlined>
         <v-card-title>Edit Account {{ appName.name }}</v-card-title>
         <v-card-text class="">
           <v-alert type="info" dense text border="left" icon="mdi-plus-circle">

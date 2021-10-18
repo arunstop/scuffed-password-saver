@@ -1,7 +1,7 @@
 <template>
-  <v-dialog v-model="logoutDialog" max-width="300">
-    <v-card>
-      <v-card-title>Exit from app?</v-card-title>
+  <v-dialog v-model="logoutDialog" max-width="420">
+    <v-card outlined>
+      <v-card-title class="primary--text">Exit from app?</v-card-title>
       <v-card-text>
         To be honest you can just close the program, boomer.
       </v-card-text>
