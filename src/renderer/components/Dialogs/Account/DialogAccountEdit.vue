@@ -182,8 +182,8 @@ export default {
     },
   },
   created() {
-    this.appName = this.getAppByName(this.accountEditValue.appName);
-    this.appNameSearch = this.appName.name;
+    this.appName = this.getAppByName(this.accountEditValue.appName) || this.accountEditValue.appName;
+    this.appNameSearch = this.appName?.name || this.appName;
     this.accountId = this.accountEditValue.accountId;
     this.accountPw = this.accountEditValue.accountPw;
     this.accountNote = this.accountEditValue.accountNote;

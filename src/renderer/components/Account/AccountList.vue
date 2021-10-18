@@ -19,7 +19,8 @@
                 :value="item.accountPw"
                 readonly
                 :type="!hoverToShowPw || !hover ? 'password' : 'text'"
-                style="color: black !important; width: 100%; max-width: 60px"
+                style="width: 100%; max-width: 60px"
+                :class="$vuetify.theme.dark ? 'white--text': 'black--text'"
               />
             </div>
           </v-hover>

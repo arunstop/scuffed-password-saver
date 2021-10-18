@@ -49,7 +49,7 @@ export const mutations = {
     EDIT_ACCOUNT(state, payload) {
         // console.log(payload)
         state.accountList = state.accountList.filter(e => e.id !== payload.id)
-        state.accountList.push({ ...state.accountEditValue, ...payload, edited: this.$date.now })
+        state.accountList.push({ ...state.accountEditValue, ...payload, edited: this.$date.moment() })
         this.$localStorage.set('accountList', state.accountList)
         // console.log(targetedAccount)
     },

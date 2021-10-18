@@ -224,7 +224,8 @@ export default {
     reminderFreqModel: {
       get() {
         const v = this.reminderFreq;
-        return v + (v === 1 ? " month" : " months");
+        
+        return v + (v*1 === 1 ? " month" : " months");
       },
       set(v) {
         this.$store.dispatch("settings/setReminderFreq", v);
