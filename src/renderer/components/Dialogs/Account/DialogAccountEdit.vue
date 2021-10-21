@@ -8,17 +8,38 @@
       <v-card outlined>
         <v-card-title>Edit Account {{ appName.name }}</v-card-title>
         <v-card-text class="">
+          <v-alert
+            :type="pwDurab.status"
+            dense
+            text
+            border="left"
+            icon="mdi-clock"
+          >
+            Password Durability :
+            <span class="sps-text-highlight"> {{ pwDurab.percentage }}% </span>
+            <br />
+            <span class="sps-text-highlight">{{
+              pwDurab.daysLeft + " days left"
+            }}</span>
+            {{ " to change this password" }}
+            <br />
+            {{ "On " + pwDurab.dueDate + "" }}
+          </v-alert>
           <v-alert type="info" dense text border="left" icon="mdi-plus-circle">
             Created
-            <u><b>{{dates.created.fromNow }}</b></u>
-            <br>
-            {{"On "+dates.created.fullDate+""}}
+            <span class="sps-text-highlight">
+              {{ dates.created.fromNow }}
+            </span>
+            <br />
+            {{ "On " + dates.created.fullDate + "" }}
           </v-alert>
           <v-alert type="info" dense text border="left" icon="mdi-pencil">
             Edited
-            <u><b>{{ dates.edited.fromNow}}</b></u>
-            <br>
-            {{"On "+dates.edited.fullDate+""}}
+            <u
+              ><b>{{ dates.edited.fromNow }}</b></u
+            >
+            <br />
+            {{ "On " + dates.edited.fullDate + "" }}
           </v-alert>
           <v-combobox
             v-model="appName"
@@ -116,6 +137,7 @@ export default {
     ...mapGetters("app", ["getAppByName", "getAppList"]),
     ...mapGetters("account", ["isAccountExist"]),
     ...mapState("account", ["accountEditValue"]),
+    ...mapState("settings", ["reminderFreq"]),
     accountEditDialog: {
       get() {
         return this.$store.state.ui.accountEditDialog;
@@ -161,15 +183,48 @@ export default {
       }
     },
     dates() {
+      const created = this.$date.moment(this.accountEditValue.created);
+      const edited = this.$date.moment(this.accountEditValue.edited);
       return {
         created: {
-          fromNow:this.$date.moment(this.accountEditValue.created).fromNow(),
-          fullDate: this.$date.moment(this.accountEditValue.created).format('dddd, DD MMMM YYYY [at] HH:mm')
+          fromNow: created.fromNow(),
+          fullDate: created.format("dddd, DD MMMM YYYY [at] HH:mm"),
         },
         edited: {
-          fromNow:this.$date.moment(this.accountEditValue.edited).fromNow(),
-          fullDate: this.$date.moment(this.accountEditValue.edited).format('dddd, DD MMMM YYYY [at] HH:mm')
+          fromNow: edited.fromNow(),
+          fullDate: edited.format("dddd, DD MMMM YYYY [at] HH:mm"),
         },
+      };
+    },
+    pwDurab() {
+      const editedPw= this.accountEditValue.editedPw
+      const now = this.$date.moment();
+      const edited = this.$date.moment(editedPw);
+      const dueDate = this.$date
+        .moment(editedPw)
+        .add(this.reminderFreq, "months");
+      const daysFull = dueDate.diff(edited, "days") - 1;
+      const daysLeft = dueDate.diff(now, "days");
+      const percentage = () => {
+        if (daysLeft < 0) {
+          return 0;
+        }
+        return Math.round((daysLeft / daysFull) * 100) || 0;
+      };
+      const status = (v) => {
+        if (v >= 70) {
+          return "success";
+        } else if (v >= 40) {
+          return "warning";
+        } else {
+          return "error";
+        }
+      };
+      return {
+        dueDate: dueDate.format("dddd, DD MMMM YYYY [at] HH:mm"),
+        daysLeft,
+        percentage:percentage(),
+        status: status(percentage()),
       };
     },
   },
@@ -182,7 +237,9 @@ export default {
     },
   },
   created() {
-    this.appName = this.getAppByName(this.accountEditValue.appName) || this.accountEditValue.appName;
+    this.appName =
+      this.getAppByName(this.accountEditValue.appName) ||
+      this.accountEditValue.appName;
     this.appNameSearch = this.appName?.name || this.appName;
     this.accountId = this.accountEditValue.accountId;
     this.accountPw = this.accountEditValue.accountPw;
@@ -246,4 +303,8 @@ export default {
 </script>
 
 <style>
+.sps-text-highlight {
+  text-decoration: underline;
+  font-weight: bold;
+}
 </style>

@@ -38,18 +38,27 @@ export const mutations = {
                 arr: state.accountList.map(e => e.id),
                 order: "desc",
                 replacedWord: "ACC",
-            })[0].replace('ACC','')
-        const id = 'ACC' + (maxId + 1)
+            })[0].replace('ACC', '')
+        const id = 'ACC' + ((maxId || 0) * 1 + 1)
         const now = this.$date.moment()
-        const dates = { created: now, edited: now }
+        const dates = { created: now, edited: now, editedPw: now }
         state.accountList.push({ id, ...payload, ...dates })
         this.$localStorage.set('accountList', state.accountList)
         // console.log(this.$localStorage.get('accountList'))
     },
     EDIT_ACCOUNT(state, payload) {
-        // console.log(payload)
+        console.log(payload)
+        const targetedItem = state.accountList.find(e => e.id === payload.id)
+        console.log(targetedItem)
+        const now = this.$date.moment()
+        const editedPw = () => {
+            if (payload.accountPw !== targetedItem.accountPw) {
+                return now
+            }
+            return targetedItem.editedPw
+        }
         state.accountList = state.accountList.filter(e => e.id !== payload.id)
-        state.accountList.push({ ...state.accountEditValue, ...payload, edited: this.$date.moment() })
+        state.accountList.push({ ...state.accountEditValue, ...payload, edited: now, editedPw: editedPw() })
         this.$localStorage.set('accountList', state.accountList)
         // console.log(targetedAccount)
     },

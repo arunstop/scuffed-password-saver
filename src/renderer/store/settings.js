@@ -4,7 +4,7 @@ export const state = () => ({
     dblClickToEdit: false,
     darkTheme: false,
     vaultPath: '',
-    reminderFreq: '3 months',
+    reminderFreq: 3,
     pwDuplication:false,
     pwDupLimit:0,
 })
