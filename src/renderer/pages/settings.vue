@@ -218,14 +218,14 @@
             Password Duplication Limit :
             {{
               pwDuplicationModel
-                ? pwDupLimit + (pwDupLimit*1 === 0 ? " (No limit)" : "")
+                ? pwDupLimit + (pwDupLimit * 1 === 0 ? " (No limit)" : "")
                 : "disabled"
             }}
           </v-list-item-title>
           <v-list-item-subtitle
             class="text-break normal-white-space subtitle-2"
           >
-            If password duplication is on. You may limit how many times the same
+            If password duplication is enabled. You may limit how many times the same
             exact passwords can be used.
           </v-list-item-subtitle>
         </v-list-item-content>
@@ -240,6 +240,7 @@
                 color="primary"
                 style="text-overflow: ellipsis !important"
                 v-bind="attrs"
+                :disabled="!pwDuplicationModel"
                 v-on="on"
               >
                 change
@@ -250,20 +251,27 @@
               <v-card-title class="primary--text">
                 Password Duplication Limit
               </v-card-title>
-              <v-card-text>
-                <v-alert type="info" dense text>
-                  Set value to <b>0</b> to make it unlimited
-                </v-alert>
-                <v-text-field
-                  v-model="pwDupLimitModel"
-                  :rules="pwDupLimitRules"
-                  class="mt-4 mb-0"
-                  type="number"
-                  outlined
-                  single-line
-                  min="0"
-                />
-              </v-card-text>
+              <v-form
+                ref="formSetPwDupLimit"
+                v-model="formSetPwDupLimit"
+                @submit="setPwDupLimit()"
+              >
+                <v-card-text class="pb-0">
+                  <v-alert type="info" dense text>
+                    Set value to <b>0</b> to make it unlimited
+                  </v-alert>
+                  <v-text-field
+                    v-model="pwDupLimitModel"
+                    :rules="pwDupLimitRules"
+                    class="mt-4 mb-0"
+                    autofocus
+                    type="number"
+                    outlined
+                    single-line
+                    min="0"
+                  />
+                </v-card-text>
+              </v-form>
               <v-card-actions class="px-6 pb-6">
                 <v-spacer />
                 <v-btn
@@ -297,6 +305,7 @@ export default {
     return {
       pwDuplicationDialog: false,
       pwDupLimitModel: 0,
+      formSetPwDupLimit: false,
     };
   },
   computed: {
@@ -383,8 +392,12 @@ export default {
       this.pwDuplicationDialog = !this.pwDuplicationDialog;
     },
     setPwDupLimit() {
-      this.$store.dispatch("settings/setPwDupLimit", this.pwDupLimitModel);
-      this.togglePwDupLimitDialog();
+      this.$refs.formSetPwDupLimit.validate();
+      if (this.formSetPwDupLimit) {
+        this.$store.dispatch("settings/setPwDupLimit", this.pwDupLimitModel*1);
+        this.togglePwDupLimitDialog();
+        this.pwDupLimitModel = this.pwDupLimitModel*1
+      }
     },
   },
 };

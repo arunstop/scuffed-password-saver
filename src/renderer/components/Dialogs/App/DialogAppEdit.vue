@@ -2,8 +2,8 @@
   <v-dialog v-model="appEditDialog" max-width="480" attach=".main-container">
     <v-form ref="formAppEdit" v-model="formAppEdit" @submit.prevent="editApp()">
       <v-card outlined>
-        <v-card-title
-          >{{ "Edit Application " + appEditValue.name }}
+        <v-card-title>
+          {{ "Edit Application " + appEditValue.name }}
         </v-card-title>
         <v-card-text class="mt-4">
           <v-text-field
@@ -123,7 +123,7 @@ export default {
         this.$store.dispatch("app/editApp", {
           name: this.appName,
           urls: this.$globals.lodash.compact(this.appUrls.trim().split("\n")),
-            oldName: this.appEditValue.name,
+          oldName: this.appEditValue.name,
         });
         this.$refs.formAppEdit.reset();
         this.hideDialog();
