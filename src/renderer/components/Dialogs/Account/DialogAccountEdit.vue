@@ -84,6 +84,7 @@
             label="Password"
             outlined
             prepend-icon="mdi-key-variant"
+            v-bind="getPwDupWarning"
           />
           <v-textarea
             v-model="accountNote"
@@ -135,9 +136,13 @@ export default {
   }),
   computed: {
     ...mapGetters("app", ["getAppByName", "getAppList"]),
-    ...mapGetters("account", ["isAccountExist"]),
+    ...mapGetters("account", [
+      "isAccountExist",
+      "isPwExist",
+      "countPwDuplicates",
+    ]),
     ...mapState("account", ["accountEditValue"]),
-    ...mapState("settings", ["reminderFreq"]),
+    ...mapState("settings", ["reminderFreq", "pwDuplication"]),
     accountEditDialog: {
       get() {
         return this.$store.state.ui.accountEditDialog;
@@ -164,9 +169,22 @@ export default {
           "This ID already exists",
       ];
     },
-    accountPwRules: () => [
-      (v) => !!(v || "").trim() || "Password is required!",
-    ],
+    accountPwRules() {
+      return [
+        (v) => !!(v || "").trim() || "Password is required!",
+        (v) => {
+          const cPwDup = this.countPwDuplicates(v || "");
+          if (v !== this.accountEditValue.accountPw) {
+            if (!this.pwDuplication && this.isPwExist((v || "").trim())) {
+              return "Password already exist";
+            } else if (this.pwDuplication && cPwDup.full) {
+              return `This password has reached its usage limit ${cPwDup.count}/${cPwDup.limit}`;
+            }
+          }
+          return null
+        },
+      ];
+    },
     appNameSuccess() {
       if (!this.appNameSearch) return null;
       else {
@@ -197,7 +215,7 @@ export default {
       };
     },
     pwDurab() {
-      const editedPw= this.accountEditValue.editedPw
+      const editedPw = this.accountEditValue.editedPw;
       const now = this.$date.moment();
       const edited = this.$date.moment(editedPw);
       const dueDate = this.$date
@@ -223,9 +241,21 @@ export default {
       return {
         dueDate: dueDate.format("dddd, DD MMMM YYYY [at] HH:mm"),
         daysLeft,
-        percentage:percentage(),
+        percentage: percentage(),
         status: status(percentage()),
       };
+    },
+    getPwDupWarning() {
+      const pw = this.accountPw
+      const cPwDup = this.countPwDuplicates( pw || "");
+      if (pw!==this.accountEditValue.accountPw && this.pwDuplication && cPwDup.available) {
+        // alert(cPwDup.count)
+        return {
+          color: 'warning',
+          messages: `After this action, this exact password usage limit will be ${cPwDup.count+1}/${cPwDup.limit}`,
+        };
+      }
+      return null;
     },
   },
   watch: {

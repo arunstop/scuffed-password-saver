@@ -6,6 +6,9 @@ export const state = function () {
 }
 
 export const getters = {
+    getAccountList: state => () => {
+        return state.accountList
+    },
     isAccountExist: state => (appName, accountId) => {
         // console.log(appName)
         // console.log(accountId)
@@ -16,9 +19,28 @@ export const getters = {
         // console.log(res)
         return res
     },
-    getAccountList: state => () => {
-        return state.accountList
+    isPwExist: state => (pw) => {
+        const res = state.accountList.find(e =>
+            e.accountPw === pw)
+        return res
+    },
+    countPwDuplicates: (state, getters, rootState) => (pw) => {
+        console.log(state.accountList.filter(e => e.accountPw === pw))
+        const count = state.accountList.filter(e => e.accountPw === pw).length
+        const limit = rootState.settings.pwDupLimit
+        console.log({
+            limit,
+            count,
+            full: count>=limit
+        })
+        return {
+            limit,
+            count,
+            available: count<limit,
+            full: count>=limit
+        }
     }
+
 }
 
 export const mutations = {
