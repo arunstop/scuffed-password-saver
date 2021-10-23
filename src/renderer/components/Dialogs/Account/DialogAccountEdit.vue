@@ -175,13 +175,11 @@ export default {
         (v) => {
           const cPwDup = this.countPwDuplicates(v || "");
           if (v !== this.accountEditValue.accountPw) {
-            if (!this.pwDuplication && this.isPwExist((v || "").trim())) {
-              return "Password already exist";
-            } else if (this.pwDuplication && cPwDup.full) {
+            if (this.pwDuplication && cPwDup.full) {
               return `This password has reached its usage limit ${cPwDup.count}/${cPwDup.limit}`;
             }
           }
-          return null
+          return true
         },
       ];
     },
