@@ -16,6 +16,8 @@
     <SettingsPwDuplication/>
     <!-- Password duplication limit -->
     <SettingsPwDupLimit/>
+    <!-- Drive API Key -->
+    <SettingsDriveApi/>
   </v-list>
 </template>
 

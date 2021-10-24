@@ -25,19 +25,19 @@ export const getters = {
         return res
     },
     countPwDuplicates: (state, getters, rootState) => (pw) => {
-        console.log(state.accountList.filter(e => e.accountPw === pw))
+        // console.log(state.accountList.filter(e => e.accountPw === pw))
         const count = state.accountList.filter(e => e.accountPw === pw).length
         const limit = rootState.settings.pwDupLimit
-        console.log({
-            limit,
-            count,
-            full: count>=limit
-        })
+        // console.log({
+        //     limit,
+        //     count,
+        //     full: count>=limit
+        // })
         return {
             limit,
             count,
-            available: count<limit,
-            full: count>=limit
+            available: count < limit,
+            full: count >= limit
         }
     }
 
@@ -104,7 +104,8 @@ export const actions = {
             label: "A new account for " + payload.appName + " has been added",
             color: "success",
         },
-            { root: true })
+            { root: true }
+        )
     },
     editAccount({ commit, dispatch }, payload) {
         // console.log(payload)
@@ -114,7 +115,8 @@ export const actions = {
                 label: "Account has been updated",
                 color: "success",
             },
-            { root: true })
+            { root: true }
+        )
     },
     deleteAccount({ commit, dispatch }, id) {
         commit('DELETE_ACCOUNT', id)
@@ -123,6 +125,7 @@ export const actions = {
                 label: "Account has been deleted",
                 color: "success",
             },
-            { root: true })
+            { root: true }
+        )
     }
 }

@@ -8,7 +8,7 @@
         </v-list-item-title>
         <v-list-item-subtitle class="text-break normal-white-space subtitle-2">
           Currently saved at :
-          <span class="font-weight-black">{{ vaultPath }}</span>
+          <span class="font-weight-black text-decoration-underline">{{ vaultPath }}</span>
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-btn

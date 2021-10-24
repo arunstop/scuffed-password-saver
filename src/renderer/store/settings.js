@@ -7,6 +7,7 @@ export const state = () => ({
     reminderFreq: 3,
     pwDuplication:false,
     pwDupLimit:0,
+    driveKey:'',
 })
 
 export const getters = {
@@ -44,6 +45,9 @@ export const mutations = {
     SET_PW_DUP_LIMIT(state, val) {
         state.pwDupLimit = val
     },
+    SET_DRIVE_KEY(state,val){
+        state.driveKey=val
+    }
 }
 
 
@@ -58,6 +62,7 @@ export const actions = {
             dispatch('setReminderFreq', payload.reminderFreq)
             dispatch('togglePwDuplication', payload.pwDuplication)
             dispatch('setPwDupLimit', payload.pwDupLimit)
+            dispatch('setDriveKey', payload.driveKey)
         }
         commit('SET_LOCAL_SETTINGS')
 
@@ -95,6 +100,10 @@ export const actions = {
     },
     setPwDupLimit({commit}, val){
         commit('SET_PW_DUP_LIMIT', val)
+        commit('SET_LOCAL_SETTINGS')
+    },
+    setDriveKey({commit}, val){
+        commit('SET_DRIVE_KEY', val)
         commit('SET_LOCAL_SETTINGS')
     }
 }

@@ -6,7 +6,7 @@
             class="font-weight-black normal-white-space text-h5"
           >
             <v-icon class="primary--text mb-1"> mdi-lock-clock </v-icon>
-            Password change reminder
+            Password Change Reminder
           </v-list-item-title>
           <v-list-item-subtitle
             class="text-break normal-white-space subtitle-2"

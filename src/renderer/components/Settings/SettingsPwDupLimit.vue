@@ -35,7 +35,6 @@
               change
             </v-btn>
           </template>
-
           <v-card outlined>
             <v-card-title class="primary--text">
               Password Duplication Limit
@@ -66,7 +65,7 @@
               <v-btn
                 ref="btnDialogPdlN"
                 outlined
-                @click="kokokoko()"
+                @click="togglePwDupLimitDialog()"
               >
                 Cancel
               </v-btn>
@@ -98,12 +97,6 @@ export default {
   },
   computed: {
     ...mapState("settings", [
-      "hoverToShowPw",
-      "dialogToDelete",
-      "dblClickToEdit",
-      "darkTheme",
-      "vaultPath",
-      "reminderFreq",
       "pwDuplication",
       "pwDupLimit",
     ]),
@@ -125,7 +118,7 @@ export default {
     this.pwDupLimitModel = this.pwDupLimit;
   },
   methods: {
-    kokokoko() {
+    togglePwDupLimitDialog() {
       this.pwDuplicationDialog = !this.pwDuplicationDialog;
     },
     setPwDupLimit() {
@@ -135,7 +128,7 @@ export default {
           "settings/setPwDupLimit",
           this.pwDupLimitModel * 1
         );
-        this.kokokoko();
+        this.togglePwDupLimitDialog();
         this.pwDupLimitModel = this.pwDupLimitModel * 1;
       }
     },

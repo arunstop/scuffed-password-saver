@@ -177,9 +177,11 @@ export default {
           if (v !== this.accountEditValue.accountPw) {
             if (this.pwDuplication && cPwDup.full) {
               return `This password has reached its usage limit ${cPwDup.count}/${cPwDup.limit}`;
+            } else if (!this.pwDuplication && cPwDup.count!==0) {
+              return "This exact password already exists";
             }
           }
-          return true
+          return true;
         },
       ];
     },
@@ -244,13 +246,19 @@ export default {
       };
     },
     getPwDupWarning() {
-      const pw = this.accountPw
-      const cPwDup = this.countPwDuplicates( pw || "");
-      if (pw!==this.accountEditValue.accountPw && this.pwDuplication && cPwDup.available) {
+      const pw = this.accountPw;
+      const cPwDup = this.countPwDuplicates(pw || "");
+      if (
+        pw !== this.accountEditValue.accountPw &&
+        this.pwDuplication &&
+        cPwDup.available
+      ) {
         // alert(cPwDup.count)
         return {
-          color: 'warning',
-          messages: `After this action, this exact password usage limit will be ${cPwDup.count+1}/${cPwDup.limit}`,
+          color: "warning",
+          messages: `After this action, this exact password usage limit will be ${
+            cPwDup.count + 1
+          }/${cPwDup.limit}`,
         };
       }
       return null;

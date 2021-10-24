@@ -1,3 +1,4 @@
+import { shell } from 'electron'
 import _ from 'lodash'
 import Vue2Storage from 'vue2-storage'
 export default ({ app }, inject) => {
@@ -15,6 +16,9 @@ export default ({ app }, inject) => {
                 if (order.toLowerCase()     === 'desc') return nextId - currId;
                 return currId - nextId;
             })
+        },
+        openUrl(url){
+            shell.openExternal(url)
         }
     })
 }

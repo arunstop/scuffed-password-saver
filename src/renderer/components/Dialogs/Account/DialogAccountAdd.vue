@@ -153,7 +153,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this.getAppList());
+    // console.log(this.getAppList());
     // window.addEventListener("keyup", (e) => {
     //   if (
     //     e.key === "Enter" ||

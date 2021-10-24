@@ -32,14 +32,7 @@ import { mapState } from "vuex";
 export default {
   computed: {
     ...mapState("settings", [
-      "hoverToShowPw",
-      "dialogToDelete",
       "dblClickToEdit",
-      "darkTheme",
-      "vaultPath",
-      "reminderFreq",
-      "pwDuplication",
-      "pwDupLimit",
     ]),
      dblClickToEditModel: {
       get() {
