@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="accountAddDialog" max-width="480">
+  <v-dialog v-model="accountAddDialog" max-width="600">
     <v-form
       ref="formAccountAdd"
       v-model="formAccountAdd"

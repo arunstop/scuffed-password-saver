@@ -4,6 +4,7 @@ import Vue2Storage from 'vue2-storage'
 export default ({ app }, inject) => {
     inject('globals', {
         lodash: _,
+        _,
         // Clone Vuex state
         cloneState: (stateVar) => {
             return JSON.parse(JSON.stringify(stateVar))
@@ -13,11 +14,16 @@ export default ({ app }, inject) => {
                 const getIdNo = (id) => id.replace(replacedWord, "");
                 const currId = getIdNo(currEl?.[prop] || currEl)
                 const nextId = getIdNo(nextEl?.[prop] || nextEl)
-                if (order.toLowerCase()     === 'desc') return nextId - currId;
+                if (order.toLowerCase() === 'desc') return nextId - currId;
                 return currId - nextId;
             })
         },
-        openUrl(url){
+        str: {
+            compress: (str) => {
+                return str.toLowerCase().trim()
+            }
+        },
+        openUrl(url) {
             shell.openExternal(url)
         }
     })

@@ -1,43 +1,51 @@
 <template>
-  <v-data-table :headers="headers" :items="sortedAccountList">
-    <template #item="{ item }">
-      <tr class="cursor-pointer" @dblclick="!dblClickToEdit || editItem(item)">
-        <td>
-          <v-chip color="primary">
-            {{ item.appName }}
-          </v-chip>
-        </td>
-        <td>
-          <span class="font-weight-black">
-            {{ item.accountId }}
-          </span>
-        </td>
-        <td>
-          <v-hover v-slot="{ hover }">
-            <div>
-              <input
-                :value="item.accountPw"
-                readonly
-                :type="!hoverToShowPw || !hover ? 'password' : 'text'"
-                style="width: 100%; max-width: 60px"
-                :class="$vuetify.theme.dark ? 'white--text' : 'black--text'"
-              />
-            </div>
-          </v-hover>
-        </td>
-        <td>
-          <v-icon color="primary" @click="editItem(item)"> mdi-pencil </v-icon>
-          <v-icon
-            color="error"
-            @click="!dialogToDelete || deleteItem(item)"
-            @dblclick.stop="dialogToDelete || deleteAccount(item.id)"
-          >
-            mdi-delete
-          </v-icon>
-        </td>
-      </tr>
-    </template>
-  </v-data-table>
+  <div>
+    <AccountSearch/>
+    <v-data-table :headers="headers" :items="sortedAccountList">
+      <template #item="{ item }">
+        <tr
+          class="cursor-pointer"
+          @dblclick="!dblClickToEdit || editItem(item)"
+        >
+          <td>
+            <v-chip color="primary">
+              {{ item.appName }}
+            </v-chip>
+          </td>
+          <td>
+            <span class="font-weight-black">
+              {{ item.accountId }}
+            </span>
+          </td>
+          <td>
+            <v-hover v-slot="{ hover }">
+              <div>
+                <input
+                  :value="item.accountPw"
+                  readonly
+                  :type="!hoverToShowPw || !hover ? 'password' : 'text'"
+                  style="width: 100%; max-width: 60px"
+                  :class="$vuetify.theme.dark ? 'white--text' : 'black--text'"
+                />
+              </div>
+            </v-hover>
+          </td>
+          <td>
+            <v-icon color="primary" @click="editItem(item)">
+              mdi-pencil
+            </v-icon>
+            <v-icon
+              color="error"
+              @click="!dialogToDelete || deleteItem(item)"
+              @dblclick.stop="dialogToDelete || deleteAccount(item.id)"
+            >
+              mdi-delete
+            </v-icon>
+          </td>
+        </tr>
+      </template>
+    </v-data-table>
+  </div>
 </template>
 
 <script>

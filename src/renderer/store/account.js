@@ -1,13 +1,18 @@
 export const state = function () {
     return {
         accountList: [],
-        accountEditValue: ""
+        accountEditValue: "",
+        accountSearch: '',
     }
 }
 
 export const getters = {
     getAccountList: state => () => {
-        return state.accountList
+        const keyword = state.accountSearch.toLowerCase().trim()
+        return state.accountList.filter(acc =>
+            acc.accountId.toLowerCase().trim().includes(keyword) ||
+            acc.appName.toLowerCase().trim().includes(keyword)
+        )
     },
     isAccountExist: state => (appName, accountId) => {
         // console.log(appName)
@@ -39,6 +44,11 @@ export const getters = {
             available: count < limit,
             full: count >= limit
         }
+    },
+    countAccountByApp: state => (app)=>{
+        return state.accountList.filter(acc =>
+            acc.appName === app
+        ).length
     }
 
 }
@@ -88,6 +98,9 @@ export const mutations = {
         state.accountList = state.accountList.filter(e => e.id !== id)
         this.$localStorage.set('accountList', state.accountList)
     },
+    SET_ACCOUNT_SEARCH(state, val) {
+        state.accountSearch = val
+    }
 }
 
 export const actions = {
@@ -127,5 +140,8 @@ export const actions = {
             },
             { root: true }
         )
+    },
+    setAccountSearch({ commit }, val) {
+        commit('SET_ACCOUNT_SEARCH', val)
     }
 }
