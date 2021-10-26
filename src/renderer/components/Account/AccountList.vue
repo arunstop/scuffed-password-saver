@@ -18,6 +18,12 @@
             </span>
           </td>
           <td>
+            <v-chip :color="pwDurab(item.editedPw).status" outlined small>
+              <v-icon left small>mdi-shield-plus-outline</v-icon>
+              {{ pwDurab(item.editedPw).percentage + "%" }}
+            </v-chip>
+          </td>
+          <td>
             <v-hover v-slot="{ hover }">
               <div>
                 <input
@@ -56,6 +62,7 @@ export default {
       headers: [
         { text: "App / Website", value: "appName" },
         { text: "ID / Email / Phone Number", value: "accountId" },
+        { text: "Durability", value: "durab"},
         { text: "Password / PIN", value: "accountPw", sortable: false },
         { text: "Actions", value: "actions", sortable: false },
       ],
@@ -111,6 +118,9 @@ export default {
     deleteAccount(id) {
       this.$store.dispatch("account/deleteAccount", id);
     },
+    pwDurab(edited){
+return this.$globals.getPwDurability(edited,this.$store.state.settings.reminderFreq)
+    }
   },
 };
 </script>

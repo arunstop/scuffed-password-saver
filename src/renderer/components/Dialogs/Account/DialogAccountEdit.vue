@@ -215,35 +215,7 @@ export default {
       };
     },
     pwDurab() {
-      const editedPw = this.accountEditValue.editedPw;
-      const now = this.$date.moment();
-      const edited = this.$date.moment(editedPw);
-      const dueDate = this.$date
-        .moment(editedPw)
-        .add(this.reminderFreq, "months");
-      const daysFull = dueDate.diff(edited, "days") - 1;
-      const daysLeft = dueDate.diff(now, "days");
-      const percentage = () => {
-        if (daysLeft < 0) {
-          return 0;
-        }
-        return Math.round((daysLeft / daysFull) * 100) || 0;
-      };
-      const status = (v) => {
-        if (v >= 70) {
-          return "success";
-        } else if (v >= 40) {
-          return "warning";
-        } else {
-          return "error";
-        }
-      };
-      return {
-        dueDate: dueDate.format("dddd, DD MMMM YYYY [at] HH:mm"),
-        daysLeft,
-        percentage: percentage(),
-        status: status(percentage()),
-      };
+      return this.$globals.getPwDurability(this.accountEditValue.editedPw, this.reminderFreq)
     },
     getPwDupWarning() {
       const pw = this.accountPw;
