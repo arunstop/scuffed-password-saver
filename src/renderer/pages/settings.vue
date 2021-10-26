@@ -18,6 +18,8 @@
     <SettingsPwDupLimit/>
     <!-- Drive API Key -->
     <SettingsDriveApi/>
+    <!-- Export -->
+    <SettingsExport/>
   </v-list>
 </template>
 
