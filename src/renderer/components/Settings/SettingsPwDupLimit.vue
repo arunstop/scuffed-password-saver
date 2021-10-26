@@ -42,11 +42,11 @@
             <v-form
               ref="formSetPwDupLimit"
               v-model="formSetPwDupLimit"
-              @submit="setPwDupLimit()"
+              @submit.prevent="setPwDupLimit()"
             >
               <v-card-text class="pb-0">
                 <v-alert type="info" dense text>
-                  Set value to <b>0</b> to make it unlimited
+                  Limit cannot be less than 2
                 </v-alert>
                 <v-text-field
                   v-model="pwDupLimitModel"
@@ -56,7 +56,7 @@
                   type="number"
                   outlined
                   single-line
-                  min="0"
+                  min="2"
                 />
               </v-card-text>
             </v-form>
@@ -110,7 +110,7 @@ export default {
     },
     pwDupLimitRules: () => [
       (v) => !!v || "This field is required",
-      (v) => v * 1 >= 0 || "Limit cannot be less than 0",
+      (v) => v * 1 >= 2 || "Limit cannot be less than 2",
       (v) => /^\d+$/.test(v) || "This field only accept numbers",
     ],
   },

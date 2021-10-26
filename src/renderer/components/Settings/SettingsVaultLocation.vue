@@ -8,7 +8,7 @@
         </v-list-item-title>
         <v-list-item-subtitle class="text-break normal-white-space subtitle-2">
           Currently saved at :
-          <span class="font-weight-black text-decoration-underline">{{ vaultPath }}</span>
+          <a class="font-weight-black text-decoration-underline" @click="openVaultPath()">{{ vaultPath }}</a>
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-btn
@@ -17,7 +17,7 @@
         large
         color="primary"
         style="text-overflow: ellipsis !important"
-        @click="openVaultPath()"
+        @click="changeVaultPath()"
       >
         Change
       </v-btn>
@@ -41,9 +41,12 @@ export default {
     },
   },
   methods: {
-    openVaultPath() {
+    changeVaultPath() {
       this.$store.dispatch("ui/toggleInitFolderDialog", true);
     },
+    openVaultPath(){
+      this.$globals.openPath(this.vaultPath)
+    }
   },
 };
 </script>

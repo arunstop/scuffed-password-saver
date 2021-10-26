@@ -25,6 +25,10 @@ export default ({ app }, inject) => {
         },
         openUrl(url) {
             shell.openExternal(url)
+        },
+        openPath(path){
+            shell.openPath(path)
+            // shell.showItemInFolder(path)
         }
     })
 }
