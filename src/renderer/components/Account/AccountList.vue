@@ -1,6 +1,6 @@
 <template>
   <div>
-    <AccountSearch/>
+    <AccountSearch />
     <v-data-table :headers="headers" :items="sortedAccountList">
       <template #item="{ item }">
         <tr
@@ -62,7 +62,7 @@ export default {
       headers: [
         { text: "App / Website", value: "appName" },
         { text: "ID / Email / Phone Number", value: "accountId" },
-        { text: "Durability", value: "durab"},
+        { text: "Durability", value: "durab" },
         { text: "Password / PIN", value: "accountPw", sortable: false },
         { text: "Actions", value: "actions", sortable: false },
       ],
@@ -118,9 +118,12 @@ export default {
     deleteAccount(id) {
       this.$store.dispatch("account/deleteAccount", id);
     },
-    pwDurab(edited){
-return this.$globals.getPwDurability(edited,this.$store.state.settings.reminderFreq)
-    }
+    pwDurab(edited) {
+      return this.$globals.getPwDurability(
+        edited,
+        this.$store.state.settings.reminderFreq
+      );
+    },
   },
 };
 </script>

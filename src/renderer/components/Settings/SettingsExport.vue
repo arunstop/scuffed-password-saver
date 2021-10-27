@@ -39,7 +39,7 @@
                   v-model="fileFormatModel"
                   :items="fileFormatItems"
                   prepend-icon="mdi-file"
-                  :rules="[v=>!!v||'Please choose file format']"
+                  :rules="[(v) => !!v || 'Please choose file format']"
                   outlined
                   label="Choose File Format"
                 >
@@ -51,11 +51,7 @@
               <v-btn ref="btnDialogPdlN" outlined @click="toggleDialog()">
                 Cancel
               </v-btn>
-              <v-btn
-                ref="btnDialogPdlY"
-                color="primary"
-                @click="exportAccs()"
-              >
+              <v-btn ref="btnDialogPdlY" color="primary" @click="exportAccs()">
                 EXPORT
               </v-btn>
             </v-card-actions>
@@ -74,7 +70,7 @@ export default {
     return {
       dialog: false,
       fileFormatModel: "",
-      formExportAccs:false,
+      formExportAccs: false,
     };
   },
   computed: {
@@ -97,14 +93,39 @@ export default {
     toggleDialog() {
       this.dialog = !this.dialog;
     },
-    exportAccs(){
-       this.$refs.formExportAccs.validate();
+    exportAccs() {
+      this.$refs.formExportAccs.validate();
       if (this.formExportAccs) {
-        const accList = JSON.stringify(this.$store.state.account.accountList)
-        alert('downloaded')
-        this.toggleDialog()
+        const accList = JSON.stringify(this.$store.state.account.accountList);
+        // alert("downloaded");
+        const renderer = require("electron").ipcRenderer;
+        renderer.send(
+          "download-button",
+          "https://www.gravatar.com/avatar/fdfdfa8555bef13e9a29f8d804e96aac?s=64&d=identicon&r=PG"
+        );
+        // this.dlFile(accList);
+
+        this.toggleDialog();
       }
-    }
+    },
+    async dlFile(accList) {
+      const { BrowserWindow, ipcMain } = require("electron").remote;
+      console.log(require("electron"));
+      const { download } = require("electron-dl");
+
+      const url = "data:text/json;charset=utf-8," + encodeURIComponent(accList);
+      await download(
+        BrowserWindow.getFocusedWindow(),
+        "https://www.gravatar.com/avatar/fdfdfa8555bef13e9a29f8d804e96aac?s=64&d=identicon&r=PG",
+        {
+          filename: this.$date.moment(),
+        }
+      );
+      // ipcMain.on("download-button", async (event, { url }) => {
+      //   const win = BrowserWindow.getFocusedWindow();
+      //   console.log(await download(win, url));
+      // });
+    },
   },
 };
 </script>
