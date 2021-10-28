@@ -1,5 +1,6 @@
 import { shell } from 'electron'
 import _ from 'lodash'
+import {nanoid} from 'nanoid'
 export default ({ app }, inject) => {
     const renderer = require("electron").ipcRenderer;
     
@@ -23,7 +24,8 @@ export default ({ app }, inject) => {
         str: {
             compress: (str) => {
                 return str.toLowerCase().trim()
-            }
+            },
+            generateId: () => nanoid()
         },
         openUrl(url) {
             shell.openExternal(url)
@@ -33,9 +35,10 @@ export default ({ app }, inject) => {
             // shell.showItemInFolder(path)
         },
         download({url, filename, directory,successAction}) {
-            renderer.on("download-reply", (event, arg) => {
+            renderer.once("download-reply", (event, arg) => {
                 // arg = JSON.parse(arg)
                 successAction(arg)
+                // renderer.removeAllListeners()
                 // console.log(arg); // prints "pong"
                 // this.$globals.openPath(arg.savePath)
             });

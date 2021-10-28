@@ -47,8 +47,9 @@ export const mutations = {
         state.accountEditDialog = val
     },
     SHOW_SNACKBAR(state, payload) {
-        const id = state.snackbarList.length + 1
+        const id = this.$globals.str.generateId()
         state.snackbarList.push({ id, ...payload })
+        console.log(state.snackbarList)
     },
     REMOVE_SNACKBAR(state, id) {
         state.snackbarList = state.snackbarList.filter(s => s.id !== id)
