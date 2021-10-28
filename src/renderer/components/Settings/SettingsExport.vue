@@ -74,7 +74,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("settings", ["reminderFreq"]),
+    ...mapState("settings", ["reminderFreq", "vaultPath"]),
     reminderFreqModel: {
       get() {
         const v = this.reminderFreq;
@@ -97,34 +97,28 @@ export default {
       this.$refs.formExportAccs.validate();
       if (this.formExportAccs) {
         const accList = JSON.stringify(this.$store.state.account.accountList);
-        // alert("downloaded");
-        const renderer = require("electron").ipcRenderer;
-        renderer.send(
-          "download-button",
-          "https://www.gravatar.com/avatar/fdfdfa8555bef13e9a29f8d804e96aac?s=64&d=identicon&r=PG"
-        );
-        // this.dlFile(accList);
+        const url =
+          "data:text/json;charset=utf-8," + encodeURIComponent(accList);
+        const filename = () => {
+          const ext = this.fileFormatModel.toLowerCase();
+          return `sps_backup_${this.$date
+            .moment()
+            .format("YYYY-MM-DD@HH-mm-ss")}${ext}`;
+        };
+        this.$globals.download({
+          url,
+          filename: filename(),
+          directory: this.vaultPath,
+          successAction: (path) => {
+            this.$store.dispatch("ui/showSnackbar", {
+              label: "Exported to vault successfully",
+              color: "success",
+            });
+          },
+        });
 
         this.toggleDialog();
       }
-    },
-    async dlFile(accList) {
-      const { BrowserWindow, ipcMain } = require("electron").remote;
-      console.log(require("electron"));
-      const { download } = require("electron-dl");
-
-      const url = "data:text/json;charset=utf-8," + encodeURIComponent(accList);
-      await download(
-        BrowserWindow.getFocusedWindow(),
-        "https://www.gravatar.com/avatar/fdfdfa8555bef13e9a29f8d804e96aac?s=64&d=identicon&r=PG",
-        {
-          filename: this.$date.moment(),
-        }
-      );
-      // ipcMain.on("download-button", async (event, { url }) => {
-      //   const win = BrowserWindow.getFocusedWindow();
-      //   console.log(await download(win, url));
-      // });
     },
   },
 };

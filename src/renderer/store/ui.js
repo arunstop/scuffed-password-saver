@@ -97,8 +97,8 @@ export const actions = {
     toggleConfirmationDialog({ commit }, payload) {
         commit('TOGGLE_CONFIRMATION_DIALOG', payload)
     },
-    showSnackbar({ commit }, payload) {
-        commit('SHOW_SNACKBAR', payload)
+    showSnackbar({ commit }, {label,color}) {
+        commit('SHOW_SNACKBAR', {label,color})
     },
     removeSnackbar({ commit }, id) {
         commit('REMOVE_SNACKBAR', id)

@@ -7,24 +7,24 @@ app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
 
-const {BrowserWindow, ipcMain} = require('electron');
+const {BrowserWindow, ipcMain,shell} = require('electron');
 const {download} = require('electron-dl');
 
-ipcMain.on('download-button', async (event, url) => {
+ipcMain.on('download', async (event, {url,filename,directory}) => {
  	const win = BrowserWindow.getFocusedWindow();
- 	 console.log(url)
-   await download(win, url).then(s=>{
+ 	//  console.log(url)
+   await download(win, url, {
+     filename,directory,openFolderWhenDone:true
+   }).then(s=>{
       console.log('success')
-      console.log(s.getSavePath())
+      console.log(JSON.stringify(s))
+      win.webContents.send('download-reply', JSON.stringify(s))
     }).catch(e=>{ 
       console.log('error')
       console.log(e)
     })
+    
 });
-
-ipcMain.on('test123', (event, arg) => {
-  console.log(arg) // prints "ping"
-})
 
 // Load here all startup windows
 require('./mainWindow')

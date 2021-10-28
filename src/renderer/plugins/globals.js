@@ -1,8 +1,9 @@
 import { shell } from 'electron'
 import _ from 'lodash'
-import Vue2Storage from 'vue2-storage'
-export default ({ app}, inject) => {
+export default ({ app }, inject) => {
+    const renderer = require("electron").ipcRenderer;
     
+
     inject('globals', {
         lodash: _,
         _,
@@ -31,8 +32,24 @@ export default ({ app}, inject) => {
             shell.openPath(path)
             // shell.showItemInFolder(path)
         },
+        download({url, filename, directory,successAction}) {
+            renderer.on("download-reply", (event, arg) => {
+                // arg = JSON.parse(arg)
+                successAction(arg)
+                // console.log(arg); // prints "pong"
+                // this.$globals.openPath(arg.savePath)
+            });
+            renderer.send(
+                "download",
+                {
+                  url,
+                  filename,
+                  directory
+                }
+              );
+        },
         getPwDurability(lastEdited, freq) {
-            
+
             const now = app.$date.moment();
             const edited = app.$date.moment(lastEdited);
             const dueDate = app.$date
