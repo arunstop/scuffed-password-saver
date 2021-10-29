@@ -4,7 +4,7 @@
       <v-card-title class="primary--text">Import accounts</v-card-title>
       <v-card-text>
         <v-file-input
-          ref="fileInputImport"
+          ref="importFileInput"
           v-model="files"
           class="d-none"
           color="primary accent-4"
@@ -23,21 +23,26 @@
             </v-chip>
           </template>
         </v-file-input>
-        <v-expand-transition leave-absolute>
+        <v-expand-transition>
           <v-card
             v-if="!files.length"
             outlined
             height="300"
             class="d-flex align-center justify-center"
+            :color="importPanelColor"
+             @click="uploadFiles()"
+            @dragover="dragover"
+            @dragleave="dragleave"
+            @drop="drop"
           >
-            <div class="text-center">
-              <v-btn color="primary" large @click="uploadFiles()">
+            <div class="text-center" style="pointer-events:none;">
+              <v-btn color="primary" large>
                 UPLOAD
                 <v-icon>mdi-upload</v-icon>
               </v-btn>
 
               <h4 class="mt-4">
-                Click the button above or <u>drag files here.</u>
+                Click the button above or drag files here.
               </h4>
             </div>
           </v-card>
@@ -156,6 +161,7 @@ export default {
     return {
       files: [],
       option: "",
+      importPanelColor:'',
     };
   },
   computed: {
@@ -217,8 +223,23 @@ export default {
       this.files = this.files.filter((e) => e.name !== name);
     },
     uploadFiles() {
-      this.$refs.fileInputImport.$refs.input.click();
+      this.$refs.importFileInput.$refs.input.click();
     },
+    dragover(event){
+      event.preventDefault()
+      this.importPanelColor='indigo'
+    },
+    dragleave(event){
+      event.preventDefault()
+      this.importPanelColor=''
+    },
+    drop(event){
+      event.preventDefault()
+      const fileList = Array.from(event.dataTransfer.files)
+      const validFiles = fileList.filter(e=>e.name.toLowerCase().trim().split('.').reverse()[0]==='json')
+      this.importPanelColor=''
+      this.files= validFiles
+    }
   },
 };
 </script>
