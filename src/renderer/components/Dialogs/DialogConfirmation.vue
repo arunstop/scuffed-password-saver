@@ -8,7 +8,7 @@
         {{ data.template.desc }}
       </v-card-text>
       <v-card-actions class="d-flex justify-end pb-4">
-        <v-btn ref="btnConfirmationN" :color="data.color || ''" outlined @click.stop="actionN()">
+        <v-btn ref="btnConfirmationN" outlined @click.stop="actionN()">
           Cancel
         </v-btn>
         <v-btn

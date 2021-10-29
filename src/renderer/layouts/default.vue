@@ -22,7 +22,6 @@
             :menu="menu"
             :active="$nuxt.$route.name === menu.page"
           />
-          {{$store.state.ui.snackbarList}}
           <!-- </v-list-item-group> -->
         </v-list>
       </v-navigation-drawer>

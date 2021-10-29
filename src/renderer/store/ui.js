@@ -10,6 +10,7 @@ export const state = () => ({
     appEditValue: "",
     snackbarList: [],
     confirmationDialog: null,
+    importDialog:null,
 })
 
 export const getters = {
@@ -47,9 +48,9 @@ export const mutations = {
         state.accountEditDialog = val
     },
     SHOW_SNACKBAR(state, payload) {
-        const id = this.$globals.str.generateId()
+        const id = 'SNB_'+this.$globals.str.generateId()
         state.snackbarList.push({ id, ...payload })
-        console.log(state.snackbarList)
+        // console.log(state.snackbarList)
     },
     REMOVE_SNACKBAR(state, id) {
         state.snackbarList = state.snackbarList.filter(s => s.id !== id)
@@ -57,6 +58,10 @@ export const mutations = {
     TOGGLE_CONFIRMATION_DIALOG(state, payload) {
         if (payload === false) state.confirmationDialog = null
         else state.confirmationDialog = payload
+    },
+    TOGGLE_IMPORT_DIALOG(state, payload) {
+        if (payload === false) state.importDialog = null
+        else state.importDialog = payload
     }
 }
 
@@ -97,6 +102,9 @@ export const actions = {
     },
     toggleConfirmationDialog({ commit }, payload) {
         commit('TOGGLE_CONFIRMATION_DIALOG', payload)
+    },
+    toggleImportDialog({ commit }, payload) {
+        commit('TOGGLE_IMPORT_DIALOG', payload)
     },
     showSnackbar({ commit }, {label,color}) {
         commit('SHOW_SNACKBAR', {label,color})

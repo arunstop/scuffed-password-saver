@@ -6,7 +6,7 @@
         To be honest you can just close the program, boomer.
       </v-card-text>
       <v-card-actions class="d-flex justify-end pb-4">
-        <v-btn ref="btnDialogLogoutN" color="primary" outlined @click.stop="hideDialog()">
+        <v-btn ref="btnDialogLogoutN" outlined @click.stop="hideDialog()">
           Cancel
         </v-btn>
         <v-btn ref="btnDialogLogoutY" color="primary" @click.stop="exitApp()">

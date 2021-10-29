@@ -20,6 +20,8 @@
     <SettingsDriveApi/>
     <!-- Export -->
     <SettingsExport/>
+    <!-- Export -->
+    <SettingsImport/>
   </v-list>
 </template>
 
