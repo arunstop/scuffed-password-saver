@@ -46,3 +46,16 @@
     border-width: 4px !important;
   /* background: #ffffff; */
 }
+
+.overflow-y-scroll{
+  overflow:scroll !important;
+  overflow-x: hidden !important;
+}
+
+.pointer-events-none{
+  pointer-events: none;
+}
+
+.pointer-events{
+  pointer-events: none;
+}
