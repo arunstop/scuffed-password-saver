@@ -45,7 +45,7 @@ export const getters = {
             full: count >= limit
         }
     },
-    countAccountByApp: state => (app)=>{
+    countAccountByApp: state => (app) => {
         return state.accountList.filter(acc =>
             acc.appName === app
         ).length
@@ -77,6 +77,29 @@ export const mutations = {
         state.accountList.push({ id, ...payload, ...dates })
         this.$localStorage.set('accountList', state.accountList)
         // console.log(this.$localStorage.get('accountList'))
+    },
+    IMPORT_ACCOUNTS(state, payload) {
+        const _ = require('lodash')
+        if (payload.mode === 'REPLACE') {
+            // intersectionBy = insert array #1 to array #2
+            // getting duplicates only
+            // array #1 value is used
+            state.accountList = _.intersectionBy(payload.value, state.accountList, 'id')
+            // console.log(state.accountList)
+            this.$localStorage.set('accountList', state.accountList)
+        } else if (payload.mode === 'REPLACE_ADD') {
+            // unionBy = insert array #1 to array #2
+            // getting ALL unique non-duplicate array
+            // if there are duplicates array #1 values are used
+            state.accountList = _.unionBy(payload.value, state.accountList, 'id')
+            // console.log(state.accountList)
+            this.$localStorage.set('accountList', state.accountList)
+        }
+        else if (payload.mode === 'ADD') {
+            state.accountList = _.concat(state.accountList,payload.value)
+            // console.log(state.accountList)
+            this.$localStorage.set('accountList', state.accountList)
+        }
     },
     EDIT_ACCOUNT(state, payload) {
         console.log(payload)
@@ -143,5 +166,9 @@ export const actions = {
     },
     setAccountSearch({ commit }, val) {
         commit('SET_ACCOUNT_SEARCH', val)
+    },
+    importAccount({commit},payload){
+        console.log(payload)
+        commit('IMPORT_ACCOUNTS',payload)
     }
 }

@@ -106,43 +106,19 @@
                 </v-btn>
               </div>
             </v-card>
-            <v-alert type="info" icon="mdi-magnify" text border="left">
-              {{ `${totalAccounts.total} accounts found` }}
-              <br />
-              {{ `${totalAccounts.total} duplicate accounts found` }}
-              <br />
-              {{ `${totalAccounts.total} new accounts found` }}
-            </v-alert>
-            <v-alert
-              v-if="files.length && option === 0"
-              type="warning"
-              icon="mdi-content-copy"
-              text
-              border="left"
-            >
-              {{ `11 duplicate accounts will be replaced` }}
-            </v-alert>
-            <v-alert
-              v-if="files.length && option === 1"
-              type="success"
-              icon="mdi-plus"
-              text
-              border="left"
-            >
-              {{ `11 new accounts will be added` }}
-            </v-alert>
+            <DialogImportAlert
+              v-for="(alert, index) in alertList"
+              :key="index"
+              :type="alert.type"
+              :icon="alert.icon"
+              :message="alert.message"
+            />
+
             <v-radio-group v-model="option" mandatory>
               <v-radio
-                :label="
-                  'Replace existing duplicate accounts (' +
-                  totalAccounts.total +
-                  ' accounts)'
-                "
-              />
-              <v-radio
-                :label="
-                  'Only add new accounts (' + totalAccounts.total + ' accounts)'
-                "
+                v-for="(mode, index) in modeList"
+                :key="index"
+                v-bind="mode"
               />
             </v-radio-group>
           </div>
@@ -155,7 +131,7 @@
         <v-btn
           ref="btnDialogLogoutY"
           color="primary"
-          :disabled="files.length === 0"
+          :disabled="!uploadResult.totalUnique"
           @click.stop="importAccounts()"
         >
           OK
@@ -166,6 +142,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -176,6 +153,7 @@ export default {
     };
   },
   computed: {
+    ...mapState("account", ["accountList"]),
     importDialog: {
       get() {
         return this.$store.state.ui.importDialog;
@@ -193,38 +171,111 @@ export default {
       });
       return fileDetailList || [];
     },
-    totalAccounts() {
+    uploadResult() {
+      const _ = this.$globals.lodash;
+      const alRaw = this.fileList
+        .map((e) => e.accList)
+        .reduce((p, c) => p.concat(c), []);
+      const al = _.uniqBy(alRaw, "id");
+
+      const alDuplicate = _.intersectionBy(_.clone(al), this.accountList, "id");
+      const alNew = _.pullAllBy(_.clone(al), this.accountList, "id");
+
       return {
-        total: this.fileList.reduce(
-          (prev, curr) => prev + curr.accList.length,
-          0 // initializer
-        ),
+        accountList: al,
+        accountListNew: alNew,
+        accountListDuplicate: alDuplicate,
+        total: alRaw.length,
+        totalUnique: al.length,
+        totalNew: alNew.length,
+        totalDuplicate: alDuplicate.length,
       };
     },
-  },
-  mounted() {
-    // window.addEventListener("keyup", (e) => {
-    //   if (
-    //     e.key === "Enter" ||
-    //     e.key === " " ||
-    //     e.key === "Spacebar" ||
-    //     e.key === "Space bar"
-    //   ) {
-    //     this.$refs.btnDialogLogoutY.$el.click();
-    //   }
-    // });
+    alertList() {
+      const importTypeAlert = () => {
+        if (this.option === "REPLACE_ADD")
+          return {
+            type: "warning",
+            icon: "mdi-swap-horizontal",
+            message: `<b>${this.uploadResult.totalDuplicate}</b> existing/duplicate accounts will be replaced <br> 
+            <b>${this.uploadResult.totalNew}</b> new account(s) will be added`,
+          };
+        if (this.option === "REPLACE")
+          return {
+            type: "warning",
+            icon: "mdi-swap-horizontal",
+            message: `<b>${this.uploadResult.totalDuplicate}</b> duplicate accounts will be replaced`,
+          };
+        else if (this.option === "ADD")
+          return {
+            type: "success",
+            icon: "mdi-plus",
+            message: `<b>${this.uploadResult.totalNew}</b> new account(s) will be added`,
+          };
+        return null;
+      };
+
+      const res = [
+        {
+          type: this.uploadResult.total ? "info" : "error",
+          icon: "mdi-magnify",
+          message: `<b>${this.uploadResult.total}</b> accounts scanned from uploaded files`,
+        },
+
+        {
+          type: this.uploadResult.totalUnique ? "info" : "error",
+          icon: "mdi-counter",
+          message: `<b>${this.uploadResult.totalUnique}</b> unique accounts found`,
+        },
+
+        {
+          type: this.uploadResult.totalDuplicate ? "success" : "error",
+          icon: "mdi-content-copy",
+          message: `<b>${this.uploadResult.totalDuplicate}</b> existing/duplicate accounts found`,
+        },
+
+        {
+          type: this.uploadResult.totalNew ? "info" : "error",
+          icon: "mdi-new-box",
+          message: `<b>${this.uploadResult.totalNew}</b> new accounts found`,
+        },
+        importTypeAlert(),
+      ];
+
+      return this.$globals.lodash.compact(res);
+    },
+    modeList() {
+      return [
+        {
+          value: "REPLACE",
+          label:
+            "Replace existing/duplicate accounts ONLY (" +
+            this.uploadResult.totalDuplicate +
+            " accounts)",
+          disabled: false,
+        },
+        {
+          value: "REPLACE_ADD",
+          label:
+            "Replace ALL duplicates & add NEW ones (" +
+            this.uploadResult.totalUnique +
+            " accounts)",
+          disabled: !this.uploadResult.totalNew,
+        },
+        {
+          value: "ADD",
+          label:
+            "ONLY add new accounts (" +
+            this.uploadResult.totalNew +
+            " accounts)",
+          disabled: !this.uploadResult.totalNew,
+        },
+      ];
+    },
   },
   methods: {
     hideDialog() {
       this.$store.dispatch("ui/toggleImportDialog", false);
-    },
-    importAccounts() {
-      console.log(this.files);
-      // const fs = require("fs");
-      // console.log(JSON.parse(fs.readFileSync(this.files.path)));
-      //   this.$store.dispatch("ui/toggleimportDialog", false);
-      // remote.getCurrentWindow().close()
-      alert("import account");
     },
     getAccountList(file) {
       const fs = require("fs");
@@ -277,15 +328,35 @@ export default {
     },
     async drop(event) {
       event.preventDefault();
-      this.toggleImportPanelLoading(true)
+      this.toggleImportPanelLoading(true);
       const fileList = Array.from(event.dataTransfer.files);
       const validFiles = fileList.filter(
         (e) => e.name.toLowerCase().trim().split(".").reverse()[0] === "json"
       );
       this.importPanelColor = "";
       this.files = validFiles;
-      this.toggleImportPanelLoading(false)
+      this.toggleImportPanelLoading(false);
       this.toggleImportPanel(false);
+    },
+    importAccounts() {
+      const payload = { value: [], mode: this.option };
+      if (this.option === "REPLACE") {
+        payload.value = this.uploadResult.accountListDuplicate;
+      } else if (this.option === "REPLACE_ADD") {
+        payload.value = this.uploadResult.accountList;
+      } else if (this.option === "ADD") {
+        payload.value = this.uploadResult.accountListNew;
+      }
+      this.$store.dispatch("account/importAccount", payload);
+      // const fs = require("fs");
+      // console.log(JSON.parse(fs.readFileSync(this.files.path)));
+      //   this.$store.dispatch("ui/toggleimportDialog", false);
+      // remote.getCurrentWindow().close()
+      this.hideDialog();
+      this.$store.dispatch("ui/showSnackbar", {
+        label: "Accounts has been imported successfully!",
+        color: "success",
+      });
     },
   },
 };
