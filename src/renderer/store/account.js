@@ -82,9 +82,9 @@ export const mutations = {
         const _ = require('lodash')
         if (payload.mode === 'REPLACE') {
             // intersectionBy = insert array #1 to array #2
-            // getting duplicates only
-            // array #1 value is used
-            state.accountList = _.intersectionBy(payload.value, state.accountList, 'id')
+            // getting ALL unique non-duplicate array
+            // if there are duplicates array #1 values are used
+            state.accountList = _.unionBy(payload.value, state.accountList, 'id')
             // console.log(state.accountList)
             this.$localStorage.set('accountList', state.accountList)
         } else if (payload.mode === 'REPLACE_ADD') {
