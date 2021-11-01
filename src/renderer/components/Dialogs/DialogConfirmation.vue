@@ -41,7 +41,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this.data);
+    // console.log(this.data);
     // window.addEventListener("keyup", (e) => {
     //   if (
     //     e.key === "Enter" ||
