@@ -18,9 +18,9 @@
             </span>
           </td>
           <td>
-            <v-chip :color="pwDurab(item.editedPw).status" outlined small>
+            <v-chip :color="item.durab.status" outlined small>
               <v-icon left small>mdi-shield-plus-outline</v-icon>
-              {{ pwDurab(item.editedPw).percentage + "%" }}
+              {{ item.durab.percentage + "%" }}
             </v-chip>
           </td>
           <td>
@@ -62,7 +62,7 @@ export default {
       headers: [
         { text: "App / Website", value: "appName" },
         { text: "ID / Email / Phone Number", value: "accountId" },
-        { text: "Durability", value: "durab" },
+        { text: "Durability", value: "durab.percentage" },
         { text: "Password / PIN", value: "accountPw", sortable: false },
         { text: "Actions", value: "actions", sortable: false },
       ],
@@ -77,12 +77,23 @@ export default {
       "darkTheme",
     ]),
     sortedAccountList() {
-      return this.$globals.sortById({
-        arr: this.$globals.cloneState(this.getAccountList()),
-        order: "desc",
-        prop: "id",
-        replacedWord: "ACC",
-      });
+      // const sal = this.$globals.sortById({
+      //   arr: this.$globals.cloneState(this.getAccountList()),
+      //   order: "desc",
+      //   prop: "id",
+      //   replacedWord: "ACC",
+      // }).map(e=>{
+      //   return {...e,durab:this.pwDurab(e.editedPw)}
+      // })
+      const sal1 = require("lodash")
+        .sortBy(this.getAccountList(), [(e) => e.id.replace("ACC", "") * 1])
+        .map((e) => {
+          return { ...e, durab: this.pwDurab(e.editedPw) };
+        })
+        .reverse();
+      // console.log(sal)
+      console.log(sal1);
+      return sal1;
     },
   },
   created() {
