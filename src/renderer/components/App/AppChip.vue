@@ -6,7 +6,7 @@
     @click="searchAppByName()"
   >
     {{ app.name }}
-    {{ ` - ${appCount}` }}
+    {{ ` - ${app.count}` }}
   </v-chip>
 </template>
 
@@ -17,24 +17,19 @@ export default {
     app: { type: Object, default: () => {} },
   },
   computed: {
-    ...mapGetters("account", ["countAccountByApp"]),
-    ...mapState("account", ["accountSearch"]),
-    appCount() {
-      return this.countAccountByApp(this.app.name);
-    },
+    ...mapState("account", ["filterByAppList"]),
     isSearched() {
       return (
-        this.accountSearch.toLowerCase().trim() ===
-        this.app.name.toLowerCase().trim()
+        this.filterByAppList.includes(this.app.name.toLowerCase().trim())
       );
     },
   },
   methods: {
     searchAppByName() {
       if (this.isSearched) {
-        this.$store.dispatch("account/setAccountSearch", "");
+        this.$store.dispatch("account/removeFilterByApp", this.app.name);
       } else {
-        this.$store.dispatch("account/setAccountSearch", this.app.name);
+        this.$store.dispatch("account/addFilterByApp", this.app.name);
       }
     },
   },

@@ -92,7 +92,7 @@ export default {
         })
         .reverse();
       // console.log(sal)
-      console.log(sal1);
+      // console.log(sal1);
       return sal1;
     },
   },

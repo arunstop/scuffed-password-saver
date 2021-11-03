@@ -14,12 +14,26 @@
       :loading="isLoading"
     >
     </v-text-field>
-    <AppChip v-for="app in getAppList()" :key="app.name" :app="app" />
+    <AppChip v-for="app in getTrimmedAppList" :key="app.name" :app="app" />
+    <v-slide-x-reverse-transition>
+      <v-btn
+    v-if="$store.state.account.filterByAppList.length"
+        class="ms-1"
+        color="error"
+        small
+        outlined
+        rounded
+        @click="removeFilterByApp('*')"
+      >
+        Clear
+        <v-icon right>mdi-close</v-icon>
+      </v-btn>
+    </v-slide-x-reverse-transition>
   </v-row>
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters,mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -29,6 +43,9 @@ export default {
   computed: {
     ...mapState("account", ["accountSearch"]),
     ...mapGetters("app", ["getAppList"]),
+    getTrimmedAppList(){
+      return this.getAppList().filter(e=>e.count>0)
+    },
     accountSearchModel: {
       get() {
         return "";
@@ -46,6 +63,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions('account', ['removeFilterByApp']),
     search(v) {
       this.$store.dispatch("account/setAccountSearch", v || "");
       this.isLoading = false;

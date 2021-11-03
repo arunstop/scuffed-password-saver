@@ -3,16 +3,22 @@ export const state = function () {
         accountList: [],
         accountEditValue: "",
         accountSearch: '',
+        filterByAppList: [],
     }
 }
 
 export const getters = {
     getAccountList: state => () => {
         const keyword = state.accountSearch.toLowerCase().trim()
-        return state.accountList.filter(acc =>
-            acc.accountId.toLowerCase().trim().includes(keyword) ||
-            acc.appName.toLowerCase().trim().includes(keyword)
-        )
+        return state.accountList
+            .filter(acc =>
+                state.filterByAppList.length
+                    ? state.filterByAppList.includes(acc.appName.toLowerCase().trim())
+                    : true
+            )
+            .filter(acc =>
+                acc.accountId.toLowerCase().trim().includes(keyword)
+            )
     },
     isAccountExist: state => (appName, accountId) => {
         // console.log(appName)
@@ -96,7 +102,7 @@ export const mutations = {
             this.$localStorage.set('accountList', state.accountList)
         }
         else if (payload.mode === 'ADD') {
-            state.accountList = _.concat(state.accountList,payload.value)
+            state.accountList = _.concat(state.accountList, payload.value)
             // console.log(state.accountList)
             this.$localStorage.set('accountList', state.accountList)
         }
@@ -123,7 +129,19 @@ export const mutations = {
     },
     SET_ACCOUNT_SEARCH(state, val) {
         state.accountSearch = val
-    }
+    },
+    ADD_FILTER_BY_APP(state, val) {
+        val = val.toLowerCase().trim()
+        if (state.filterByAppList.includes(val)) return
+        state.filterByAppList.push(val)
+    },
+    REMOVE_FILTER_BY_APP(state, val) {
+        if (val === "*") {
+            state.filterByAppList = []
+            return
+        }
+        state.filterByAppList = state.filterByAppList.filter(e => e !== val.trim().toLowerCase())
+    },
 }
 
 export const actions = {
@@ -167,8 +185,14 @@ export const actions = {
     setAccountSearch({ commit }, val) {
         commit('SET_ACCOUNT_SEARCH', val)
     },
-    importAccount({commit},payload){
+    addFilterByApp({ commit }, val) {
+        commit('ADD_FILTER_BY_APP', val)
+    },
+    removeFilterByApp({ commit }, val) {
+        commit('REMOVE_FILTER_BY_APP', val)
+    },
+    importAccount({ commit }, payload) {
         console.log(payload)
-        commit('IMPORT_ACCOUNTS',payload)
+        commit('IMPORT_ACCOUNTS', payload)
     }
 }
