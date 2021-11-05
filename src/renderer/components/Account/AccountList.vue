@@ -1,14 +1,23 @@
 <template>
   <div>
     <AccountSearch />
-    <v-data-table :headers="headers" :items="sortedAccountList">
+    {{selectedItemsList}}
+    <v-data-table
+      :headers="headers"
+      :items="sortedAccountList"
+      show-select
+      item-key="id"
+    >
       <template #item="{ item }">
         <tr
           class="cursor-pointer"
           @dblclick="!dblClickToEdit || editItem(item)"
         >
           <td>
-            <v-chip color="primary">
+            <v-checkbox @change="selectItem($event, item.id)" />
+          </td>
+          <td>
+            <v-chip color="primary" label small>
               {{ item.appName }}
             </v-chip>
           </td>
@@ -18,7 +27,12 @@
             </span>
           </td>
           <td>
-            <v-chip :color="item.durab.status" outlined small>
+            <v-chip
+              class="font-weight-bold"
+              :color="item.durab.status"
+              outlined
+              small
+            >
               <v-icon left small>mdi-shield-plus-outline</v-icon>
               {{ item.durab.percentage + "%" }}
             </v-chip>
@@ -59,6 +73,7 @@ import { mapGetters, mapState } from "vuex";
 export default {
   data() {
     return {
+      selectedItemsList: [],
       headers: [
         { text: "App / Website", value: "appName" },
         { text: "ID / Email / Phone Number", value: "accountId" },
@@ -88,7 +103,7 @@ export default {
       const sal1 = require("lodash")
         .sortBy(this.getAccountList(), [(e) => e.id.replace("ACC", "") * 1])
         .map((e) => {
-          return { ...e, durab: this.pwDurab(e.editedPw) };
+          return { ...e, durab: this.pwDurab(e.editedPw), selected: true };
         })
         .reverse();
       // console.log(sal)
@@ -100,7 +115,16 @@ export default {
     // console.log(this.sortedAccountList);
   },
   methods: {
+    selectItem(val, id) {
+      if (val) {
+        if (!this.selectedItemsList.includes(id))
+          this.selectedItemsList.push(id);
+      } else {
+        this.selectedItemsList = this.selectedItemsList.filter((e) => e !== id);
+      }
+    },
     editItem(item) {
+      // console.log(item);
       this.$store.dispatch("ui/toggleAccountEditDialog", {
         val: true,
         id: item.id,

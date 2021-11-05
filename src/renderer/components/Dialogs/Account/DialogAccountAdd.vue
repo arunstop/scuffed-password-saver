@@ -1,12 +1,17 @@
 <template>
-  <v-dialog v-model="accountAddDialog" max-width="600">
+  <v-dialog v-model="accountAddDialog" max-width="600" scrollable
+    :fullscreen="$vuetify.breakpoint.smAndDown"
+    transition="slide-y-reverse-transition">
     <v-form
       ref="formAccountAdd"
       v-model="formAccountAdd"
       @submit="accountAdd()"
     >
       <v-card outlined>
-        <v-card-title>Add New Account</v-card-title>
+        <v-card-title>
+          Add New Account
+          <UtilDialogCloseBtn :action="() => hideDialog()" />
+        </v-card-title>
         <v-card-text class="mt-4">
           <v-combobox
             v-model="appName"

@@ -1,5 +1,11 @@
 <template>
-  <v-dialog v-model="importDialog" max-width="600">
+  <v-dialog
+    v-model="importDialog"
+    max-width="600"
+    scrollable
+    :fullscreen="$vuetify.breakpoint.smAndDown"
+    transition="slide-y-reverse-transition"
+  >
     <v-card outlined>
       <v-card-title class="primary--text">Import accounts</v-card-title>
       <v-card-text>
@@ -113,11 +119,10 @@ export default {
     });
   },
   beforeDestroy() {
-
-      this.$store.dispatch("ui/dialogImport/clearFiles");
+    this.$store.dispatch("ui/dialogImport/clearFiles");
 
     // removing eventBus listener
-    this.$nuxt.$off('clickImportFileInput')
+    this.$nuxt.$off("clickImportFileInput");
   },
   methods: {
     hideDialog() {

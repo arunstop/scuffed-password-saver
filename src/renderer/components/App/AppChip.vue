@@ -1,7 +1,9 @@
 <template>
   <v-chip
-    class="mx-1 my-2"
-    color="primary lighten-2"
+    class="mx-1 my-2 font-weight-bold"
+    :class="isSearched ? 'white--text' : ''"
+    color="indigo ligthen-2"
+    label
     :outlined="!isSearched"
     @click="searchAppByName()"
   >

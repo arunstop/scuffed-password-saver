@@ -1,12 +1,21 @@
 <template>
-  <v-dialog v-model="accountEditDialog" max-width="600">
+  <v-dialog
+    v-model="accountEditDialog"
+    max-width="600"
+    scrollable
+    :fullscreen="$vuetify.breakpoint.smAndDown"
+    transition="slide-y-reverse-transition"
+  >
     <v-form
       ref="formAccountEdit"
       v-model="formAccountEdit"
       @submit="accountEdit()"
     >
       <v-card outlined>
-        <v-card-title>Edit Account {{ appName.name }}</v-card-title>
+        <v-card-title>
+          Edit Account {{ appName.name }}
+          <UtilDialogCloseBtn :action="() => hideDialog()" />
+        </v-card-title>
         <v-card-text class="">
           <v-alert
             :type="pwDurab.status"
@@ -177,7 +186,7 @@ export default {
           if (v !== this.accountEditValue.accountPw) {
             if (this.pwDuplication && cPwDup.full) {
               return `This password has reached its usage limit ${cPwDup.count}/${cPwDup.limit}`;
-            } else if (!this.pwDuplication && cPwDup.count!==0) {
+            } else if (!this.pwDuplication && cPwDup.count !== 0) {
               return "This exact password already exists";
             }
           }
@@ -215,7 +224,10 @@ export default {
       };
     },
     pwDurab() {
-      return this.$globals.getPwDurability(this.accountEditValue.editedPw, this.reminderFreq)
+      return this.$globals.getPwDurability(
+        this.accountEditValue.editedPw,
+        this.reminderFreq
+      );
     },
     getPwDupWarning() {
       const pw = this.accountPw;

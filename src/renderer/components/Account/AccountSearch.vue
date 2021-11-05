@@ -1,11 +1,12 @@
 <template>
   <v-row class="pt-4" no-gutters align="center">
     <v-text-field
+      ref="accSearchInput"
       v-model.lazy="accountSearchModel"
       :value="accountSearch"
       class="col-6 me-1"
       outlined
-      label="Search"
+      label="Search : ctrl + f or /"
       placeholder="App / Email / ID / Username..."
       prepend-icon="mdi-magnify"
       clearable
@@ -17,8 +18,8 @@
     <AppChip v-for="app in getTrimmedAppList" :key="app.name" :app="app" />
     <v-slide-x-reverse-transition>
       <v-btn
-    v-if="$store.state.account.filterByAppList.length"
-        class="ms-1"
+        v-if="$store.state.account.filterByAppList.length"
+        class="ms-1 font-weight-black"
         color="error"
         small
         outlined
@@ -26,14 +27,14 @@
         @click="removeFilterByApp('*')"
       >
         Clear
-        <v-icon right>mdi-close</v-icon>
+        <v-icon right>mdi-close-thick</v-icon>
       </v-btn>
     </v-slide-x-reverse-transition>
   </v-row>
 </template>
 
 <script>
-import { mapState, mapGetters,mapActions } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -43,8 +44,8 @@ export default {
   computed: {
     ...mapState("account", ["accountSearch"]),
     ...mapGetters("app", ["getAppList"]),
-    getTrimmedAppList(){
-      return this.getAppList().filter(e=>e.count>0)
+    getTrimmedAppList() {
+      return this.getAppList().filter((e) => e.count > 0);
     },
     accountSearchModel: {
       get() {
@@ -62,8 +63,19 @@ export default {
       },
     },
   },
+  mounted(){
+    window.addEventListener('keydown', e=>{
+      if((e.key==="f" && e.ctrlKey) || e.key==="/"){
+        e.preventDefault()
+        this.$refs.accSearchInput.focus()
+      }
+    })
+  },
+  beforeDestroy(){
+    window.removeEventListener('keydown',e=>{})
+  },
   methods: {
-    ...mapActions('account', ['removeFilterByApp']),
+    ...mapActions("account", ["removeFilterByApp"]),
     search(v) {
       this.$store.dispatch("account/setAccountSearch", v || "");
       this.isLoading = false;

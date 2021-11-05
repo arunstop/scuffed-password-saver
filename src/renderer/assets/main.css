@@ -1,16 +1,42 @@
-.theme--dark.v-application{
-    background:#1E1E1E !important;
+html {
+  overflow-y: hidden !important;
+  overflow-x: hidden !important;
+}
+
+body {
+  margin: 0 !important;
+}
+.v-main__wrap{
+  max-height: calc(100vh - (48px + 28px) ) !important;
+  overflow: auto !important;
+}
+.v-overlay{
+  position: absolute !important;
 }
 
 
+.theme--dark.v-application {
+  background: #1e1e1e !important;
+}
+
+.v-dialog__content {
+  height: calc(100vh - (28px) ) !important;
+  bottom:0 !important;
+  top: unset !important;
+}
+
+.v-dialog--fullscreen{
+  position: absolute !important;
+}
+
 /* width */
 ::-webkit-scrollbar {
-    width: 20px;
-  }
-::-webkit-scrollbar-thumb{
-    border-radius: 28px !important;
-    border: 6px solid transparent !important;
-    background-clip: padding-box !important;
+  width: 20px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 28px !important;
+  border: 6px solid transparent !important;
+  background-clip: padding-box !important;
 }
 
 /* LIGHT THEME SCROLLBAR */
@@ -26,7 +52,7 @@
 
 /* Handle on hover */
 .theme--light ::-webkit-scrollbar-thumb:hover {
-    border-width: 4px !important;
+  border-width: 4px !important;
   /* background: #000000; */
 }
 
@@ -43,19 +69,19 @@
 
 /* Handle on hover */
 .theme--dark ::-webkit-scrollbar-thumb:hover {
-    border-width: 4px !important;
+  border-width: 4px !important;
   /* background: #ffffff; */
 }
 
-.overflow-y-scroll{
-  overflow:scroll !important;
+.overflow-y-scroll {
+  overflow: scroll !important;
   overflow-x: hidden !important;
 }
 
-.pointer-events-none{
+.pointer-events-none {
   pointer-events: none;
 }
 
-.pointer-events{
+.pointer-events {
   pointer-events: none;
 }

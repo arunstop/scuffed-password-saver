@@ -117,18 +117,5 @@ export default {
 </script>
 
 <style>
-html {
-  overflow-y: hidden;
-  overflow-x: hidden;
-}
-body {
-  margin: 0 !important;
-}
-.v-main__wrap{
-  max-height: calc(100vh - (48px + 28px) );
-  overflow: auto;
-}
-.v-overlay{
-  position: absolute !important;
-}
+
 </style>

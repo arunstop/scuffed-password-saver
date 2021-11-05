@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="my-auto">
     <v-card
       v-if="!files.length"
       v-bind="importPanel.loading"
