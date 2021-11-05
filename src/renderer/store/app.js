@@ -12,8 +12,7 @@ export const getters = {
     },
     getAppList: (state, getters, rootState, rootGetters) => () => {
         // console.log(rootGetters)
-        return state.appList.map(e => require('lodash')
-            .assign(e, { count: rootGetters['account/countAccountByApp'](e.name) }))
+        return state.appList
     }
 }
 

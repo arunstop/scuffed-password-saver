@@ -1,21 +1,14 @@
 <template>
   <div>
     <AccountSearch />
-    {{selectedItemsList}}
-    <v-data-table
-      :headers="headers"
-      :items="sortedAccountList"
-      show-select
-      item-key="id"
-    >
+    <v-data-table :headers="headers" :items="sortedAccountList" item-key="id">
       <template #item="{ item }">
         <tr
           class="cursor-pointer"
+          :class="item.selected ? 'v-data-table__selected' : ''"
           @dblclick="!dblClickToEdit || editItem(item)"
+          @click="selectItem(item)"
         >
-          <td>
-            <v-checkbox @change="selectItem($event, item.id)" />
-          </td>
           <td>
             <v-chip color="primary" label small>
               {{ item.appName }}
@@ -69,11 +62,12 @@
 </template>
 
 <script>
+import _ from "lodash";
 import { mapGetters, mapState } from "vuex";
 export default {
   data() {
     return {
-      selectedItemsList: [],
+      selectedItemList: [],
       headers: [
         { text: "App / Website", value: "appName" },
         { text: "ID / Email / Phone Number", value: "accountId" },
@@ -100,10 +94,11 @@ export default {
       // }).map(e=>{
       //   return {...e,durab:this.pwDurab(e.editedPw)}
       // })
-      const sal1 = require("lodash")
-        .sortBy(this.getAccountList(), [(e) => e.id.replace("ACC", "") * 1])
+      const sal1 = _.sortBy(this.getAccountList(), [
+        (e) => e.id.replace("ACC", "") * 1,
+      ])
         .map((e) => {
-          return { ...e, durab: this.pwDurab(e.editedPw), selected: true };
+          return { ...e, durab: this.pwDurab(e.editedPw), selected: false };
         })
         .reverse();
       // console.log(sal)
@@ -115,13 +110,20 @@ export default {
     // console.log(this.sortedAccountList);
   },
   methods: {
-    selectItem(val, id) {
-      if (val) {
-        if (!this.selectedItemsList.includes(id))
-          this.selectedItemsList.push(id);
+    isSelected(id) {
+      return this.selectedItemList.find((e) => e === id)
+        ? "v-data-table__selected"
+        : "";
+    },
+    selectItem(item) {
+      if (!item.selected) {
+        this.sortedAccountList.find((e) => e.id === item.id).selected = true;
       } else {
-        this.selectedItemsList = this.selectedItemsList.filter((e) => e !== id);
+        this.sortedAccountList.find((e) => e.id === item.id).selected = false;
       }
+      this.selectedItemList = this.sortedAccountList.filter(
+        (e) => e.selected === true
+      );
     },
     editItem(item) {
       // console.log(item);
@@ -145,13 +147,13 @@ export default {
         },
         actions: {
           y: () => {
-            this.deleteAccount(item.id);
+            this.deleteAccount(item);
           },
         },
       });
     },
-    deleteAccount(id) {
-      this.$store.dispatch("account/deleteAccount", id);
+    deleteAccount(item) {
+      this.$store.dispatch("account/deleteAccount", item);
     },
     pwDurab(edited) {
       return this.$globals.getPwDurability(

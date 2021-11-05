@@ -45,7 +45,7 @@ export default {
     ...mapState("account", ["accountSearch"]),
     ...mapGetters("app", ["getAppList"]),
     getTrimmedAppList() {
-      return this.getAppList().filter((e) => e.count > 0);
+      return this.getAppList()
     },
     accountSearchModel: {
       get() {

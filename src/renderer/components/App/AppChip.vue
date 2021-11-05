@@ -1,5 +1,6 @@
 <template>
   <v-chip
+  v-if="countAccountByApp(app.name)"
     class="mx-1 my-2 font-weight-bold"
     :class="isSearched ? 'white--text' : ''"
     color="indigo ligthen-2"
@@ -8,7 +9,7 @@
     @click="searchAppByName()"
   >
     {{ app.name }}
-    {{ ` - ${app.count}` }}
+    {{ ` - ${countAccountByApp(app.name)}` }}
   </v-chip>
 </template>
 
@@ -20,6 +21,7 @@ export default {
   },
   computed: {
     ...mapState("account", ["filterByAppList"]),
+    ...mapGetters("account", ['countAccountByApp']),
     isSearched() {
       return (
         this.filterByAppList.includes(this.app.name.toLowerCase().trim())

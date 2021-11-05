@@ -51,9 +51,9 @@ export const getters = {
             full: count >= limit
         }
     },
-    countAccountByApp: state => (app) => {
+    countAccountByApp: state => (appName) => {
         return state.accountList.filter(acc =>
-            acc.appName === app
+            acc.appName === appName
         ).length
     }
 
@@ -172,8 +172,8 @@ export const actions = {
             { root: true }
         )
     },
-    deleteAccount({ commit, dispatch }, id) {
-        commit('DELETE_ACCOUNT', id)
+    deleteAccount({ commit, dispatch, getters }, payload) {
+        commit('DELETE_ACCOUNT', payload.id)
         dispatch("ui/showSnackbar",
             {
                 label: "Account has been deleted",
@@ -181,6 +181,9 @@ export const actions = {
             },
             { root: true }
         )
+        if (getters.countAccountByApp(payload.appName) === 0) {
+            dispatch('removeFilterByApp', payload.appName)
+        }
     },
     setAccountSearch({ commit }, val) {
         commit('SET_ACCOUNT_SEARCH', val)
