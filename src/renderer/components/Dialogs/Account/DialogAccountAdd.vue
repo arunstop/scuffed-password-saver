@@ -108,10 +108,10 @@ export default {
     ...mapGetters("account", ["isAccountExist"]),
     accountAddDialog: {
       get() {
-        return this.$store.state.ui.accountAddDialog;
+        return this.$store.getters['ui/isDialogActive']('ACCOUNT_ADD_DIALOG');
       },
       set(v) {
-        this.$store.dispatch("ui/toggleAccountAddDialog", v);
+        this.hideDialog()
       },
     },
     appNameRules: () => [
@@ -172,7 +172,7 @@ export default {
   },
   methods: {
     hideDialog() {
-      this.$store.dispatch("ui/toggleAccountAddDialog", false);
+      this.$store.dispatch("ui/toggleDialog", {type:'ACCOUNT_ADD_DIALOG', val:false});
     },
     accountAdd() {
       this.$refs.formAccountAdd.validate();

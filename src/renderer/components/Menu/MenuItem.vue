@@ -30,7 +30,7 @@ export default {
       } else if (page.toLowerCase() === "index") {
         this.$router.push({ name: "index" });
       } else if (page.toLowerCase() === "logout") {
-        this.$store.dispatch("ui/toggleLogoutDialog", true);
+        this.$store.dispatch("ui/toggleDialog", {type:'LOGOUT_DIALOG', val:true});
       }
     },
     getStyle() {

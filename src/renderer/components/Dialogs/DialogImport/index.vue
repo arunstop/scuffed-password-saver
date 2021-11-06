@@ -7,7 +7,10 @@
     transition="slide-y-reverse-transition"
   >
     <v-card outlined>
-      <v-card-title class="primary--text">Import accounts</v-card-title>
+      <v-card-title class="primary--text">
+        Import accounts
+        <UtilDialogCloseBtn :action="() => hideDialog()" />
+      </v-card-title>
       <v-card-text>
         <!-- HIDDEN FILE INPUT -->
         <v-file-input
@@ -89,7 +92,7 @@ export default {
     ...mapState("account", ["accountList"]),
     importDialog: {
       get() {
-        return this.$store.state.ui.importDialog;
+        return this.$store.getters["ui/isDialogActive"]("IMPORT_DIALOG");
       },
       set(v) {
         this.hideDialog();
@@ -126,7 +129,10 @@ export default {
   },
   methods: {
     hideDialog() {
-      this.$store.dispatch("ui/toggleImportDialog", false);
+      this.$store.dispatch("ui/toggleDialog", {
+        type: "IMPORT_DIALOG",
+        val: false,
+      });
     },
     onchange(event) {
       if (!event.target.files.length) return;

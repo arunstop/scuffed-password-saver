@@ -5,7 +5,7 @@
       <template #item="{ item }">
         <tr
           class="cursor-pointer"
-          :class="item.selected ? 'v-data-table__selected' : ''"
+          :class="isSelected(item.id)"
           @dblclick="!dblClickToEdit || editItem(item)"
           @click="selectItem(item)"
         >
@@ -98,7 +98,7 @@ export default {
         (e) => e.id.replace("ACC", "") * 1,
       ])
         .map((e) => {
-          return { ...e, durab: this.pwDurab(e.editedPw), selected: false };
+          return { ...e, durab: this.pwDurab(e.editedPw) };
         })
         .reverse();
       // console.log(sal)
@@ -106,8 +106,16 @@ export default {
       return sal1;
     },
   },
-  created() {
-    // console.log(this.sortedAccountList);
+  mounted() {
+    // console.log(this.selectedItemList);
+    window.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape" && this.$store.state.ui.dialogAdd) return;
+      this.selectedItemList = [];
+      // console.log(this.selectedItemList);
+    });
+  },
+  beforeDestroy() {
+    window.removeEventListener("keydown", {});
   },
   methods: {
     isSelected(id) {
@@ -116,27 +124,29 @@ export default {
         : "";
     },
     selectItem(item) {
-      if (!item.selected) {
-        this.sortedAccountList.find((e) => e.id === item.id).selected = true;
+      if (this.isSelected(item.id)) {
+        
+        this.selectedItemList = this.selectedItemList.filter(
+          (e) => e !== item.id
+        );
       } else {
-        this.sortedAccountList.find((e) => e.id === item.id).selected = false;
+        this.selectedItemList.push(item.id);
       }
-      this.selectedItemList = this.sortedAccountList.filter(
-        (e) => e.selected === true
-      );
     },
     editItem(item) {
       // console.log(item);
-      this.$store.dispatch("ui/toggleAccountEditDialog", {
+      this.$store.dispatch("ui/toggleDialog", {
+        type: 'ACCOUNT_EDIT_DIALOG',
         val: true,
         id: item.id,
       });
     },
     deleteItem(item) {
-      this.$store.dispatch("ui/toggleConfirmationDialog", {
+      this.$store.dispatch("ui/toggleDialog", {
+        type: 'CONFIRMATION_DIALOG',
         val: true,
-        color: "error",
-        template: {
+        data: {
+          color: "error",
           title: "Delete account",
           desc:
             "Are u sure you want to delete this " +
@@ -144,12 +154,13 @@ export default {
             " account with ID : " +
             item.accountId +
             " ?",
-        },
-        actions: {
+            actions: {
           y: () => {
             this.deleteAccount(item);
           },
         },
+        },
+        
       });
     },
     deleteAccount(item) {

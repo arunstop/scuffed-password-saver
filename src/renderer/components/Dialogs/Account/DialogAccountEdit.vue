@@ -154,10 +154,10 @@ export default {
     ...mapState("settings", ["reminderFreq", "pwDuplication"]),
     accountEditDialog: {
       get() {
-        return this.$store.state.ui.accountEditDialog;
+        return this.$store.getters['ui/isDialogActive']('ACCOUNT_EDIT_DIALOG');
       },
       set(v) {
-        this.$store.dispatch("ui/toggleAccountEditDialog", v);
+        this.hideDialog()
       },
     },
     appNameRules: () => [
@@ -280,7 +280,7 @@ export default {
   },
   methods: {
     hideDialog() {
-      this.$store.dispatch("ui/toggleAccountEditDialog", false);
+      this.$store.dispatch("ui/toggleDialog", {type:'ACCOUNT_EDIT_DIALOG', val:false});
     },
     isUnchanged() {
       if (

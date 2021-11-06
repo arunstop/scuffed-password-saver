@@ -42,7 +42,10 @@ export default {
   },
   methods: {
     changeVaultPath() {
-      this.$store.dispatch("ui/toggleInitFolderDialog", true);
+      this.$store.dispatch("ui/toggleDialog", {
+          type: "INIT_FOLDER_DIALOG",
+          val: true,
+        });
     },
     openVaultPath(){
       this.$globals.openPath(this.vaultPath)

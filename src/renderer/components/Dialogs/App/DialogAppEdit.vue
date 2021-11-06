@@ -61,10 +61,10 @@ export default {
     ...mapState("app", ["appEditValue"]),
     appEditDialog: {
       get() {
-        return this.$store.state.ui.appEditDialog;
+        return this.$store.getters['ui/isDialogActive']('APP_EDIT_DIALOG');
       },
       set(v) {
-        this.$store.dispatch("ui/toggleAppEditDialog", v);
+        this.hideDialog()
       },
     },
     appNameRules() {
@@ -114,7 +114,7 @@ export default {
   },
   methods: {
     hideDialog() {
-      this.$store.dispatch("ui/toggleAppEditDialog", false);
+      this.$store.dispatch('ui/toggleDialog', { type: 'APP_EDIT_DIALOG', val: false });
       this.$store.dispatch("app/setAppEditValue", "");
     },
     editApp() {

@@ -5,9 +5,9 @@ export const state = () => ({
     darkTheme: false,
     vaultPath: '',
     reminderFreq: 3,
-    pwDuplication:false,
-    pwDupLimit:0,
-    driveKey:'',
+    pwDuplication: false,
+    pwDupLimit: 0,
+    driveKey: '',
 })
 
 export const getters = {
@@ -45,14 +45,14 @@ export const mutations = {
     SET_PW_DUP_LIMIT(state, val) {
         state.pwDupLimit = val
     },
-    SET_DRIVE_KEY(state,val){
-        state.driveKey=val
+    SET_DRIVE_KEY(state, val) {
+        state.driveKey = val
     }
 }
 
 
 export const actions = {
-    initSettings({ dispatch,commit }, payload) {
+    initSettings({ dispatch, commit }, payload) {
         if (payload) {
             dispatch('toggleHoverToShowPw', payload.hoverToShowPw)
             dispatch('toggleDialogToDelete', payload.dialogToDelete)
@@ -86,7 +86,7 @@ export const actions = {
     setVaultPath({ commit, dispatch }, path) {
         commit('SET_VAULT_PATH', path)
         commit('SET_LOCAL_SETTINGS')
-        dispatch('ui/toggleInitFolderDialog', false, { root: true })
+        // dispatch('ui/toggleDialog', { type: 'INIT_FOLDER_DIALOG', val: false }, { root: true })
         const snackbar = { label: "Vault folder is set! But, shhh! Don't tell anyone ;)", color: "success" }
         dispatch('ui/showSnackbar', snackbar, { root: true })
     },
@@ -98,11 +98,11 @@ export const actions = {
         commit('TOGGLE_PW_DUPLICATION', val)
         commit('SET_LOCAL_SETTINGS')
     },
-    setPwDupLimit({commit}, val){
+    setPwDupLimit({ commit }, val) {
         commit('SET_PW_DUP_LIMIT', val)
         commit('SET_LOCAL_SETTINGS')
     },
-    setDriveKey({commit}, val){
+    setDriveKey({ commit }, val) {
         commit('SET_DRIVE_KEY', val)
         commit('SET_LOCAL_SETTINGS')
     }

@@ -1,18 +1,23 @@
 <template>
   <div>
-    <DialogInitFolder v-if="$store.state.ui.initFolderDialog"/>
-    <DialogLogout v-if="$store.state.ui.logoutDialog" />
-    <DialogAppAdd v-if="$store.state.ui.appAddDialog" />
-    <DialogAppEdit v-if="$store.state.ui.appEditDialog" />
-    <DialogConfirmation v-if="$store.state.ui.confirmationDialog" :data="$store.state.ui.confirmationDialog"/>
-    <DialogAccountAdd v-if="$store.state.ui.accountAddDialog" />
-    <DialogAccountEdit v-if="$store.state.ui.accountEditDialog" />
-    <DialogImport v-if="$store.state.ui.importDialog"/>
+    <DialogInitFolder v-if="isDialogActive('INIT_FOLDER_DIALOG')"/>
+    <DialogLogout  v-if="isDialogActive('LOGOUT_DIALOG')" />
+    <DialogAppAdd v-if="isDialogActive('APP_ADD_DIALOG')" />
+    <DialogAppEdit v-if="isDialogActive('APP_EDIT_DIALOG')" />
+    <DialogConfirmation v-if="isDialogActive('CONFIRMATION_DIALOG')"/>
+    <DialogAccountAdd v-if="isDialogActive('ACCOUNT_ADD_DIALOG')" />
+    <DialogAccountEdit v-if="isDialogActive('ACCOUNT_EDIT_DIALOG')" />
+    <DialogImport v-if="isDialogActive('IMPORT_DIALOG')"/>
   </div>
 </template>
   
 <script>
-export default {};
+import {mapGetters} from 'vuex'
+export default {
+  computed:{
+    ...mapGetters('ui',['isDialogActive'])
+  }
+};
 </script>
 
 <style>

@@ -19,14 +19,16 @@
 
 <script>
 import { remote } from "electron";
+import { mapGetters } from "vuex";
 export default {
   computed: {
+    ...mapGetters("ui", ["isDialogActive"]),
     logoutDialog: {
       get() {
-        return this.$store.state.ui.logoutDialog;
+        return this.isDialogActive("LOGOUT_DIALOG");
       },
       set(v) {
-        this.$store.dispatch("ui/toggleLogoutDialog", v);
+        this.hideDialog()
       },
     },
   },
@@ -44,7 +46,10 @@ export default {
   },
   methods: {
     hideDialog() {
-      this.$store.dispatch("ui/toggleLogoutDialog", false);
+      this.$store.dispatch("ui/toggleDialog", {
+          type: "LOGOUT_DIALOG",
+          val: false,
+        });
     },
     exitApp() {
       //   this.$store.dispatch("ui/toggleLogoutDialog", false);

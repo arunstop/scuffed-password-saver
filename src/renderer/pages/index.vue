@@ -49,13 +49,13 @@ export default {
       this.$router.push({ name: "settings" });
     },
     openAppAddDialog() {
-      this.$store.dispatch("ui/toggleAppAddDialog", true);
+     this.$store.dispatch('ui/toggleDialog', { type: 'APP_ADD_DIALOG', val: true });
     },
     openAppEditDialog(name) {
-      this.$store.dispatch("ui/toggleAppEditDialog", { val: true, name });
+      this.$store.dispatch('ui/toggleDialog', { type: 'APP_EDIT_DIALOG', val: true,name })
     },
     openAccountAddDialog() {
-      this.$store.dispatch("ui/toggleAccountAddDialog", true);
+      this.$store.dispatch('ui/toggleDialog', { type: 'ACCOUNT_ADD_DIALOG', val: true })
     },
     deleteApp(name){
       this.$store.dispatch("app/deleteApp", name)

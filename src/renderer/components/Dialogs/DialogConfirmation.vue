@@ -1,11 +1,11 @@
 <template>
   <v-dialog v-model="confirmationDialog" max-width="420">
     <v-card outlined>
-      <v-card-title :class="data.color + '--text'">{{
-        data.template.title
+      <v-card-title :class="dialog.data.color + '--text'">{{
+        dialog.data.title
       }}</v-card-title>
       <v-card-text>
-        {{ data.template.desc }}
+        {{ dialog.data.desc }}
       </v-card-text>
       <v-card-actions class="d-flex justify-end pb-4">
         <v-btn ref="btnConfirmationN" outlined @click.stop="actionN()">
@@ -13,7 +13,7 @@
         </v-btn>
         <v-btn
           ref="btnConfirmationY"
-          :color="data.color || 'primary'"
+          :color="dialog.data.color || 'primary'"
           @click.stop="actionY()"
         >
           OK
@@ -26,17 +26,16 @@
 <script>
 import { remote } from "electron";
 export default {
-  props: {
-    data: { type: Object, default: () => {} },
-  },
   computed: {
+    dialog(){
+      return this.$store.getters['ui/isDialogActive']('CONFIRMATION_DIALOG')
+    },
     confirmationDialog: {
       get() {
-        return this.data.val;
+        return !!this.dialog;
       },
       set(v) {
-        // alert(v)
-        this.hideDialog();
+        this.hideDialog()
       },
     },
   },
@@ -55,13 +54,13 @@ export default {
   },
   methods: {
     actionN() {
-      this.data.actions.n?.() || this.hideDialog();
+      this.dialog.data.actions.n?.() || this.hideDialog();
     },
     actionY() {
-      this.data.actions?.y() || this.hideDialog();
+      this.dialog.data.actions?.y() || this.hideDialog();
     },
     hideDialog() {
-      this.$store.dispatch("ui/toggleConfirmationDialog", false);
+      this.$store.dispatch("ui/toggleDialog", {type:"CONFIRMATION_DIALOG",val:false});
     },
   },
 };

@@ -42,7 +42,10 @@ export default {
   },
   methods: {
     showImportDialog() {
-      this.$store.dispatch('ui/toggleImportDialog', true)
+      this.$store.dispatch("ui/toggleDialog", {
+        type: 'IMPORT_DIALOG',
+        val: true,
+      })
     },
     exportAccs() {},
   },

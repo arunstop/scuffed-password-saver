@@ -44,10 +44,10 @@ export default {
     ...mapState("settings", ["vaultPath"]),
     initFolderDialog: {
       get() {
-        return this.$store.state.ui.initFolderDialog;
+        return this.$store.getters['ui/isDialogActive']('INIT_FOLDER_DIALOG');
       },
       set(v) {
-        this.$store.dispatch("ui/toggleInitFolderDialog", v);
+        this.$store.dispatch('ui/toggleDialog', { type: 'INIT_FOLDER_DIALOG', val: v });
       },
     },
   },

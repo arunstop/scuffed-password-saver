@@ -8,12 +8,17 @@ export const state = () => ({
     accountAddDialog: false,
     accountEditDialog: false,
     appEditValue: "",
+    dialogList: [],
     snackbarList: [],
     confirmationDialog: null,
-    importDialog:null,
+    importDialog: null,
 })
 
 export const getters = {
+    isDialogActive: state => (dialogType) => {
+        console.log(state.dialogList.find(e=>e.type === dialogType))
+        return state.dialogList.find(e=>e.type === dialogType) || false
+    },
     getMenuList: state => () => {
         return state.menuList
     },
@@ -29,85 +34,59 @@ export const mutations = {
     TOGGLE_DRAWER(state, val) {
         state.mainDrawer = val
     },
-    TOGGLE_INIT_FOLDER_DIALOG(state, val) {
-        state.initFolderDialog = val
-    },
-    TOGGLE_LOGOUT_DIALOG(state, val) {
-        state.logoutDialog = val
-    },
-    TOGGLE_APP_ADD_DIALOG(state, val) {
-        state.appAddDialog = val
-    },
-    TOGGLE_APP_EDIT_DIALOG(state, val) {
-        state.appEditDialog = val
-    },
-    TOGGLE_ACCOUNT_ADD_DIALOG(state, val) {
-        state.accountAddDialog = val
-    },
-    TOGGLE_ACCOUNT_EDIT_DIALOG(state, val) {
-        state.accountEditDialog = val
+    SHOW_DIALOG(state, payload) {
+        console.log(payload)
+        if (payload.val === true) {
+            state.dialogList.push(payload)
+            return
+        }
+        state.dialogList = state.dialogList.filter(e => e.type !== payload.type)
     },
     SHOW_SNACKBAR(state, payload) {
-        const id = 'SNB_'+this.$globals.str.generateId()
+        const id = 'SNB_' + this.$globals.str.generateId()
         state.snackbarList.push({ id, ...payload })
         // console.log(state.snackbarList)
     },
     REMOVE_SNACKBAR(state, id) {
         state.snackbarList = state.snackbarList.filter(s => s.id !== id)
     },
-    TOGGLE_CONFIRMATION_DIALOG(state, payload) {
-        if (payload === false) state.confirmationDialog = null
-        else state.confirmationDialog = payload
-    },
-    TOGGLE_IMPORT_DIALOG(state, payload) {
-        if (payload === false) state.importDialog = null
-        else state.importDialog = payload
-    }
 }
 
 export const actions = {
     toggleDrawer({ commit }, val) {
         commit('TOGGLE_DRAWER', val)
     },
-    toggleInitFolderDialog({ commit }, val) {
-        commit('TOGGLE_INIT_FOLDER_DIALOG', val)
-    },
-    toggleLogoutDialog({ commit }, val) {
-        commit('TOGGLE_LOGOUT_DIALOG', val)
-    },
-    toggleAppAddDialog({ commit }, val) {
-        commit('TOGGLE_APP_ADD_DIALOG', val)
-    },
-    toggleAppEditDialog({ commit, dispatch }, payload) {
-        if (payload?.name) {
-            commit('TOGGLE_APP_EDIT_DIALOG', payload.val)
-            dispatch('app/setAppEditValue', payload.name, { root: true })
-        } else {
-            commit('TOGGLE_APP_EDIT_DIALOG', payload.val)
-            if (payload.val === false) dispatch('app/setAppEditValue', "", { root: true })
+    toggleDialog({ commit, dispatch }, payload) {
+        const type = payload.type
+        if (type === "INIT_FOLDER_DIALOG") {
+            commit("SHOW_DIALOG", payload)
+        }
+        else if (type === "LOGOUT_DIALOG") {
+            commit("SHOW_DIALOG", payload)
+        }
+        else if (type === "APP_ADD_DIALOG") {
+            commit("SHOW_DIALOG", payload)
+        }
+        else if (type === "APP_EDIT_DIALOG") {
+            commit("SHOW_DIALOG", payload)
+            dispatch('app/setAppEditValue', payload.val === true ? payload.name : '', { root: true })
+        }
+        else if (type === "ACCOUNT_ADD_DIALOG") {
+            commit("SHOW_DIALOG", payload)
+        }
+        else if (type === "ACCOUNT_EDIT_DIALOG") {
+            commit("SHOW_DIALOG", payload)
+            dispatch('account/setAccountEditValue', payload.val === true ? payload.id : '', { root: true })
+        }
+        else if (type === "CONFIRMATION_DIALOG") {
+            commit("SHOW_DIALOG", payload)
+        }
+        else if (type === "IMPORT_DIALOG") {
+            commit("SHOW_DIALOG", payload)
         }
     },
-    toggleAccountAddDialog({ commit }, val) {
-        commit('TOGGLE_ACCOUNT_ADD_DIALOG', val)
-    },
-    toggleAccountEditDialog({ commit, dispatch }, payload) {
-        // alert(payload.id)
-        if (payload?.id) {
-            commit('TOGGLE_ACCOUNT_EDIT_DIALOG', payload.val)
-            dispatch('account/setAccountEditValue', payload.id, { root: true })
-        } else {
-            commit('TOGGLE_ACCOUNT_EDIT_DIALOG', payload.val)
-            if (payload.val === false) dispatch('account/setAccountEditValue', "", { root: true })
-        }
-    },
-    toggleConfirmationDialog({ commit }, payload) {
-        commit('TOGGLE_CONFIRMATION_DIALOG', payload)
-    },
-    toggleImportDialog({ commit }, payload) {
-        commit('TOGGLE_IMPORT_DIALOG', payload)
-    },
-    showSnackbar({ commit }, {label,color}) {
-        commit('SHOW_SNACKBAR', {label,color})
+    showSnackbar({ commit }, { label, color }) {
+        commit('SHOW_SNACKBAR', { label, color })
     },
     removeSnackbar({ commit }, id) {
         commit('REMOVE_SNACKBAR', id)

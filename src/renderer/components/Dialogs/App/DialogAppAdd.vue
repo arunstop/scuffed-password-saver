@@ -58,10 +58,10 @@ export default {
     ...mapGetters("app", ["getAppByName"]),
     appAddDialog: {
       get() {
-        return this.$store.state.ui.appAddDialog;
+        return this.$store.getters['ui/isDialogActive']('APP_ADD_DIALOG');
       },
       set(v) {
-        this.$store.dispatch("ui/toggleAppAddDialog", v);
+        this.hideDialog()
       },
     },
     appNameRules() {
@@ -88,7 +88,7 @@ export default {
   },
   methods: {
     hideDialog() {
-      this.$store.dispatch("ui/toggleAppAddDialog", false);
+      this.$store.dispatch('ui/toggleDialog', { type: 'APP_ADD_DIALOG', val: false });
     },
     addApp() {
       this.$refs.formAddApp.validate();
