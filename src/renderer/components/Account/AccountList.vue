@@ -1,13 +1,39 @@
 <template>
   <div>
     <AccountSearch />
+    <v-expand-transition>
+      <div v-if="selectMode" class="d-flex justify-end">
+        <v-chip
+          outlined
+          class="font-weight-bold"
+          color="error"
+          small
+          :disabled="!selectedItemList.length"
+          @click="deleteItemMulti()"
+        >
+          DELETE {{ selectedItemList.length }} item(s)
+          <v-icon right small>mdi-close-thick</v-icon>
+        </v-chip>
+        <v-chip
+          outlined
+          class="font-weight-bold ms-2"
+          color="grey"
+          small
+          @click="endSelectMode()"
+        >
+          CANCEL
+          <v-icon right small>mdi-close-thick</v-icon>
+        </v-chip>
+      </div>
+    </v-expand-transition>
     <v-data-table :headers="headers" :items="sortedAccountList" item-key="id">
       <template #item="{ item }">
         <tr
+          v-longclick="() => initSelectMode()"
           class="cursor-pointer"
           :class="isSelected(item.id)"
-          @dblclick="!dblClickToEdit || editItem(item)"
-          @click="selectItem(item)"
+          @dblclick="!selectMode && (!dblClickToEdit || editItem(item))"
+          @click="selectMode && selectItem(item)"
         >
           <td>
             <v-chip color="primary" label small>
@@ -44,12 +70,12 @@
             </v-hover>
           </td>
           <td>
-            <v-icon color="primary" @click="editItem(item)">
+            <v-icon color="primary" @click.prevent="editItem(item)">
               mdi-pencil
             </v-icon>
             <v-icon
               color="error"
-              @click="!dialogToDelete || deleteItem(item)"
+              @click.self="!dialogToDelete || deleteItem(item)"
               @dblclick.stop="dialogToDelete || deleteAccount(item.id)"
             >
               mdi-delete
@@ -67,6 +93,7 @@ import { mapGetters, mapState } from "vuex";
 export default {
   data() {
     return {
+      selectMode: false,
       selectedItemList: [],
       headers: [
         { text: "App / Website", value: "appName" },
@@ -109,33 +136,22 @@ export default {
   mounted() {
     // console.log(this.selectedItemList);
     window.addEventListener("keydown", (event) => {
+      // esc
       if (event.key === "Escape") {
-        this.selectedItemList = [];
-      } else if (event.ctrlKey && event.key.toLowerCase() === "a") {
+        this.endSelectMode();
+      }
+      // ctrl+a
+      else if (event.ctrlKey && event.key.toLowerCase() === "a") {
         event.preventDefault();
+        this.initSelectMode()
         this.selectedItemList = this.sortedAccountList.map((e) => e.id);
-      } else if (
+      }
+      // delete
+      else if (
         event.key.toLowerCase() === "delete" &&
         this.selectedItemList.length
       ) {
-        if (this.selectedItemList.length === 1) {
-          this.deleteItem(
-            this.sortedAccountList.find(
-              (e) => e.id === this.selectedItemList[0]
-            )
-          );
-        } else {
-          console.log(
-            this.sortedAccountList.filter((e) =>
-              this.selectedItemList.includes(e.id)
-            )
-          );
-          this.deleteItemMulti(
-            this.sortedAccountList.filter((e) =>
-              this.selectedItemList.includes(e.id)
-            )
-          );
-        }
+        this.deleteItemMulti();
       }
       // console.log(this.selectedItemList);
     });
@@ -148,6 +164,15 @@ export default {
       return this.selectedItemList.find((e) => e === id)
         ? "v-data-table__selected"
         : "";
+    },
+    initSelectMode() {
+      if (this.selectMode) return;
+      this.selectMode = true;
+      // this.selectItem(item);
+    },
+    endSelectMode() {
+      this.selectMode = false;
+      this.selectedItemList = [];
     },
     selectItem(item) {
       if (this.isSelected(item.id)) {
@@ -187,26 +212,36 @@ export default {
         },
       });
     },
-    deleteItemMulti(itemList) {
-      this.$store.dispatch("ui/toggleDialog", {
-        type: "CONFIRMATION_DIALOG",
-        val: true,
-        data: {
-          color: "error",
-          title: "Delete account",
-          desc:
-            "Are u sure you want to delete these " +
-            itemList.length +
-            " accounts ?",
-          actions: {
-            y: () => {
-              itemList.forEach((e) => {
-                this.deleteAccount(e);
-              });
+    deleteItemMulti() {
+      if (this.selectedItemList.length === 1) {
+        this.deleteItem(
+          this.sortedAccountList.find((e) => e.id === this.selectedItemList[0])
+        );
+      } else {
+        const itemList = this.sortedAccountList.filter((e) =>
+          this.selectedItemList.includes(e.id)
+        );
+        this.$store.dispatch("ui/toggleDialog", {
+          type: "CONFIRMATION_DIALOG",
+          val: true,
+          data: {
+            color: "error",
+            title: "Delete account",
+            desc:
+              "Are u sure you want to delete these " +
+              itemList.length +
+              " accounts ?",
+            actions: {
+              y: () => {
+                itemList.forEach((e) => {
+                  this.deleteAccount(e);
+                });
+                this.endSelectMode()
+              },
             },
           },
-        },
-      });
+        });
+      }
     },
     deleteAccount(item) {
       this.$store.dispatch("account/deleteAccount", item);

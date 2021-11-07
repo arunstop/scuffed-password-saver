@@ -18,6 +18,7 @@ module.exports = {
     '~/plugins/local-storage',
     '~/plugins/globals',
     '~/plugins/date',
+    '~/plugins/longclick',
 
   ],
   css:[
