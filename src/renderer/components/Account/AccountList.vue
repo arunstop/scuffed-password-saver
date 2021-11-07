@@ -20,9 +20,7 @@
               <v-icon right small>mdi-delete</v-icon>
             </v-chip>
             <v-chip
-            outlined
               class="font-weight-bold ms-2"
-              color="white"
               small
               @click="endSelectMode()"
             >
@@ -83,7 +81,7 @@
             <v-icon
               color="error"
               @click.self="!dialogToDelete || deleteItem(item)"
-              @dblclick.stop="dialogToDelete || deleteAccount(item.id)"
+              @dblclick.stop="dialogToDelete || deleteAccount(item)"
             >
               mdi-delete
             </v-icon>

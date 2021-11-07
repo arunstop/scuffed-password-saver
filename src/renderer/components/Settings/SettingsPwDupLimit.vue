@@ -72,6 +72,7 @@
               <v-btn
                 ref="btnDialogPdlY"
                 color="primary"
+                :disabled="!formSetPwDupLimit"
                 @click="setPwDupLimit()"
               >
                 OK
@@ -119,6 +120,7 @@ export default {
   },
   methods: {
     togglePwDupLimitDialog() {
+      this.pwDupLimitModel = this.pwDupLimit;
       this.pwDuplicationDialog = !this.pwDuplicationDialog;
     },
     setPwDupLimit() {
