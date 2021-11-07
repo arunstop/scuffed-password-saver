@@ -166,10 +166,4 @@ export default {
 </script>
 
 <style>
-.chip-file {
-  white-space: nowrap;
-  width: 50px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 </style>

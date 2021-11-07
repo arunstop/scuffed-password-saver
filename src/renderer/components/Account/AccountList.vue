@@ -2,28 +2,35 @@
   <div>
     <AccountSearch />
     <v-expand-transition>
-      <div v-if="selectMode" class="d-flex justify-end">
-        <v-chip
-          outlined
-          class="font-weight-bold"
-          color="error"
-          small
-          :disabled="!selectedItemList.length"
-          @click="deleteItemMulti()"
-        >
-          DELETE {{ selectedItemList.length }} item(s)
-          <v-icon right small>mdi-close-thick</v-icon>
-        </v-chip>
-        <v-chip
-          outlined
-          class="font-weight-bold ms-2"
-          color="grey"
-          small
-          @click="endSelectMode()"
-        >
-          CANCEL
-          <v-icon right small>mdi-close-thick</v-icon>
-        </v-chip>
+      <div
+        v-show="selectMode"
+        ref="selectionOpt"
+        class="selection-opt"
+      >
+        <div class="d-flex justify-end selection-opt">
+          <v-card class="pa-4 rounded-0 rounded-b-xl" elevation="0">
+            <v-chip
+              class="font-weight-bold"
+              color="error"
+              small
+              :disabled="!selectedItemList.length"
+              @click="deleteItemMulti()"
+            >
+              DELETE {{ selectedItemList.length }} item(s)
+              <v-icon right small>mdi-delete</v-icon>
+            </v-chip>
+            <v-chip
+            outlined
+              class="font-weight-bold ms-2"
+              color="white"
+              small
+              @click="endSelectMode()"
+            >
+              CANCEL
+              <v-icon right small>mdi-close-thick</v-icon>
+            </v-chip>
+          </v-card>
+        </div>
       </div>
     </v-expand-transition>
     <v-data-table :headers="headers" :items="sortedAccountList" item-key="id">
@@ -133,8 +140,9 @@ export default {
       return sal1;
     },
   },
+  created() {},
   mounted() {
-    // console.log(this.selectedItemList);
+    // Detect keydown
     window.addEventListener("keydown", (event) => {
       // esc
       if (event.key === "Escape") {
@@ -143,7 +151,7 @@ export default {
       // ctrl+a
       else if (event.ctrlKey && event.key.toLowerCase() === "a") {
         event.preventDefault();
-        this.initSelectMode()
+        this.initSelectMode();
         this.selectedItemList = this.sortedAccountList.map((e) => e.id);
       }
       // delete
@@ -155,6 +163,17 @@ export default {
       }
       // console.log(this.selectedItemList);
     });
+console.log(this.$vuetify)
+    const selectionOpt = this.$refs.selectionOpt;
+    const observer = new IntersectionObserver(
+      ([e]) => {
+        const soChild=e.target.firstChild.firstChild.classList
+        soChild.toggle("primary-t", e.intersectionRatio < 1)
+      },
+      { threshold: [1] }
+    );
+    console.log(selectionOpt.firstChild.classList);
+    observer.observe(selectionOpt)
   },
   beforeDestroy() {
     window.removeEventListener("keydown", {});
@@ -236,7 +255,7 @@ export default {
                 itemList.forEach((e) => {
                   this.deleteAccount(e);
                 });
-                this.endSelectMode()
+                this.endSelectMode();
               },
             },
           },
@@ -260,4 +279,18 @@ export default {
 .cursor-pointer {
   cursor: pointer;
 }
+.selection-opt {
+  position: -webkit-sticky;
+  position: sticky;
+  top: -1px;
+  z-index: 100;
+}
+.primary-t{
+  background-color: var(--v-primary-base) !important;
+  transition: .6s;
+}
+/* .selection-opt-pinned{
+  border-left: thin var(--v-primary-base) solid !important;
+  border-bottom: thin var(--v-primary-base) solid !important;
+} */
 </style>

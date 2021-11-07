@@ -43,7 +43,11 @@ module.exports = {
     // '@nuxtjs/vuetify'
   ],
   vuetify: {
+    
     theme: {
+      options: {
+        customProperties: true
+      },
       themes: {
         light: {
           primary: '#1867c0',

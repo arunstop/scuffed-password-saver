@@ -100,7 +100,7 @@ export const getters = {
                     "Replace existing/duplicate accounts ONLY (" +
                     upRes().totalDuplicate +
                     " accounts)",
-                disabled: false,
+                disabled: !upRes().totalDuplicate,
             },
             {
                 value: "REPLACE_ADD",
