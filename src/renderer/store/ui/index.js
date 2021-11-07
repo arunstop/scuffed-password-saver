@@ -1,23 +1,19 @@
 export const state = () => ({
     menuList: require("@/assets/menu-list.json"),
     mainDrawer: false,
-    initFolderDialog: true,
-    logoutDialog: false,
-    appAddDialog: false,
-    appEditDialog: false,
-    accountAddDialog: false,
-    accountEditDialog: false,
     appEditValue: "",
     dialogList: [],
     snackbarList: [],
-    confirmationDialog: null,
-    importDialog: null,
 })
 
 export const getters = {
+    inDialogMode: state => () => {
+        console.log(!!state.dialogList.length)
+        return !!state.dialogList.length
+    },
     isDialogActive: state => (dialogType) => {
-        console.log(state.dialogList.find(e=>e.type === dialogType))
-        return state.dialogList.find(e=>e.type === dialogType) || false
+        // console.log(state.dialogList.find(e => e.type === dialogType))
+        return state.dialogList.find(e => e.type === dialogType) || false
     },
     getMenuList: state => () => {
         return state.menuList
@@ -35,7 +31,7 @@ export const mutations = {
         state.mainDrawer = val
     },
     SHOW_DIALOG(state, payload) {
-        console.log(payload)
+        // console.log(payload)
         if (payload.val === true) {
             state.dialogList.push(payload)
             return

@@ -108,9 +108,35 @@ export default {
   },
   mounted() {
     // console.log(this.selectedItemList);
-    window.addEventListener("keydown", (e) => {
-      if (e.key !== "Escape" && this.$store.state.ui.dialogAdd) return;
-      this.selectedItemList = [];
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        this.selectedItemList = [];
+      } else if (event.ctrlKey && event.key.toLowerCase() === "a") {
+        event.preventDefault();
+        this.selectedItemList = this.sortedAccountList.map((e) => e.id);
+      } else if (
+        event.key.toLowerCase() === "delete" &&
+        this.selectedItemList.length
+      ) {
+        if (this.selectedItemList.length === 1) {
+          this.deleteItem(
+            this.sortedAccountList.find(
+              (e) => e.id === this.selectedItemList[0]
+            )
+          );
+        } else {
+          console.log(
+            this.sortedAccountList.filter((e) =>
+              this.selectedItemList.includes(e.id)
+            )
+          );
+          this.deleteItemMulti(
+            this.sortedAccountList.filter((e) =>
+              this.selectedItemList.includes(e.id)
+            )
+          );
+        }
+      }
       // console.log(this.selectedItemList);
     });
   },
@@ -125,7 +151,6 @@ export default {
     },
     selectItem(item) {
       if (this.isSelected(item.id)) {
-        
         this.selectedItemList = this.selectedItemList.filter(
           (e) => e !== item.id
         );
@@ -136,14 +161,14 @@ export default {
     editItem(item) {
       // console.log(item);
       this.$store.dispatch("ui/toggleDialog", {
-        type: 'ACCOUNT_EDIT_DIALOG',
+        type: "ACCOUNT_EDIT_DIALOG",
         val: true,
         id: item.id,
       });
     },
     deleteItem(item) {
       this.$store.dispatch("ui/toggleDialog", {
-        type: 'CONFIRMATION_DIALOG',
+        type: "CONFIRMATION_DIALOG",
         val: true,
         data: {
           color: "error",
@@ -154,13 +179,33 @@ export default {
             " account with ID : " +
             item.accountId +
             " ?",
-            actions: {
-          y: () => {
-            this.deleteAccount(item);
+          actions: {
+            y: () => {
+              this.deleteAccount(item);
+            },
           },
         },
+      });
+    },
+    deleteItemMulti(itemList) {
+      this.$store.dispatch("ui/toggleDialog", {
+        type: "CONFIRMATION_DIALOG",
+        val: true,
+        data: {
+          color: "error",
+          title: "Delete account",
+          desc:
+            "Are u sure you want to delete these " +
+            itemList.length +
+            " accounts ?",
+          actions: {
+            y: () => {
+              itemList.forEach((e) => {
+                this.deleteAccount(e);
+              });
+            },
+          },
         },
-        
       });
     },
     deleteAccount(item) {
