@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 export const state = function () {
     return {
         accountList: [],
@@ -51,6 +53,7 @@ export const getters = {
             full: count >= limit
         }
     },
+    
     countAccountByApp: state => (appName) => {
         return state.accountList.filter(acc =>
             acc.appName === appName
@@ -85,7 +88,6 @@ export const mutations = {
         // console.log(this.$localStorage.get('accountList'))
     },
     IMPORT_ACCOUNTS(state, payload) {
-        const _ = require('lodash')
         if (payload.mode === 'REPLACE') {
             // intersectionBy = insert array #1 to array #2
             // getting ALL unique non-duplicate array
@@ -194,8 +196,9 @@ export const actions = {
     removeFilterByApp({ commit }, val) {
         commit('REMOVE_FILTER_BY_APP', val)
     },
-    importAccount({ commit }, payload) {
+    importAccount({ commit, dispatch }, payload) {
         console.log(payload)
-        commit('IMPORT_ACCOUNTS', payload)
+        // commit('IMPORT_ACCOUNTS', payload)
+        dispatch('app/importApps', payload.value, { root: true })
     }
 }

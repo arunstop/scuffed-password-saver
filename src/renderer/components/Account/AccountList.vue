@@ -5,10 +5,10 @@
       <div
         v-show="selectMode"
         ref="selectionOpt"
-        class="selection-opt"
+        class="selection-opt pointer-events-none"
       >
         <div class="d-flex justify-end selection-opt">
-          <v-card class="pa-4 rounded-0 rounded-b-xl" elevation="0">
+          <v-card class="pa-4 rounded-0 rounded-b-xl pointer-events" elevation="0">
             <v-chip
               class="font-weight-bold"
               color="error"
@@ -34,9 +34,9 @@
     <v-data-table :headers="headers" :items="sortedAccountList" item-key="id">
       <template #item="{ item }">
         <tr
-          v-longclick="() => initSelectMode()"
           class="cursor-pointer"
           :class="isSelected(item.id)"
+          @contextmenu.prevent="initSelectMode(item)"
           @dblclick="!selectMode && (!dblClickToEdit || editItem(item))"
           @click="selectMode && selectItem(item)"
         >
@@ -182,10 +182,10 @@ console.log(this.$vuetify)
         ? "v-data-table__selected"
         : "";
     },
-    initSelectMode() {
+    initSelectMode(item) {
       if (this.selectMode) return;
       this.selectMode = true;
-      // this.selectItem(item);
+      if (item) this.selectItem(item);
     },
     endSelectMode() {
       this.selectMode = false;
@@ -207,6 +207,7 @@ console.log(this.$vuetify)
         val: true,
         id: item.id,
       });
+      this.endSelectMode()
     },
     deleteItem(item) {
       this.$store.dispatch("ui/toggleDialog", {
@@ -262,6 +263,7 @@ console.log(this.$vuetify)
     },
     deleteAccount(item) {
       this.$store.dispatch("account/deleteAccount", item);
+      this.endSelectMode()
     },
     pwDurab(edited) {
       return this.$globals.getPwDurability(

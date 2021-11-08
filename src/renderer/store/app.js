@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 export const state = function () {
     return {
         appList: [],
@@ -13,6 +15,34 @@ export const getters = {
     getAppList: (state, getters, rootState, rootGetters) => () => {
         // console.log(rootGetters)
         return state.appList
+    },
+    getAppListByAccount: (state, getters, rootState,) => () => {
+        const accList = _.uniqBy(rootState.account.accountList.map(e => ({ name: e.appName, urls: "" })), "name")
+        // console.log(accList)
+        // // Getting apps that are listed in appList
+        // const listedAppList = _.intersectionBy(
+        //     state.appList,
+        //     accList,
+        //     "name"
+        // )
+        // console.log(state.appList)
+        // console.log(listedAppList)
+        // // Getting apps that are NOT listed in appList
+        // const unlistedAppList = _.differenceBy(accList, listedAppList, "name")
+
+        // if there are unlisted apps then push another "other apps" element
+        // return listedAppList.concat(unlistedAppList ? { name: "Other", urls: "" } : [])
+
+        return accList
+    },
+    getUnlistedApp: (state, getters, rootState) => () => {
+        // pulling apps that are not listed in appList
+        // but listed in accountList
+        return _.pullAllBy(
+            getters.getAppListByAccount(),
+            state.appList,
+            "name"
+        )
     }
 }
 
@@ -42,6 +72,13 @@ export const mutations = {
         state.appList = state.appList.filter(e => e.name.toLowerCase() !== name.toLowerCase())
         this.$localStorage.set('appList', state.appList)
     },
+    IMPORT_APPS(state, payload) {
+        payload = _.uniqBy(payload.map(e => ({ name: e.appName, urls: '' })), 'name')
+        console.log(payload)
+        const newApps = _.differenceBy(payload, state.appList, 'name')
+        console.log(newApps)
+        state.appList = state.appList.concat(newApps)
+    }
 }
 
 export const actions = {
@@ -78,5 +115,8 @@ export const actions = {
                 color: "success",
             },
             { root: true })
+    },
+    importApps({ commit }, payload) {
+        commit('IMPORT_APPS', payload)
     }
 }

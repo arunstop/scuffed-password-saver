@@ -13,7 +13,7 @@
     >
       <v-card outlined>
         <v-card-title>
-          Edit Account {{ appName.name }}
+          Edit Account {{ accountEditValue.accountId }}
           <UtilDialogCloseBtn :action="() => hideDialog()" />
         </v-card-title>
         <v-card-text class="">

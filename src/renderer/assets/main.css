@@ -83,5 +83,5 @@ body {
 }
 
 .pointer-events {
-  pointer-events: none;
+  pointer-events: all;
 }
