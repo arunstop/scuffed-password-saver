@@ -1,3 +1,4 @@
+
 <template>
   <!-- <v-snackbar v-model="show" :timeout="timeout" :style="calculatePosition()">
     {{ snackbar.id }}
@@ -16,11 +17,13 @@
     :color="snackbar.color"
     max-height="60px"
     min-width="320px"
+    @mouseenter="timer.pause()"
+    @mouseleave="timer.resume()"
   >
     <div class="d-flex align-center pa-2 font-weight-regular">
       <span class="ms-4">{{ snackbar.label }}</span>
       <v-spacer />
-      <v-btn class="ms-4" color="white" outlined text @click="removeSnackbar()">
+      <v-btn class="ms-4" color="white" outlined @click="removeSnackbar()">
         Close
       </v-btn>
     </div>
@@ -37,7 +40,7 @@ export default {
   data: () => ({
     // snackbar: false
     // timeout: 20000,
-    hover:false,
+    hover: false,
   }),
   computed: {
     ...mapGetters("ui", ["getSnackbarById"]),
@@ -49,13 +52,39 @@ export default {
         this.$store.dispatch("ui/removeSnackbar", this.snackbar.id);
       },
     },
+    timer(){
+      return this.timerInstance()
+    }
   },
-  mounted() {
-    setTimeout(() => {
-      this.$store.dispatch("ui/removeSnackbar", this.snackbar.id);
-    }, 2121);
+  created() {
+    this.timer.resume()
   },
   methods: {
+    timerInstance() {
+      class Timer {
+        constructor(action, delay) {
+          let timerId = delay;
+          let start = delay;
+          let remaining = delay;
+
+          this.pause = () => {
+            // alert('paused')
+            window.clearTimeout(timerId);
+            remaining -= Date.now() - start;
+          };
+          this.resume = () => {
+            start = Date.now();
+            window.clearTimeout(timerId);
+            timerId = window.setTimeout(action, remaining);
+          };
+          this.resume();
+        }
+      }
+
+      return new Timer( () =>{
+        this.removeSnackbar()
+      }, 2121);
+    },
     removeSnackbar() {
       // alert(123);
       this.$store.dispatch("ui/removeSnackbar", this.snackbar.id);
@@ -70,7 +99,6 @@ export default {
 </script>
 
 <style>
-
 .pointer-events {
   pointer-events: all;
 }
