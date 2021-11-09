@@ -8,7 +8,9 @@
     :outlined="!isSearched"
     @click="searchAppByName()"
   >
-    <v-icon v-if="!isListed" left small>mdi-alert-circle</v-icon>
+    <v-icon v-if="!isListed" left small>
+      {{ isSearched ? "mdi-alert-circle-outline" : "mdi-alert-circle" }}
+    </v-icon>
     {{ app.name }}
     {{ ` - ${countAccountByApp(app.name)}` }}
   </v-chip>
@@ -28,11 +30,11 @@ export default {
       return this.filterByAppList.includes(this.app.name.toLowerCase().trim());
     },
     isListed() {
-      return !!this.getAppByName(this.app.name)
+      return !!this.getAppByName(this.app.name);
     },
-    color(){
-      return this.isListed?"indigo ligthen-2" : "warning"
-    }
+    color() {
+      return this.isListed ? "indigo ligthen-2" : "warning";
+    },
   },
   methods: {
     searchAppByName() {
@@ -42,7 +44,6 @@ export default {
         this.$store.dispatch("account/addFilterByApp", this.app.name);
       }
     },
-    
   },
 };
 </script>

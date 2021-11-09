@@ -1,6 +1,7 @@
 <template>
   <div class="pt-4">
-    <v-alert v-if="getUnlistedApp().length" type="warning" border="left" text icon="mdi-alert-circle">
+    <v-expand-transition>
+      <v-alert v-if="getUnlistedApp().length" type="warning" border="left" text icon="mdi-alert-circle">
       Some applications/websites for the accounts might not be listed in the
       system yet.
       <br />
@@ -9,6 +10,7 @@
         <v-icon right>mdi-check</v-icon>
       </v-btn>
     </v-alert>
+    </v-expand-transition>
     <v-row class="" no-gutters align="center">
       <v-text-field
         ref="accSearchInput"
