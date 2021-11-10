@@ -117,8 +117,8 @@
               ref="btnDialogAccountEditY"
               class="flex-grow-1"
               large
-              :disabled="isUnchanged()"
               color="success"
+              :disabled="isUnchanged()"
               @click.stop="accountEdit()"
             >
               Confirm

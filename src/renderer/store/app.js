@@ -57,6 +57,7 @@ export const mutations = {
         // console.log(name)
     },
     ADD_APP(state, payload) {
+        console.log(payload)
         state.appList.push(payload)
         this.$localStorage.set('appList', state.appList)
         // console.log(this.$localStorage.get('appList'))
@@ -89,7 +90,7 @@ export const actions = {
         commit('SET_APP_EDIT_VALUE', val)
     },
     addApp({ commit, dispatch }, payload) {
-        // console.log(payload)
+        payload.urls = require('lodash').uniqBy(payload.urls)
         commit('ADD_APP', payload)
         dispatch("ui/showSnackbar", {
             label: "App : " + payload.name + " has been added",

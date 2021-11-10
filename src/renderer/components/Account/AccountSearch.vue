@@ -1,5 +1,6 @@
 <template>
   <div class="pt-4">
+    <AppList/>
     <v-expand-transition>
       <v-alert v-if="getUnlistedApp().length" type="warning" border="left" text icon="mdi-alert-circle">
       Some applications/websites for the accounts might not be listed in the

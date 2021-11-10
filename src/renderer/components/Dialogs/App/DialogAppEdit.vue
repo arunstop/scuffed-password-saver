@@ -37,6 +37,7 @@
               class="flex-grow-1"
               large
               color="success"
+              :disabled="!formAppEdit"
               @click.stop="editApp()"
             >
               Confirm

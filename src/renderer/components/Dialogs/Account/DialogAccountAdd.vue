@@ -79,6 +79,7 @@
               class="flex-grow-1"
               large
               color="success"
+              :disabled="!formAccountAdd"
               @click.stop="accountAdd()"
             >
               Confirm

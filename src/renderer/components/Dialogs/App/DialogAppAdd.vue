@@ -35,6 +35,7 @@
               class="flex-grow-1"
               large
               color="success"
+              :disabled="!formAddApp"
               @click.stop="addApp()"
             >
               Confirm
@@ -95,7 +96,7 @@ export default {
       if (this.formAddApp) {
         this.$store.dispatch("app/addApp", {
           name: this.appName,
-          urls: this.$globals.lodash.compact(this.appUrls.trim().split("\n")),
+          urls: require('lodash').compact(this.appUrls.trim().split("\n")),
         });
         // this.$store.dispatch("ui/showSnackbar", {
         //   label: this.appName + "has been added",

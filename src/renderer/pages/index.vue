@@ -10,22 +10,14 @@
         Add New Application
       </v-btn>
     </div>
-    <v-btn
-      v-for="a in $store.state.app.appList"
-      :key="a.name+'0'"
-      @click="openAppEditDialog(a.name)"
-      @contextmenu.prevent="deleteApp(a.name)"
-    >
-      {{ a.name }}
-    </v-btn>
-    <v-btn @click.stop="snack()"> snack </v-btn>
-    <v-btn @click="doNavigate()"> settings </v-btn>
-    <AccountList/>
+    
+    <!-- <v-btn @click.stop="snack()"> snack </v-btn> -->
+    <AccountList />
   </div>
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters, mapState, mapActions } from "vuex";
 import { remote } from "electron";
 // import SystemInformation from "@/components/SystemInformation.vue";
 
@@ -39,27 +31,25 @@ export default {
     };
   },
   methods: {
-    snack() {
-      this.$store.dispatch("ui/showSnackbar", {
-        label: "snack",
-        color: "success",
-      });
-    },
-    doNavigate() {
-      this.$router.push({ name: "settings" });
-    },
+    ...mapActions("ui", ["toggleDialog"]),
+    // snack() {
+    //   this.$store.dispatch("ui/showSnackbar", {
+    //     label: "snack",
+    //     color: "success",
+    //   });
+    // },
     openAppAddDialog() {
-     this.$store.dispatch('ui/toggleDialog', { type: 'APP_ADD_DIALOG', val: true });
+      this.toggleDialog({ type: "APP_ADD_DIALOG", val: true });
     },
     openAppEditDialog(name) {
-      this.$store.dispatch('ui/toggleDialog', { type: 'APP_EDIT_DIALOG', val: true,name })
+      this.toggleDialog({ type: "APP_EDIT_DIALOG", val: true, name });
     },
     openAccountAddDialog() {
-      this.$store.dispatch('ui/toggleDialog', { type: 'ACCOUNT_ADD_DIALOG', val: true })
+      this.toggleDialog({ type: "ACCOUNT_ADD_DIALOG", val: true });
     },
-    deleteApp(name){
-      this.$store.dispatch("app/deleteApp", name)
-    }
+    deleteApp(name) {
+      this.$store.dispatch("app/deleteApp", name);
+    },
   },
 };
 </script>

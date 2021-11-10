@@ -80,6 +80,11 @@ export const actions = {
         else if (type === "IMPORT_DIALOG") {
             commit("SHOW_DIALOG", payload)
         }
+        else if (type === "APP_LIST_DIALOG") {
+            commit("SHOW_DIALOG", payload)
+        }else{
+            alert('Unknown dialog type')
+        }
     },
     showSnackbar({ commit }, { label, color }) {
         commit('SHOW_SNACKBAR', { label, color })
