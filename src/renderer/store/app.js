@@ -43,6 +43,9 @@ export const getters = {
             state.appList,
             "name"
         )
+    },
+    getUrllessApp:(state)=>()=>{
+        return state.appList.filter(e=>e.urls.length===0)
     }
 }
 

@@ -8,6 +8,10 @@
       no-action
     >
       <template #body>
+        <v-alert v-if="getUrllessApp()" type="warning" border="left" text icon="mdi-alert-circle">
+      Some applications/websites have no urls of a website to get linked to. Add them by clicking the items below.
+      <br />
+    </v-alert>
         <v-row no-gutters align="center" justify="space-around">
           <AppCard
             v-for="app in $store.state.app.appList"
@@ -23,7 +27,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions,mapState } from "vuex";
 
 export default {
   data: () => ({
@@ -31,6 +35,7 @@ export default {
   }),
   computed: {
     ...mapGetters("ui", ["isDialogActive"]),
+    ...mapGetters("app", ["getUrllessApp"]),
   },
   methods: {
     act() {

@@ -2,7 +2,7 @@
   <v-hover v-slot="{ hover }">
     <div class="ma-2 app-card">
       <v-card
-        :class="hover && 'app-card-expand'"
+        :class="'app-card-expand'"
         outlined
         @click="click()"
       >
@@ -38,6 +38,13 @@
                 </v-chip>
               </div>
             </v-list-item-content>
+            <v-list-item-avatar>
+             <v-scale-transition origin="center center">
+                  <v-btn v-if="hover" icon color="error" @click.stop="deleteItem(app.name)">
+                  <v-icon>mdi-delete</v-icon>
+              </v-btn>
+             </v-scale-transition>
+            </v-list-item-avatar>
           </v-list-item>
         </v-alert>
       </v-card>
@@ -89,6 +96,26 @@ export default {
     openUrl(url) {
       this.$globals.openUrl("http://" + url);
     },
+   deleteApp(name) {
+      this.$store.dispatch("app/deleteApp", name);
+    },
+    deleteItem(name) {
+      this.$store.dispatch("ui/toggleDialog", {
+        type: "CONFIRMATION_DIALOG",
+        val: true,
+        data: {
+          color: "error",
+          title: "Delete application",
+          desc:
+            `Are u sure you want to delete application: ${name}?`,
+          actions: {
+            y: () => {
+              this.deleteApp(name);
+            },
+          },
+        },
+      });
+    },
   },
 };
 </script>
@@ -99,12 +126,14 @@ export default {
     transition: all 1s;
 }
 
-.app-card-expand {
-    left:0;
+.app-card-expand:hover {
+    /* left:0;
+    right:0;
   width: 100% !important;
-  position: absolute;
-  z-index:201;
-  transition: all 1s;
+   position: absolute;
+  z-index:201; */
+  transform:scale(1.06);
+  transition: all .4s;
 }
 
 .urls-list {
