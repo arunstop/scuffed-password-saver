@@ -127,7 +127,8 @@ export default {
       //   return {...e,durab:this.pwDurab(e.editedPw)}
       // })
       const sal1 = _.sortBy(this.getAccountList(), [
-        (e) => e.id.replace("ACC", "") * 1,
+        // (e) => e.id.replace("ACC", "") * 1,
+        (e)=>e.edited
       ])
         .map((e) => {
           return { ...e, durab: this.pwDurab(e.editedPw) };
