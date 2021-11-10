@@ -63,7 +63,7 @@ export default {
       }
     },
     windowButtonAction(action) {
-      console.log(action);
+      // console.log(action);
       const window = remote.getCurrentWindow();
       if (action === "minimize") {
         window.minimize();

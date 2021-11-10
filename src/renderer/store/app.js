@@ -60,7 +60,7 @@ export const mutations = {
         // console.log(name)
     },
     ADD_APP(state, payload) {
-        console.log(payload)
+        // console.log(payload)
         state.appList.push(payload)
         this.$localStorage.set('appList', state.appList)
         // console.log(this.$localStorage.get('appList'))
@@ -78,9 +78,9 @@ export const mutations = {
     },
     IMPORT_APPS(state, payload) {
         payload = _.uniqBy(payload.map(e => ({ name: e.appName, urls: '' })), 'name')
-        console.log(payload)
+        // console.log(payload)
         const newApps = _.differenceBy(payload, state.appList, 'name')
-        console.log(newApps)
+        // console.log(newApps)
         state.appList = state.appList.concat(newApps)
     }
 }
@@ -102,7 +102,7 @@ export const actions = {
             { root: true })
     },
     editApp({ commit, dispatch }, payload) {
-        console.log(payload)
+        // console.log(payload)
         commit('EDIT_APP', payload)
         dispatch("ui/showSnackbar",
             {

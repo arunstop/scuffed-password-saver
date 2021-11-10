@@ -9,6 +9,7 @@
         <v-icon left>mdi-plus</v-icon>
         Add New Application
       </v-btn>
+      <AppList/>
     </div>
     
     <!-- <v-btn @click.stop="snack()"> snack </v-btn> -->

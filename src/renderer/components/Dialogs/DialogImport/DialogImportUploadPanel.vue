@@ -5,7 +5,7 @@
       v-bind="importPanel.loading"
       outlined
       height="300"
-      class=""
+      class="upload-panel"
       :color="importPanel.color"
       @click="uploadFiles()"
       @dragover="dragover"
@@ -88,4 +88,7 @@ export default {
 </script>
 
 <style>
+.upload-panel{
+  border: 2px dashed !important;
+}
 </style>

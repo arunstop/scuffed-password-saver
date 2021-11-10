@@ -110,9 +110,9 @@ export const mutations = {
         }
     },
     EDIT_ACCOUNT(state, payload) {
-        console.log(payload)
+        // console.log(payload)
         const targetedItem = state.accountList.find(e => e.id === payload.id)
-        console.log(targetedItem)
+        // console.log(targetedItem)
         const now = this.$date.moment()
         const editedPw = () => {
             if (payload.accountPw !== targetedItem.accountPw) {
@@ -197,8 +197,8 @@ export const actions = {
         commit('REMOVE_FILTER_BY_APP', val)
     },
     importAccount({ commit, dispatch }, payload) {
-        console.log(payload)
-        // commit('IMPORT_ACCOUNTS', payload)
+        // console.log(payload)
+        commit('IMPORT_ACCOUNTS', payload)
         dispatch('app/importApps', payload.value, { root: true })
     }
 }

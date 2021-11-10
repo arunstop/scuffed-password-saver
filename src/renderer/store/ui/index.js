@@ -8,7 +8,7 @@ export const state = () => ({
 
 export const getters = {
     inDialogMode: state => () => {
-        console.log(!!state.dialogList.length)
+        // console.log(!!state.dialogList.length)
         return !!state.dialogList.length
     },
     isDialogActive: state => (dialogType) => {

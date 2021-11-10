@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mb-4" outlined>
+  <v-card class="mb-4 upload-panel" outlined>
     <v-card
       class="my-4 overflow-y-scroll elevation-0"
       color="transparent"

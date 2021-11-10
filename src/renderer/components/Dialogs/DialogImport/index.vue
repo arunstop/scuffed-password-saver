@@ -51,6 +51,7 @@
                 v-for="(mode, index) in getModeList()"
                 :key="index"
                 v-bind="mode"
+                clas
               />
             </v-radio-group>
           </div>

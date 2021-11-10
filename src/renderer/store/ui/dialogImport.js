@@ -41,7 +41,7 @@ export const getters = {
             if (option === "REPLACE_ADD")
                 return {
                     type: "warning",
-                    icon: "mdi-swap-horizontal",
+                    icon: "mdi-swap-horizontal-bold",
                     message: `<b>${upRes().totalDuplicate}</b> 
                     existing/duplicate accounts will be replaced <br> <b>${upRes().totalNew}</b> 
                     new account(s) will be added`,
@@ -108,7 +108,7 @@ export const getters = {
                     "Replace ALL duplicates & add NEW ones (" +
                     upRes().totalUnique +
                     " accounts)",
-                disabled: !upRes().totalNew,
+                disabled: !upRes().totalDuplicate || !upRes().totalNew,
             },
             {
                 value: "ADD",

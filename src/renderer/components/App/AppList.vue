@@ -1,6 +1,9 @@
 <template>
   <div>
-    <v-btn @click="doShowAppListDialog()"> APP LIST </v-btn>
+    <v-btn color="success" @click="doShowAppListDialog()">
+      <v-icon left>mdi-application-outline</v-icon>
+      Application List
+    </v-btn>
     <DialogBigTemplate
       v-if="isDialogActive(dialogType)"
       :type="dialogType"
@@ -8,10 +11,17 @@
       no-action
     >
       <template #body>
-        <v-alert v-if="getUrllessApp()" type="warning" border="left" text icon="mdi-alert-circle">
-      Some applications/websites have no urls of a website to get linked to. Add them by clicking the items below.
-      <br />
-    </v-alert>
+        <v-alert
+          v-if="getUrllessApp()"
+          type="warning"
+          border="left"
+          text
+          icon="mdi-alert-circle"
+        >
+          Some applications/websites have no urls of a website to get linked to.
+          Add them by clicking the items below.
+          <br />
+        </v-alert>
         <v-row no-gutters align="center" justify="space-around">
           <AppCard
             v-for="app in $store.state.app.appList"
@@ -27,7 +37,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions,mapState } from "vuex";
+import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
   data: () => ({

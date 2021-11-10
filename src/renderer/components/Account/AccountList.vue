@@ -161,7 +161,7 @@ export default {
       }
       // console.log(this.selectedItemList);
     });
-console.log(this.$vuetify)
+// console.log(this.$vuetify)
     const selectionOpt = this.$refs.selectionOpt;
     const observer = new IntersectionObserver(
       ([e]) => {
@@ -170,7 +170,7 @@ console.log(this.$vuetify)
       },
       { threshold: [1] }
     );
-    console.log(selectionOpt.firstChild.classList);
+    // console.log(selectionOpt.firstChild.classList);
     observer.observe(selectionOpt)
   },
   beforeDestroy() {

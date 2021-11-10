@@ -122,7 +122,7 @@ export default {
 
 <style>
 .app-card{
-    min-width: 240px; height:80px;
+    width: 240px; height:80px;
     transition: all 1s;
 }
 

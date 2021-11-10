@@ -8,7 +8,12 @@
         {{ dialog.data.desc }}
       </v-card-text>
       <v-card-actions class="d-flex justify-end pb-4">
-        <v-btn ref="btnConfirmationN" outlined @click.stop="actionN()">
+        <v-btn
+          ref="btnConfirmationN"
+          outlined
+          tabindex="-1"
+          @click.stop="actionN()"
+        >
           Cancel
         </v-btn>
         <v-btn
@@ -27,30 +32,33 @@
 import { remote } from "electron";
 export default {
   computed: {
-    dialog(){
-      return this.$store.getters['ui/isDialogActive']('CONFIRMATION_DIALOG')
+    dialog() {
+      return this.$store.getters["ui/isDialogActive"]("CONFIRMATION_DIALOG");
     },
     confirmationDialog: {
       get() {
         return !!this.dialog;
       },
       set(v) {
-        this.hideDialog()
+        this.hideDialog();
       },
     },
   },
   mounted() {
     // console.log(this.data);
-    // window.addEventListener("keyup", (e) => {
-    //   if (
-    //     e.key === "Enter" ||
-    //     e.key === " " ||
-    //     e.key === "Spacebar" ||
-    //     e.key === "Space bar"
-    //   ) {
-    //     this.$refs.btnDialogLogoutY.$el.click();
-    //   }
-    // });
+    window.addEventListener("keyup", (e) => {
+      if (
+        e.key === "Enter" ||
+        e.key === " " ||
+        e.key === "Spacebar" ||
+        e.key === "Space bar"
+      ) {
+        this.$refs.btnConfirmationY.$el.click();
+      }
+    });
+  },
+  beforeDestroy() {
+    window.removeEventListener("keyup", {});
   },
   methods: {
     actionN() {
@@ -60,7 +68,10 @@ export default {
       this.dialog.data.actions?.y() || this.hideDialog();
     },
     hideDialog() {
-      this.$store.dispatch("ui/toggleDialog", {type:"CONFIRMATION_DIALOG",val:false});
+      this.$store.dispatch("ui/toggleDialog", {
+        type: "CONFIRMATION_DIALOG",
+        val: false,
+      });
     },
   },
 };
