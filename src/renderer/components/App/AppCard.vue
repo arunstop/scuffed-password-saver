@@ -130,8 +130,8 @@ export default {
     /* left:0;
     right:0;
   width: 100% !important;
-   position: absolute;
-  z-index:201; */
+   position: absolute; */
+  z-index:201;
   transform:scale(1.06);
   transition: all .4s;
 }

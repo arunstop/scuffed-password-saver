@@ -46,23 +46,22 @@
               :icon="alert.icon"
               :message="alert.message"
             />
-            <v-radio-group v-model="option" mandatory>
+            <v-radio-group v-model="option" mandatory hide-details="">
               <v-radio
                 v-for="(mode, index) in getModeList()"
                 :key="index"
                 v-bind="mode"
-                clas
               />
             </v-radio-group>
           </div>
         </v-expand-transition>
-      </v-card-text>
-      <v-card-actions class="d-flex justify-end pb-4">
-        <v-btn ref="btnDialogLogoutN" outlined @click.stop="hideDialog()">
+        <v-card-actions class="d-flex px-0 mt-4">
+        <v-btn ref="btnDialogLogoutN" class="flex-grow-1" outlined @click.stop="hideDialog()">
           Cancel
         </v-btn>
         <v-btn
-          ref="btnDialogLogoutY"
+        ref="btnDialogLogoutY"
+          class="flex-grow-1"
           color="primary"
           :disabled="!getUploadResult().totalUnique"
           @click.stop="importAccounts()"
@@ -70,6 +69,7 @@
           OK
         </v-btn>
       </v-card-actions>
+      </v-card-text>
     </v-card>
   </v-dialog>
 </template>

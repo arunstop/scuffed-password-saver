@@ -1,15 +1,15 @@
 <template>
   <div>
-    <div class="d-flex">
-      <v-btn class="me-4" color="success" @click.stop="openAccountAddDialog()">
+    <div class="d-flex flex-wrap">
+      <v-btn class="me-4 mt-4" color="success" @click.stop="openAccountAddDialog()">
         <v-icon left>mdi-lock</v-icon>
         Save New Account
       </v-btn>
-      <v-btn class="me-4" color="primary" @click.stop="openAppAddDialog()">
+      <v-btn class="me-4 mt-4" color="primary" @click.stop="openAppAddDialog()">
         <v-icon left>mdi-plus</v-icon>
         Add New Application
       </v-btn>
-      <AppList/>
+      <AppList class="me-4 mt-4"/>
     </div>
     
     <!-- <v-btn @click.stop="snack()"> snack </v-btn> -->

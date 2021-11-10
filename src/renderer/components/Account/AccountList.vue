@@ -138,7 +138,6 @@ export default {
       return sal1;
     },
   },
-  created() {},
   mounted() {
     // Detect keydown
     window.addEventListener("keydown", (event) => {
@@ -174,7 +173,9 @@ export default {
     observer.observe(selectionOpt)
   },
   beforeDestroy() {
-    window.removeEventListener("keydown", {});
+    window.removeEventListener("keydown", ()=>{
+      alert('removed')
+    });
   },
   methods: {
     isSelected(id) {
