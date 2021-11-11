@@ -2,6 +2,12 @@ export const state = () => ({
     menuList: require("@/assets/menu-list.json"),
     mainDrawer: false,
     appEditValue: "",
+    accViewVal:"table",
+    accViewOptList:[
+        {value:"table", active:false, label:"Table",icon:"mdi-view-list"},
+        {value:"card", active:false, label:"Table",icon:"mdi-format-list-text"},
+        {value:"grid", active:false, label:"Table",icon:"mdi-view-grid"},
+    ],
     dialogList: [],
     snackbarList: [],
 })
@@ -45,6 +51,9 @@ export const mutations = {
     },
     REMOVE_SNACKBAR(state, id) {
         state.snackbarList = state.snackbarList.filter(s => s.id !== id)
+    },
+    SET_ACC_VIEW(state, val) {
+        state.accViewVal = val
     },
 }
 
@@ -92,4 +101,7 @@ export const actions = {
     removeSnackbar({ commit }, id) {
         commit('REMOVE_SNACKBAR', id)
     },
+    setAccView({commit}, val){
+        commit('SET_ACC_VIEW',val)
+    }
 }

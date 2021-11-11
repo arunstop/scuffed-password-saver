@@ -52,7 +52,6 @@ export default ({ app }, inject) => {
               );
         },
         getPwDurability(lastEdited, freq) {
-
             const now = app.$date.moment();
             const edited = app.$date.moment(lastEdited);
             const dueDate = app.$date

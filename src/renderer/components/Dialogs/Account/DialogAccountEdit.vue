@@ -64,9 +64,9 @@
             prepend-icon="mdi-alphabetical-variant"
           >
             <template #item="data">
-              <v-list-item-icon>
-                <v-icon>mdi-apps</v-icon>
-              </v-list-item-icon>
+              <v-list-item-avatar>
+                <UtilProfile :alpha="data.item.name" :color="'primary'" />
+              </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>
                   {{ data.item.name }}
