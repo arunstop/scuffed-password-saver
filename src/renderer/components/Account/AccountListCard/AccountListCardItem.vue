@@ -7,7 +7,16 @@
             <UtilProfile :alpha="acc.appName" :color="color" />
           </v-list-item-avatar>
           <v-list-item-content class="d-flex">
-            <v-list-item-title class="font-weight-bold">
+            <v-list-item-title
+              class="font-weight-bold"
+              :class="color + '--text'"
+            >
+              {{ acc.accountId }}
+            </v-list-item-title>
+            <v-list-item-subtitle>
+              {{ acc.accountPw }}
+            </v-list-item-subtitle>
+             <v-list-item-title class="font-weight-bold">
               <v-chip outlined small label color="primary">
                 {{ acc.appName }}
               </v-chip>
@@ -21,15 +30,6 @@
                 {{ acc.durab.percentage + "%" }}
               </v-chip>
             </v-list-item-title>
-            <v-list-item-title
-              class="font-weight-bold"
-              :class="color + '--text'"
-            >
-              {{ acc.accountId }}
-            </v-list-item-title>
-            <v-list-item-subtitle>
-              {{ acc.accountPw }}
-            </v-list-item-subtitle>
           </v-list-item-content>
           <v-list-item-avatar>
             <v-scale-transition origin="center center">
