@@ -7,7 +7,7 @@
         :dark="isSelectedInLight(acc.id)"
         link
         @contextmenu.prevent="!selectionMode && selectItem(acc.id)"
-          @dblclick="!selectionMode && (!dblClickToEdit || editItem(acc))"
+          @dblclick="!selectionMode && (!dblClickToEdit || showEditDialog(acc))"
           @click="selectionMode && selectItem(acc.id)"
       >
         <v-alert class="mb-0 pa-0" border="left" colored-border :color="color">
