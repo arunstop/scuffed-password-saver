@@ -6,7 +6,7 @@
           class="cursor-pointer"
           :class="isSelected(acc.id) ? 'v-data-table__selected' : ''"
           @contextmenu.prevent="!selectionMode && selectItem(acc.id)"
-          @dblclick="!selectionMode && (!dblClickToEdit || showEditDialog(item))"
+          @dblclick="!selectionMode && (!dblClickToEdit || showEditDialog(acc))"
           @click="selectionMode && selectItem(acc.id)"
         >
           <td>

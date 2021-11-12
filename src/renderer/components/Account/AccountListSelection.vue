@@ -80,7 +80,8 @@ export default {
       // THEN keydown does nothing
       if (
         this.$nuxt.$route.name !== "index" ||
-        this.$store.state.ui.dialogList.length
+        this.$store.state.ui.dialogList.length||
+        !this.data.length
       ) {
         return;
       }
