@@ -25,7 +25,7 @@ export default ({ app }, inject) => {
             compress: (str) => {
                 return str.toLowerCase().trim()
             },
-            generateId: () => nanoid()
+            generateId: () => nanoid().replaceAll('-', '0')
         },
         openUrl(url) {
             shell.openExternal(url)
@@ -52,6 +52,7 @@ export default ({ app }, inject) => {
               );
         },
         getPwDurability(lastEdited, freq) {
+
             const now = app.$date.moment();
             const edited = app.$date.moment(lastEdited);
             const dueDate = app.$date

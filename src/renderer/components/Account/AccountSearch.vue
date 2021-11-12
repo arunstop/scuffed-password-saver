@@ -1,75 +1,81 @@
 <template>
-  <div class="pt-4">
-    <v-expand-transition>
-      <v-alert
-        v-if="getUnlistedApp().length"
-        type="warning"
-        border="left"
-        text
-        icon="mdi-alert-circle"
-      >
-        Some applications/websites for the accounts might not be listed in the
-        system yet.
-        <br />
-        <v-btn class="mt-2" color="primary" @click="completeListing()">
-          Complete Listing
-          <v-icon right>mdi-check</v-icon>
-        </v-btn>
-      </v-alert>
-    </v-expand-transition>
-    <v-row class="" no-gutters align="center">
-      <v-text-field
-        ref="accSearchInput"
-        v-model.lazy="accountSearchModel"
-        :value="accountSearch"
-        class="col-6 me-1"
-        outlined
-        label="Search : ctrl + f or /"
-        placeholder="App / Email / ID / Username..."
-        prepend-icon="mdi-magnify"
-        clearable
-        dense
-        hide-details
-        :loading="isLoading"
-      >
-      </v-text-field>
-      <v-row class="ms-1" no-gutters>
-        <v-chip
-          v-for="view in $store.state.ui.accViewOptList"
-          :key="view.value"
-          class="mx-2"
-          :outlined="$store.state.ui.accViewVal !== view.value"
-          :color="($store.state.ui.accViewVal === view.value )? 'primary' :''"
-          label
-          @click="setAccView(view.value)"
+  <div style="height:100%;">
+    <div class="pt-4">
+      <v-expand-transition>
+        <v-alert
+          v-if="getUnlistedApp().length"
+          type="warning"
+          border="left"
+          text
+          icon="mdi-alert-circle"
         >
-          <v-icon>{{ view.icon }}</v-icon>
-        </v-chip>
-      </v-row>
-    </v-row>
-    <v-row no-gutters>
-      <AppChip v-for="app in getTrimmedAppList" :key="app.name" :app="app" />
-      <v-slide-x-reverse-transition>
-        <v-btn
-          v-if="$store.state.account.filterByAppList.length"
-          class="ms-1 my-auto font-weight-black"
-          color="error"
-          small
+          Some applications/websites for the accounts might not be listed in the
+          system yet.
+          <br />
+          <v-btn class="mt-2" color="primary" @click="completeListing()">
+            Complete Listing
+            <v-icon right>mdi-check</v-icon>
+          </v-btn>
+        </v-alert>
+      </v-expand-transition>
+      <v-row class="" no-gutters align="center">
+        <v-text-field
+          ref="accSearchInput"
+          v-model.lazy="accountSearchModel"
+          :value="accountSearch"
+          class="col-6 me-1"
           outlined
-          rounded
-          @click="removeFilterByApp('*')"
+          label="Search : ctrl + f or /"
+          placeholder="App / Email / ID / Username..."
+          prepend-icon="mdi-magnify"
+          clearable
+          dense
+          hide-details
+          :loading="isLoading"
         >
-          Clear
-          <v-icon right>mdi-close-thick</v-icon>
-        </v-btn>
-      </v-slide-x-reverse-transition>
-    </v-row>
+        </v-text-field>
+        <v-row class="ms-1" no-gutters>
+          <v-chip
+            v-for="view in $store.state.ui.accViewOptList"
+            :key="view.value"
+            class="mx-2"
+            :outlined="$store.state.ui.accViewVal !== view.value"
+            :color="$store.state.ui.accViewVal === view.value ? 'primary' : ''"
+            label
+            :title="view.label"
+            @click="setAccView(view.value)"
+          >
+            <v-icon>{{ view.icon }}</v-icon>
+          </v-chip>
+        </v-row>
+      </v-row>
+      <v-row no-gutters>
+        <AppChip v-for="app in getTrimmedAppList" :key="app.name" :app="app" />
+        <v-slide-x-reverse-transition>
+          <v-btn
+            v-if="$store.state.account.filterByAppList.length"
+            class="ms-1 my-auto font-weight-black"
+            color="error"
+            small
+            outlined
+            rounded
+            @click="removeFilterByApp('*')"
+          >
+            Clear
+            <v-icon right>mdi-close-thick</v-icon>
+          </v-btn>
+        </v-slide-x-reverse-transition>
+      </v-row>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions } from "vuex";
 export default {
+  props: {
+    data: { type: Array, default: () => [] },
+  },
   data() {
     return {
       isLoading: false,
@@ -87,7 +93,7 @@ export default {
     },
     accountSearchModel: {
       get() {
-        return this.accountSearch||"";
+        return this.accountSearch || "";
       },
       set(v) {
         this.isLoading = true;
@@ -102,9 +108,21 @@ export default {
     },
   },
   mounted() {
-    window.addEventListener("keydown", (e) => {
-      if ((e.key === "f" && e.ctrlKey) || e.key === "/") {
-        e.preventDefault();
+    // Detect keydown
+    window.addEventListener("keydown", (event) => {
+      // IF not in home page
+      // AND there is dialog
+      // THEN keydown does nothing
+      if (
+        this.$nuxt.$route.name !== "index" ||
+        this.$store.state.ui.dialogList.length
+      ) {
+        return;
+      }
+
+      // ctrl+f or /
+      if ((event.key === "f" && event.ctrlKey) || event.key === "/") {
+        event.preventDefault();
         this.$refs.accSearchInput.focus();
       }
     });
@@ -113,7 +131,7 @@ export default {
     window.removeEventListener("keydown", (e) => {});
   },
   methods: {
-    ...mapActions("account", ["removeFilterByApp"]),
+     ...mapActions("account", ["removeFilterByApp"]),
     ...mapActions("ui", ["setAccView"]),
     search(v) {
       this.$store.dispatch("account/setAccountSearch", v || "");

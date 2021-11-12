@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import { nanoid } from 'nanoid'
 
 export const state = function () {
     return {
@@ -74,13 +75,14 @@ export const mutations = {
         // console.log(state.accountEditValue)
     },
     ADD_ACCOUNT(state, payload) {
-        const maxId = this.$globals.sortById(
-            {
-                arr: state.accountList.map(e => e.id),
-                order: "desc",
-                replacedWord: "ACC",
-            })[0].replace('ACC', '')
-        const id = 'ACC' + ((maxId || 0) * 1 + 1)
+        // const maxId = this.$globals.sortById(
+        //     {
+        //         arr: state.accountList.map(e => e.id),
+        //         order: "desc",
+        //         replacedWord: "ACC",
+        //     })[0].replace('ACC', '')
+        // const id = 'ACC' + ((maxId || 0) * 1 + 1)
+        const id = this.$globals.str.generateId()
         const now = this.$date.moment()
         const dates = { created: now, edited: now, editedPw: now }
         state.accountList.push({ id, ...payload, ...dates })

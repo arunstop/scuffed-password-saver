@@ -1,15 +1,23 @@
 <template>
-  <div class="fill-height d-flex justify-center" style="position:relative; min-height:100vh;">
-    <div>
-      <v-scale-transition
-      class="d-flex justify-center flex-wrap"
+  <div
+    class="fill-height d-flex justify-center"
+    style="position: relative; min-height: 100vh"
+  >
+    <v-scale-transition
+      class="row no-gutters justify-center flex-wrap"
+      style="min-width: 100%; height:min-content;"
       group
       origin="center center"
+      hide-on-leave
     >
       <AccountListCardItem v-for="acc in data" :key="acc.id" :acc="acc" />
     </v-scale-transition>
-    </div>
-    <div v-if="!data.length" class="d-flex" style="min-height: 300px;position:absolute;">
+
+    <div
+      v-if="!data.length"
+      class="d-flex"
+      style="min-height: 300px; position: absolute"
+    >
       <v-card class="ma-auto" elevation="0">
         <v-card-text class="d-flex flex-column text-center">
           <v-icon size="90">mdi-robot-confused</v-icon>

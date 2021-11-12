@@ -1,6 +1,7 @@
 <template>
   <div>
-    <AccountSearch />
+    <AccountSearch :data="sortedAccountList" />
+    <AccountListSelection :data="sortedAccountList" />
     <v-fade-transition leave-absolute group>
       <AccountListTable v-if="$store.state.ui.accViewVal === 'table'" :key="'al-table'" :data="sortedAccountList"/>
     <AccountListCard v-else-if="$store.state.ui.accViewVal === 'card'" :key="'al-card'" :data="sortedAccountList"/>

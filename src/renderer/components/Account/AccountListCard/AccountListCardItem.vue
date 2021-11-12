@@ -1,95 +1,138 @@
 <template>
   <v-hover v-slot="{ hover }">
-    <v-card class="ma-2 pa-0 col-4" max-width="300px" outlined @click="editItem(acc)">
-      <v-alert class="mb-0 pa-0" border="left" colored-border :color="color">
-        <v-list-item>
-          <v-list-item-avatar>
-            <UtilProfile :alpha="acc.appName" :color="color" />
-          </v-list-item-avatar>
-          <v-list-item-content class="d-flex">
-            <v-list-item-title
-              class="font-weight-bold"
-              :class="color + '--text'"
-            >
-              {{ acc.accountId }}
-            </v-list-item-title>
-            <v-list-item-subtitle>
-              {{ acc.accountPw }}
-            </v-list-item-subtitle>
-             <v-list-item-title class="font-weight-bold">
-              <v-chip outlined small label color="primary">
-                {{ acc.appName }}
-              </v-chip>
-              <v-chip
-                class="ms-1 font-weight-bold"
-                :color="color"
-                outlined
-                small
+    <v-col class="pa-0" lg="4" md="6">
+      <v-card
+        class="ma-2 pa-0 elevation-6"
+        :light="isSelectedInDark(acc.id)"
+        :dark="isSelectedInLight(acc.id)"
+        link
+        @contextmenu.prevent="!selectionMode && selectItem(acc.id)"
+          @dblclick="!selectionMode && (!dblClickToEdit || editItem(acc))"
+          @click="selectionMode && selectItem(acc.id)"
+      >
+        <v-alert class="mb-0 pa-0" border="left" colored-border :color="color">
+          <v-list-item class="align-stretch">
+            <v-list-item-avatar>
+              <UtilProfile :alpha="acc.appName" :color="color" />
+            </v-list-item-avatar>
+            <v-list-item-content class="d-block">
+              <v-list-item-title
+                class="font-weight-bold text-truncate"
+                style="max-width: 150px"
+                :class="color + '--text'"
               >
-                <v-icon left small>mdi-shield-plus-outline</v-icon>
-                {{ acc.durab.percentage + "%" }}
-              </v-chip>
-            </v-list-item-title>
-          </v-list-item-content>
-          <v-list-item-avatar>
-            <v-scale-transition origin="center center">
-              <v-btn v-if="hover" icon color="error" @click.stop="deleteItem(acc)">
-                <v-icon>mdi-delete</v-icon>
-              </v-btn>
-            </v-scale-transition>
-          </v-list-item-avatar>
-        </v-list-item>
-      </v-alert>
-    </v-card>
+                {{ acc.accountId }}
+              </v-list-item-title>
+              <v-list-item-title
+                class="text-truncate"
+                style="max-width: 150px"
+                :style="!hover && 'letter-spacing:1.4px; font-weight:bolder;'"
+              >
+                {{ hover && hoverToShowPw ? acc.accountPw : hiddenPw }}
+              </v-list-item-title>
+              <v-list-item-title class="font-weight-bold">
+                <v-chip outlined small label color="primary">
+                  {{ acc.appName }}
+                </v-chip>
+                <v-chip
+                  class="ms-1 font-weight-bold"
+                  :color="color"
+                  outlined
+                  small
+                >
+                  <v-icon left small>mdi-shield-plus-outline</v-icon>
+                  {{ acc.durab.percentage + "%" }}
+                </v-chip>
+              </v-list-item-title>
+            </v-list-item-content>
+            <div class="ms-auto py-2">
+              <v-slide-x-reverse-transition origin="center center">
+                <div
+                  v-if="hover"
+                  class="d-flex flex-column fill-height justify-space-between"
+                >
+                  <v-icon color="primary" @click.prevent="showEditDialog(acc)">
+                    mdi-pencil
+                  </v-icon>
+                  <v-icon
+                    class="mt-1"
+                    color="error"
+                    @click.self="
+                      !dialogToDelete || showDeleteDialog(acc)
+                    "
+                    @dblclick.stop="dialogToDelete || deleteAccount(acc)"
+                  >
+                    mdi-delete
+                  </v-icon>
+                </div>
+              </v-slide-x-reverse-transition>
+            </div>
+          </v-list-item>
+        </v-alert>
+      </v-card>
+    </v-col>
   </v-hover>
 </template>
 
 <script>
+import { mapState, mapActions, mapGetters } from "vuex";
 export default {
   props: {
     acc: { type: Object, default: () => {} },
   },
   computed: {
+    ...mapState("ui/accountList", ["selectionMode"]),
+    ...mapGetters("ui/accountList", ["isSelected"]),
+    ...mapState("settings", [
+      "hoverToShowPw",
+      "dialogToDelete",
+      "dblClickToEdit",
+      "darkTheme",
+    ]),
     color() {
       return this.acc.durab.status;
     },
+    hiddenPw() {
+      let stars = "";
+      for (let index = 0; index < this.acc.accountPw.length; index++) {
+        stars = stars + "•";
+      }
+      return stars;
+    },
   },
-   methods:{
-     editItem(item) {
-      // console.log(item);
-      this.$store.dispatch("ui/toggleDialog", {
-        type: "ACCOUNT_EDIT_DIALOG",
-        val: true,
-        id: item.id,
-      });
-      // this.endSelectMode();
+  methods: {
+    ...mapActions("ui/accountList", [
+      "selectItem",
+      "clearSelection",
+      "showEditDialog",
+      "showDeleteDialog",
+      "deleteAccount",
+    ]),
+    getSelectedStyle(id) {
+      const isSel = this.isSelected(id);
+      return this.$vuetify.theme.dark
+        ? // if selected in DARK theme THEN turn to LIGHT theme
+          isSel
+          ? "theme--light"
+          : ""
+        : // if selected in LIGHT theme THEN turn to DARK theme
+        isSel
+        ? "theme--dark"
+        : "";
     },
-    deleteItem(item) {
-      this.$store.dispatch("ui/toggleDialog", {
-        type: "CONFIRMATION_DIALOG",
-        val: true,
-        data: {
-          color: "error",
-          title: "Delete account",
-          desc:
-            "Are u sure you want to delete this " +
-            item.appName +
-            " account with ID : " +
-            item.accountId +
-            " ?",
-          actions: {
-            y: () => {
-              this.deleteAccount(item);
-            },
-          },
-        },
-      });
+    isSelectedInDark(id) {
+      // IN DARK MODE
+      // IF selected
+      // TURN card into LIGHT THEME
+      return this.$vuetify.theme.dark && this.isSelected(id);
     },
-    deleteAccount(item) {
-      this.$store.dispatch("account/deleteAccount", item);
-    //   this.endSelectMode();
+    isSelectedInLight(id) {
+      // IN LIGHT MODE
+      // IF selected
+      // TURN card into DARK THEME
+      return !this.$vuetify.theme.dark && this.isSelected(id);
     },
-  }
+  },
 };
 </script>
 

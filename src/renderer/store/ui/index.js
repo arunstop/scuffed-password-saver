@@ -4,9 +4,9 @@ export const state = () => ({
     appEditValue: "",
     accViewVal:"table",
     accViewOptList:[
-        {value:"table", active:false, label:"Table",icon:"mdi-view-list"},
-        {value:"card", active:false, label:"Table",icon:"mdi-format-list-text"},
-        {value:"grid", active:false, label:"Table",icon:"mdi-view-grid"},
+        {value:"table", active:false, label:"Table View",icon:"mdi-view-list"},
+        {value:"card", active:false, label:"Card View",icon:"mdi-format-list-text"},
+        {value:"grid", active:false, label:"Grid View",icon:"mdi-view-grid"},
     ],
     dialogList: [],
     snackbarList: [],
