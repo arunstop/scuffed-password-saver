@@ -60,8 +60,9 @@ export default {
       event.preventDefault();
       this.toggleImportPanelLoading(true);
       const fileList = Array.from(event.dataTransfer.files);
-      const validFiles = fileList.filter(
-        (e) => e.name.toLowerCase().trim().split(".").reverse()[0] === "json"
+      const extList = this.$store.state.account.extList;
+      const validFiles = fileList.filter((e) =>
+        extList.includes(e.name.toLowerCase().trim().split(".").reverse()[0])
       );
 
       this.files = validFiles;
@@ -88,7 +89,7 @@ export default {
 </script>
 
 <style>
-.upload-panel{
+.upload-panel {
   border: 2px dashed !important;
 }
 </style>

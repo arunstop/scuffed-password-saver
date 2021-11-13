@@ -1,23 +1,15 @@
 export const state = () => ({
     filesRaw: [],
     files: [],
-    fileList: []
+    fileList: [],
 })
 
 export const getters = {
-    getFileList: (state) => () => {
-        const fileDetailList = [];
-        state.files.forEach((e) => {
-            const accList = JSON.parse(require("fs").readFileSync(e.path));
-            fileDetailList.push(require('lodash').assign(e, { accList }));
-        });
-        return fileDetailList || [];
-    },
     getUploadResult: (state, getters, rootState) => () => {
 
         const _ = require('lodash');
         const alCurrent = rootState.account.accountList
-        const alRaw = getters.getFileList()
+        const alRaw = state.files
             .map((e) => e.accList)
             .reduce((p, c) => p.concat(c), []);
         const alFound = _.uniqBy(alRaw, "id");
@@ -127,8 +119,22 @@ export const mutations = {
     SET_FILES_RAW(state, v) {
         state.filesRaw = v
     },
-    SET_FILES(state, v) {
-        state.files = v
+    SET_FILES(state, fileRawList) {
+        const fileDetailList = [];
+        fileRawList.forEach((e) => {
+            let accList
+            const ext = e.name.toLowerCase().trim().split(".").reverse()[0]
+            if (ext === 'json') {
+                accList = JSON.parse(require("fs").readFileSync(e.path));
+            } else if (ext === 'txt') {
+                const accListFound = this.$globals.txtToJson(e.path)
+                // if there is no account
+                if(accListFound[0].id) accList = accListFound
+            }
+            fileDetailList.push(require('lodash').assign(e, { accList }));
+        })
+        
+        state.files = fileDetailList.filter(e=>e.accList) || []
     },
     REMOVE_FILE(state, name) {
         state.files = state.files.filter(f => f.name !== name)
@@ -139,7 +145,11 @@ export const mutations = {
     },
 }
 export const actions = {
-    setFilesRaw({ commit }, v) {
+    setFilesRaw({ commit, rootState }, v) {
+        v = v.filter(e =>
+            rootState.account.extList
+                .includes(e.name.toLowerCase().trim().split(".").reverse()[0])
+        )
         commit('SET_FILES_RAW', v)
     },
     setFiles({ commit }, v) {

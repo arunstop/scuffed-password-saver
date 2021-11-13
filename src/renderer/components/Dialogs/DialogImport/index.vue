@@ -25,7 +25,7 @@
           outlined
           multiple
           :show-size="1000"
-          accept=".json"
+          accept=".json,.txt,.csv,.xls"
           @change.native="onchange"
         >
           <!-- <template #selection="{ index, text }">
@@ -85,7 +85,6 @@ export default {
   },
   computed: {
     ...mapGetters("ui/dialogImport", [
-      "getFileList",
       "getUploadResult",
       "getAlertList",
       "getModeList",
@@ -99,6 +98,7 @@ export default {
         this.hideDialog();
       },
     },
+    // FILES RAW to make input files empty after clearing OK
     filesRaw: {
       get() {
         return this.$store.state.ui.dialogImport.filesRaw;

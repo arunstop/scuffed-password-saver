@@ -51,7 +51,12 @@
               <v-btn ref="btnDialogPdlN" outlined @click="toggleDialog()">
                 Cancel
               </v-btn>
-              <v-btn ref="btnDialogPdlY" color="primary" @click="exportAccs()">
+              <v-btn
+                ref="btnDialogPdlY"
+                :disabled="!formExportAccs"
+                color="primary"
+                @click="exportAccs()"
+              >
                 EXPORT
               </v-btn>
             </v-card-actions>
@@ -97,16 +102,31 @@ export default {
       this.$refs.formExportAccs.validate();
       if (this.formExportAccs) {
         const accList = JSON.stringify(this.$store.state.account.accountList);
-        const url =
-          "data:text/json;charset=utf-8," + encodeURIComponent(accList);
+        const ext = this.fileFormatModel.toLowerCase();
+
+        const url = () => {
+          if (ext === ".json") {
+            return (
+              "data:text/json;charset=utf-8," + encodeURIComponent(accList)
+            );
+          } else if (ext === ".txt") {
+            return (
+              "data:text/html," +
+              encodeURIComponent(
+                this.$globals.jsonToTxt(this.$store.state.account.accountList)
+              )
+            );
+          }
+        };
+        // console.log(url());
         const filename = () => {
-          const ext = this.fileFormatModel.toLowerCase();
           return `sps_backup_${this.$date
             .moment()
             .format("YYYY-MM-DD@HH-mm-ss")}${ext}`;
         };
+
         this.$globals.download({
-          url,
+          url:url(),
           filename: filename(),
           directory: this.vaultPath,
           successAction: (path) => {

@@ -7,6 +7,7 @@ export const state = function () {
         accountEditValue: "",
         accountSearch: '',
         filterByAppList: [],
+        extList: ["json", "txt", "csv", "xls"]
     }
 }
 

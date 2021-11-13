@@ -1,6 +1,7 @@
 import { shell } from 'electron'
 import _ from 'lodash'
 import {nanoid} from 'nanoid'
+import {jsonToTxt}  from 'json-to-txt'
 export default ({ app }, inject) => {
     const renderer = require("electron").ipcRenderer;
     
@@ -33,6 +34,12 @@ export default ({ app }, inject) => {
         openPath(path) {
             shell.openPath(path)
             // shell.showItemInFolder(path)
+        },
+        jsonToTxt(data){
+            return require('json-to-txt')({data})
+        },
+        txtToJson(filePath){
+            return require('txt-file-to-json')({filePath})
         },
         download({url, filename, directory,successAction}) {
             renderer.once("download-reply", (event, arg) => {
