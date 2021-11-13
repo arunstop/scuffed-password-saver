@@ -1,10 +1,10 @@
 import { shell } from 'electron'
 import _ from 'lodash'
-import {nanoid} from 'nanoid'
-import {jsonToTxt}  from 'json-to-txt'
+import { nanoid } from 'nanoid'
+import { jsonToTxt } from 'json-to-txt'
 export default ({ app }, inject) => {
     const renderer = require("electron").ipcRenderer;
-    
+
 
     inject('globals', {
         lodash: _,
@@ -35,13 +35,29 @@ export default ({ app }, inject) => {
             shell.openPath(path)
             // shell.showItemInFolder(path)
         },
-        jsonToTxt(data){
-            return require('json-to-txt')({data})
+        jsonToTxt(data) {
+            return require('json-to-txt')({ data })
         },
-        txtToJson(filePath){
-            return require('txt-file-to-json')({filePath})
+        txtToJson(filePath) {
+            return require('txt-file-to-json')({ filePath })
         },
-        download({url, filename, directory,successAction}) {
+        jsonToCsv(data) {
+            return require('papaparse').unparse(data, {
+                quotes: true,
+            })
+        },
+        async csvToJson(files,funk) {
+            return await new Promise(resolve => {
+                require('papaparse').parse(files, {
+                    header: true,
+                    complete: results => {
+                        console.log('Complete', results.data.length, 'records.');
+                        resolve(results.data);
+                    }
+                });
+            });
+        },
+        download({ url, filename, directory, successAction }) {
             renderer.once("download-reply", (event, arg) => {
                 // arg = JSON.parse(arg)
                 successAction(arg)
@@ -52,11 +68,11 @@ export default ({ app }, inject) => {
             renderer.send(
                 "download",
                 {
-                  url,
-                  filename,
-                  directory
+                    url,
+                    filename,
+                    directory
                 }
-              );
+            );
         },
         getPwDurability(lastEdited, freq) {
 

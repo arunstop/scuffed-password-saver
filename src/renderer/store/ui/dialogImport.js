@@ -119,22 +119,29 @@ export const mutations = {
     SET_FILES_RAW(state, v) {
         state.filesRaw = v
     },
-    SET_FILES(state, fileRawList) {
+    async SET_FILES(state, fileRawList) {
         const fileDetailList = [];
-        fileRawList.forEach((e) => {
-            let accList
+        fileRawList.forEach(async (e) => {
+            let accList = []
             const ext = e.name.toLowerCase().trim().split(".").reverse()[0]
             if (ext === 'json') {
                 accList = JSON.parse(require("fs").readFileSync(e.path));
+                fileDetailList.push(require('lodash').assign(e, { accList }));
             } else if (ext === 'txt') {
                 const accListFound = this.$globals.txtToJson(e.path)
                 // if there is no account
-                if(accListFound[0].id) accList = accListFound
+                if (accListFound[0].id) accList = accListFound
+                fileDetailList.push(require('lodash').assign(e, { accList }));
+            } else if (ext === 'csv') {
+                this.$globals.csvToJson(fileRawList[0]).then(async data => {
+                    console.log(data)
+                    await fileDetailList.push(require('lodash').assign(e, { accList:data }));
+                })
             }
-            fileDetailList.push(require('lodash').assign(e, { accList }));
+
         })
-        
-        state.files = fileDetailList.filter(e=>e.accList) || []
+
+        state.files = fileDetailList.filter(e => e.accList) || []
     },
     REMOVE_FILE(state, name) {
         state.files = state.files.filter(f => f.name !== name)

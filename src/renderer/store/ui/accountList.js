@@ -84,7 +84,7 @@ export const actions = {
     },
     deleteItemMulti({dispatch,state}, sortedAccountList) {
         if (state.selectedItemList.length===1) {
-          dispatch('showDeleteDialog', state.selectedItemList[0])
+          dispatch('showDeleteDialog', sortedAccountList.find(e=>e.id===state.selectedItemList[0]))
         } else {
           const itemList = sortedAccountList.filter((e) =>
             state.selectedItemList.includes(e.id)

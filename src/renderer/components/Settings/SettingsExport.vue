@@ -116,9 +116,16 @@ export default {
                 this.$globals.jsonToTxt(this.$store.state.account.accountList)
               )
             );
+          } else if (ext === ".csv") {
+            return (
+              "data:text/html," +
+              encodeURIComponent(
+                this.$globals.jsonToCsv(this.$store.state.account.accountList)
+              )
+            );
           }
         };
-        // console.log(url());
+        
         const filename = () => {
           return `sps_backup_${this.$date
             .moment()
@@ -126,7 +133,7 @@ export default {
         };
 
         this.$globals.download({
-          url:url(),
+          url: url(),
           filename: filename(),
           directory: this.vaultPath,
           successAction: (path) => {
