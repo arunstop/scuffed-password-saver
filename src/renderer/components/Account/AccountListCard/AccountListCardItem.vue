@@ -1,6 +1,6 @@
 <template>
   <v-hover v-slot="{ hover }">
-    <v-col class="pa-0" lg="4" md="6">
+    <v-col class="pa-0" lg="4" md="6" sm="6">
       <v-card
         class="ma-2 pa-0 elevation-6"
         :light="isSelectedInDark(acc.id)"

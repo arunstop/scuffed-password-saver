@@ -52,9 +52,9 @@ export const mutations = {
     REMOVE_SNACKBAR(state, id) {
         state.snackbarList = state.snackbarList.filter(s => s.id !== id)
     },
-    SET_ACC_VIEW(state, val) {
-        state.accViewVal = val
-    },
+    // SET_ACC_VIEW(state, val) {
+    //     state.accViewVal = val
+    // },
 }
 
 export const actions = {
@@ -101,7 +101,8 @@ export const actions = {
     removeSnackbar({ commit }, id) {
         commit('REMOVE_SNACKBAR', id)
     },
-    setAccView({commit}, val){
-        commit('SET_ACC_VIEW',val)
-    }
+    // setAccView({commit,dispatch}, val){
+    //     commit('SET_ACC_VIEW',val)
+    //     dispatch('settings/setAccListView',val)
+    // }
 }

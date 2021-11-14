@@ -8,6 +8,7 @@ export const state = () => ({
     pwDuplication: false,
     pwDupLimit: 0,
     driveKey: '',
+    accListView: '',
 })
 
 export const getters = {
@@ -47,6 +48,9 @@ export const mutations = {
     },
     SET_DRIVE_KEY(state, val) {
         state.driveKey = val
+    },
+    SET_ACC_LIST_VIEW(state, val) {
+        state.accListView = val
     }
 }
 
@@ -63,6 +67,7 @@ export const actions = {
             dispatch('togglePwDuplication', payload.pwDuplication)
             dispatch('setPwDupLimit', payload.pwDupLimit)
             dispatch('setDriveKey', payload.driveKey)
+            dispatch('setAccListView', payload.accListView)
         }
         commit('SET_LOCAL_SETTINGS')
 
@@ -104,6 +109,10 @@ export const actions = {
     },
     setDriveKey({ commit }, val) {
         commit('SET_DRIVE_KEY', val)
+        commit('SET_LOCAL_SETTINGS')
+    },
+    setAccListView({ commit }, val) {
+        commit('SET_ACC_LIST_VIEW', val)
         commit('SET_LOCAL_SETTINGS')
     }
 }

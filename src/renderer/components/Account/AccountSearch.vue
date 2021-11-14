@@ -39,11 +39,11 @@
             v-for="view in $store.state.ui.accViewOptList"
             :key="view.value"
             class="mx-2"
-            :outlined="$store.state.ui.accViewVal !== view.value"
-            :color="$store.state.ui.accViewVal === view.value ? 'primary' : ''"
+            :outlined="$store.state.settings.accListView !== view.value"
+            :color="$store.state.settings.accListView === view.value ? 'primary' : ''"
             label
             :title="view.label"
-            @click="setAccView(view.value)"
+            @click="setAccListView(view.value)"
           >
             <v-icon>{{ view.icon }}</v-icon>
           </v-chip>
@@ -132,7 +132,7 @@ export default {
   },
   methods: {
      ...mapActions("account", ["removeFilterByApp"]),
-    ...mapActions("ui", ["setAccView"]),
+    ...mapActions("settings", ["setAccListView"]),
     search(v) {
       this.$store.dispatch("account/setAccountSearch", v || "");
       this.isLoading = false;

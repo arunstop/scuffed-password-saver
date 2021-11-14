@@ -3,8 +3,16 @@
     <LazyAccountSearch :data="sortedAccountList" />
     <LazyAccountListSelection :data="sortedAccountList" />
     <v-fade-transition leave-absolute group>
-      <LazyAccountListTable v-if="$store.state.ui.accViewVal === 'table'" :key="'al-table'" :data="sortedAccountList"/>
-    <LazyAccountListCard v-else-if="$store.state.ui.accViewVal === 'card'" :key="'al-card'" :data="sortedAccountList"/>
+      <LazyAccountListTable
+        v-if="$store.state.settings.accListView === 'table'"
+        :key="'al-table'"
+        :data="sortedAccountList"
+      />
+      <LazyAccountListCard
+        v-else-if="$store.state.settings.accListView === 'card'"
+        :key="'al-card'"
+        :data="sortedAccountList"
+      />
     </v-fade-transition>
   </div>
 </template>
