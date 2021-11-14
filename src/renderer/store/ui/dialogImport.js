@@ -149,16 +149,16 @@ export const actions = {
             if (ext === 'json') {
                 const accListFound = JSON.parse(require("fs").readFileSync(e.path));
                 // if there is no account
-                if (accListFound[0].id) accList=accListFound
+                if (accListFound[0]?.id) accList=accListFound
             } else if (ext === 'txt') {
                 const accListFound = this.$globals.txtToJson(e.path)
                 // if there is no account
-                if (accListFound[0].id) accList = accListFound
+                if (accListFound[0]?.id) accList = accListFound
                 // commit('SET_FILES', require('lodash').assign(e, { accList }))
             } else if (ext === 'csv') {
                 const accListFound = await this.$globals.csvToJson(e)
                 // if there is no account
-                if (accListFound[0].id) accList = accListFound
+                if (accListFound[0]?.id) accList = accListFound
                 // commit('SET_FILES', require('lodash').assign(e, { accList }))
             }
             // SET 
