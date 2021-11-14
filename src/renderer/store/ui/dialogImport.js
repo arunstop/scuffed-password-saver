@@ -1,7 +1,7 @@
 export const state = () => ({
     filesRaw: [],
-    files: [],
-    fileList: [],
+    fileAccountList: [],
+    // fileAccountList: [],
 })
 
 export const getters = {
@@ -9,7 +9,7 @@ export const getters = {
 
         const _ = require('lodash');
         const alCurrent = rootState.account.accountList
-        const alRaw = state.files
+        const alRaw = state.fileAccountList
             .map((e) => e.accList)
             .reduce((p, c) => p.concat(c), []);
         const alFound = _.uniqBy(alRaw, "id");
@@ -119,36 +119,16 @@ export const mutations = {
     SET_FILES_RAW(state, v) {
         state.filesRaw = v
     },
-    async SET_FILES(state, fileRawList) {
-        const fileDetailList = [];
-        fileRawList.forEach(async (e) => {
-            let accList = []
-            const ext = e.name.toLowerCase().trim().split(".").reverse()[0]
-            if (ext === 'json') {
-                accList = JSON.parse(require("fs").readFileSync(e.path));
-                fileDetailList.push(require('lodash').assign(e, { accList }));
-            } else if (ext === 'txt') {
-                const accListFound = this.$globals.txtToJson(e.path)
-                // if there is no account
-                if (accListFound[0].id) accList = accListFound
-                fileDetailList.push(require('lodash').assign(e, { accList }));
-            } else if (ext === 'csv') {
-                this.$globals.csvToJson(fileRawList[0]).then(async data => {
-                    console.log(data)
-                    await fileDetailList.push(require('lodash').assign(e, { accList:data }));
-                })
-            }
-
-        })
-
-        state.files = fileDetailList.filter(e => e.accList) || []
+    SET_FILE_ACCOUNT_LIST(state, v) {
+        state.fileAccountList.push(v)
+        state.fileAccountList = require('lodash').uniqBy(state.fileAccountList, "path")
     },
     REMOVE_FILE(state, name) {
-        state.files = state.files.filter(f => f.name !== name)
+        state.fileAccountList = state.fileAccountList.filter(f => f.name !== name)
     },
     CLEAR_FILES(state) {
         state.filesRaw = []
-        state.files = []
+        state.fileAccountList = []
     },
 }
 export const actions = {
@@ -159,8 +139,32 @@ export const actions = {
         )
         commit('SET_FILES_RAW', v)
     },
-    setFiles({ commit }, v) {
-        commit('SET_FILES', v)
+    setFileAccountList({ commit }, fileRawList) {
+        const fileDetailList = []
+        // 1. json-file.JSON
+        // 2. csv-file.CSV
+        fileRawList.forEach(async (e) => {
+            let accList = []
+            const ext = e.name.toLowerCase().trim().split(".").reverse()[0]
+            if (ext === 'json') {
+                const accListFound = JSON.parse(require("fs").readFileSync(e.path));
+                // if there is no account
+                if (accListFound[0].id) accList=accListFound
+            } else if (ext === 'txt') {
+                const accListFound = this.$globals.txtToJson(e.path)
+                // if there is no account
+                if (accListFound[0].id) accList = accListFound
+                // commit('SET_FILES', require('lodash').assign(e, { accList }))
+            } else if (ext === 'csv') {
+                const accListFound = await this.$globals.csvToJson(e)
+                // if there is no account
+                if (accListFound[0].id) accList = accListFound
+                // commit('SET_FILES', require('lodash').assign(e, { accList }))
+            }
+            // SET 
+            if(accList.length!==0)
+            commit('SET_FILE_ACCOUNT_LIST', require('lodash').assign(e, { accList }))
+        })
     },
     removeFile({ commit }, name) {
         commit('REMOVE_FILE', name)

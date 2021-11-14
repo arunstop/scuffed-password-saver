@@ -19,8 +19,6 @@
           class="d-none"
           color="primary accent-4"
           counter
-          label="Choose a backup file"
-          placeholder="Select your files"
           prepend-icon="mdi-paperclip"
           outlined
           multiple
@@ -36,7 +34,7 @@
         </v-file-input>
         <v-expand-transition>
           <!-- IMPORT PANEL -->
-          <DialogImportUploadPanel v-if="!files.length" />
+          <DialogImportUploadPanel v-if="!fileAccountList.length" />
           <div v-else>
             <DialogImportFileListPanel />
             <DialogImportAlert
@@ -98,7 +96,7 @@ export default {
         this.hideDialog();
       },
     },
-    // FILES RAW to make input files empty after clearing OK
+    // FILES RAW to make input Files empty after clearing OK
     filesRaw: {
       get() {
         return this.$store.state.ui.dialogImport.filesRaw;
@@ -107,12 +105,12 @@ export default {
         this.$store.dispatch("ui/dialogImport/setFilesRaw", v);
       },
     },
-    files: {
+    fileAccountList: {
       get() {
-        return this.$store.state.ui.dialogImport.files;
+        return this.$store.state.ui.dialogImport.fileAccountList;
       },
       set(v) {
-        this.$store.dispatch("ui/dialogImport/setFiles", v);
+        this.$store.dispatch("ui/dialogImport/setFileAccountList", v);
       },
     },
   },
@@ -136,15 +134,17 @@ export default {
       });
     },
     onchange(event) {
+      // if cancel click
       if (!event.target.files.length) return;
       const fetchedFiles = Array.from(event.target.files);
-      // console.log(this.files);
-      if (!this.files.length) {
-        this.files = fetchedFiles;
+      // console.log(this.fileAccountList);
+      if (!this.fileAccountList.length) {
+        this.fileAccountList = fetchedFiles;
         return;
       }
       const _ = require("lodash");
-      this.files = _.unionBy(this.files, fetchedFiles, "path");
+      console.log(_.unionBy(this.fileAccountList, fetchedFiles, "path"))
+      this.fileAccountList = _.unionBy(this.fileAccountList, fetchedFiles, "path");
     },
     importAccounts() {
       const payload = { value: [], mode: this.option };

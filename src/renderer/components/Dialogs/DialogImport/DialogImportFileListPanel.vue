@@ -10,7 +10,7 @@
         group
       >
         <v-chip
-          v-for="(file, index) in files"
+          v-for="(file, index) in fileAccountList"
           :key="file.name"
           class="ma-2 py-2 white--text"
           color="indigo"
@@ -58,7 +58,7 @@
 import { mapState, mapActions } from "vuex";
 export default {
   computed: {
-    ...mapState("ui/dialogImport", ["files"]),
+    ...mapState("ui/dialogImport", ["fileAccountList"]),
   },
   methods: {
     ...mapActions("ui/dialogImport", ["removeFile", "clearFiles"]),

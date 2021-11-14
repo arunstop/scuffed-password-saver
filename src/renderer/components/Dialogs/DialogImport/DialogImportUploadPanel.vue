@@ -1,7 +1,7 @@
 <template>
   <div class="my-auto">
     <v-card
-      v-if="!files.length"
+      v-if="!fileAccountList.length"
       v-bind="importPanel.loading"
       outlined
       height="300"
@@ -19,7 +19,7 @@
             <v-icon>mdi-upload</v-icon>
           </v-btn>
 
-          <h4 class="mt-4">Click the button above or drag files here.</h4>
+          <h4 class="mt-4">Click the button above or drag Files here.</h4>
         </div>
       </div>
     </v-card>
@@ -34,12 +34,12 @@ export default {
     };
   },
   computed: {
-    files: {
+    fileAccountList: {
       get() {
-        return this.$store.state.ui.dialogImport.files;
+        return this.$store.state.ui.dialogImport.fileAccountList;
       },
       set(v) {
-        this.$store.dispatch("ui/dialogImport/setFiles", v);
+        this.$store.dispatch("ui/dialogImport/setFileAccountList", v);
       },
     },
   },
@@ -65,7 +65,7 @@ export default {
         extList.includes(e.name.toLowerCase().trim().split(".").reverse()[0])
       );
 
-      this.files = validFiles;
+      this.fileAccountList = validFiles;
       this.toggleImportPanelLoading(false);
       this.toggleImportPanel(false);
     },

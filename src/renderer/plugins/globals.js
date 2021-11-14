@@ -51,7 +51,7 @@ export default ({ app }, inject) => {
                 require('papaparse').parse(files, {
                     header: true,
                     complete: results => {
-                        console.log('Complete', results.data.length, 'records.');
+                        // console.log('Complete', results.data.length, 'records.');
                         resolve(results.data);
                     }
                 });
