@@ -2,7 +2,7 @@
   <div>
     <LazyAccountSearch :data="sortedAccountList" />
     <v-row class="d-flex justify-sm-space-between" no-gutters>
-      <div class="ma-4 ms-1">
+      <div class="my-2 ms-1">
         <v-menu>
           <template #activator="{ on, attrs }">
             <v-btn

@@ -49,7 +49,7 @@
           </v-chip>
         </v-row>
       </v-row>
-      <v-row no-gutters>
+      <v-row no-gutters class="mt-2">
         <AppChip v-for="app in getTrimmedAppList" :key="app.name" :app="app" />
         <v-slide-x-reverse-transition>
           <v-btn

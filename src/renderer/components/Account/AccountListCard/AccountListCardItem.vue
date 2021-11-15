@@ -3,14 +3,16 @@
     <v-hover v-slot="{ hover }">
       <v-card
         class="ma-2 pa-0 elevation-6"
-        :light="isSelectedInDark(acc.id)"
-        :dark="isSelectedInLight(acc.id)"
         link
         @contextmenu.prevent="!selectionMode && selectItem(acc.id)"
         @dblclick="!selectionMode && (!dblClickToEdit || showEditDialog(acc))"
         @click="selectionMode && selectItem(acc.id)"
       >
-        <v-alert class="mb-0 pa-0" border="left" colored-border :color="color">
+        <v-alert
+          class="mb-0 pa-0"
+          v-bind="getSelectedStyle(acc.id)"
+          border="left"
+        >
           <v-list-item class="align-stretch">
             <v-list-item-avatar>
               <UtilProfile :alpha="acc.appName" :color="color" />
@@ -106,18 +108,8 @@ export default {
       "showDeleteDialog",
       "deleteAccount",
     ]),
-    getSelectedStyle(id) {
-      const isSel = this.isSelected(id);
-      return this.$vuetify.theme.dark
-        ? // if selected in DARK theme THEN turn to LIGHT theme
-          isSel
-          ? "theme--light"
-          : ""
-        : // if selected in LIGHT theme THEN turn to DARK theme
-        isSel
-        ? "theme--dark"
-        : "";
-    },
+    // :light="isSelectedInDark(acc.id)"
+    //     :dark="isSelectedInLight(acc.id)"
     isSelectedInDark(id) {
       // IN DARK MODE
       // IF selected
@@ -129,6 +121,11 @@ export default {
       // IF selected
       // TURN card into DARK THEME
       return !this.$vuetify.theme.dark && this.isSelected(id);
+    },
+    getSelectedStyle(id) {
+      return this.isSelected(id)
+        ? { text: true, coloredBorder: false, color: "primary"}
+        : { text: false, coloredBorder: true,color:this.color  };
     },
   },
 };

@@ -85,3 +85,12 @@ body {
 .pointer-events {
   pointer-events: all;
 }
+
+/* TABLE SELECTED */
+.theme--light.v-data-table tbody tr.v-data-table__selected {
+  background: var(--v-secondary-lighten1) !important;
+}
+
+.theme--dark.v-data-table tbody tr.v-data-table__selected {
+  background: var(--v-secondary-base) !important;
+}

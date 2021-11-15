@@ -10,7 +10,13 @@
           @click="selectionMode && selectItem(acc.id)"
         >
           <td>
-            <v-chip color="primary" label small>
+            <v-chip
+              class="font-weight-bold"
+              color="primary"
+              :outlined="!isSelected(acc.id)"
+              label
+              small
+            >
               {{ acc.appName }}
             </v-chip>
           </td>

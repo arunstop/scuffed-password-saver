@@ -90,7 +90,7 @@ export default {
       },
     },
     fileFormatItems() {
-      const ff = [".JSON", ".TXT", ".CSV", ".XLS"];
+      const ff = [".JSON", ".TXT", ".CSV"];
       return ff;
     },
   },
@@ -111,14 +111,14 @@ export default {
             );
           } else if (ext === ".txt") {
             return (
-              "data:text/html," +
+              "data:text/plain;charset=utf-8," +
               encodeURIComponent(
                 this.$globals.jsonToTxt(this.$store.state.account.accountList)
               )
             );
           } else if (ext === ".csv") {
             return (
-              "data:text/html," +
+              "data:text/csv;charset=utf-8," +
               encodeURIComponent(
                 this.$globals.jsonToCsv(this.$store.state.account.accountList)
               )

@@ -5,7 +5,7 @@ export const state = () => ({
     sortByList: [
         { val: "edited", label: "Last Edited", icon: 'mdi-pencil-outline' },
         { val: "appName", label: "Application/Website", icon: 'mdi-application-outline' },
-        { val: "id", label: "ID/Email/Phone", icon: 'mdi-at' },
+        { val: "accountId", label: "ID/Email/Phone", icon: 'mdi-at' },
         { val: "durab.percentage", label: "Password Durability", icon: 'mdi-shield-plus-outline' },
         { val: "created", label: "Date Created", icon: 'mdi-plus-circle-outline' },
 
