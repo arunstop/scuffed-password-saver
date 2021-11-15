@@ -1,11 +1,28 @@
 export const state = () => ({
     selectionMode: false,
     selectedItemList: [],
+    sortByValue: { val: "edited", order: "desc" },
+    sortByList: [
+        { val: "edited", label: "Last Edited", icon: 'mdi-pencil-outline' },
+        { val: "appName", label: "Application/Website", icon: 'mdi-application-outline' },
+        { val: "id", label: "ID/Email/Phone", icon: 'mdi-at' },
+        { val: "durab.percentage", label: "Password Durability", icon: 'mdi-shield-plus-outline' },
+        { val: "created", label: "Date Created", icon: 'mdi-plus-circle-outline' },
+
+    ],
+    orderValue: { val: "desc", label: "Descending", icon: "mdi-sort-descending" },
+    orderList: [
+        { val: "asc", label: "ASCENDING", icon: "mdi-sort-ascending" },
+        { val: "desc", label: "DESCENDING", icon: "mdi-sort-descending" },
+    ],
 })
 
 export const getters = {
     isSelected: (state) => (id) => {
         return !!state.selectedItemList.includes(id)
+    },
+    getActiveSortByValue: (state) => () => {
+        return state.sortByList.find(e => e.val === state.sortByValue.val)
     }
 }
 
@@ -25,6 +42,12 @@ export const mutations = {
     CLEAR_SELECTION(state) {
         state.selectionMode = false
         state.selectedItemList = []
+    },
+    SET_SORT_BY_VALUE(state, v) {
+        state.sortByValue = v
+    },
+    SET_ORDER_VALUE(state, v) {
+        state.orderValue = state.orderList.find(e => e.val !== v)
     }
 }
 
@@ -47,6 +70,12 @@ export const actions = {
     },
     clearSelection({ commit }, val) {
         commit('CLEAR_SELECTION')
+    },
+    setSortByValue({ commit }, val) {
+        commit('SET_SORT_BY_VALUE', val)
+    },
+    setOrderValue({ commit }, val) {
+        commit('SET_ORDER_VALUE', val)
     },
     deleteAccount({ dispatch }, acc) {
         dispatch("account/deleteAccount", acc, { root: true });
@@ -82,34 +111,34 @@ export const actions = {
         }
             , { root: true });
     },
-    deleteItemMulti({dispatch,state}, sortedAccountList) {
-        if (state.selectedItemList.length===1) {
-          dispatch('showDeleteDialog', sortedAccountList.find(e=>e.id===state.selectedItemList[0]))
+    deleteItemMulti({ dispatch, state }, sortedAccountList) {
+        if (state.selectedItemList.length === 1) {
+            dispatch('showDeleteDialog', sortedAccountList.find(e => e.id === state.selectedItemList[0]))
         } else {
-          const itemList = sortedAccountList.filter((e) =>
-            state.selectedItemList.includes(e.id)
-          );
-          dispatch("ui/toggleDialog", {
-            type: "CONFIRMATION_DIALOG",
-            val: true,
-            data: {
-              color: "error",
-              title: "Delete account",
-              desc:
-                "Are u sure you want to delete these " +
-                itemList.length +
-                " accounts ?",
-              actions: {
-                y: () => {
-                  itemList.forEach((e) => {
-                    dispatch('deleteAccount',e)
-                  });
-                  dispatch('clearSelection')
+            const itemList = sortedAccountList.filter((e) =>
+                state.selectedItemList.includes(e.id)
+            );
+            dispatch("ui/toggleDialog", {
+                type: "CONFIRMATION_DIALOG",
+                val: true,
+                data: {
+                    color: "error",
+                    title: "Delete account",
+                    desc:
+                        "Are u sure you want to delete these " +
+                        itemList.length +
+                        " accounts ?",
+                    actions: {
+                        y: () => {
+                            itemList.forEach((e) => {
+                                dispatch('deleteAccount', e)
+                            });
+                            dispatch('clearSelection')
+                        },
+                    },
                 },
-              },
             },
-          },
-          {root:true});
+                { root: true });
         }
-      },
+    },
 }

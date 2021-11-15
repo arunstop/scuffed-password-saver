@@ -1,14 +1,14 @@
 <template>
-  <v-hover v-slot="{ hover }">
-    <v-col class="pa-0" lg="4" md="6" sm="6">
+  <v-col class="pa-0" lg="4" md="6" sm="6">
+    <v-hover v-slot="{ hover }">
       <v-card
         class="ma-2 pa-0 elevation-6"
         :light="isSelectedInDark(acc.id)"
         :dark="isSelectedInLight(acc.id)"
         link
         @contextmenu.prevent="!selectionMode && selectItem(acc.id)"
-          @dblclick="!selectionMode && (!dblClickToEdit || showEditDialog(acc))"
-          @click="selectionMode && selectItem(acc.id)"
+        @dblclick="!selectionMode && (!dblClickToEdit || showEditDialog(acc))"
+        @click="selectionMode && selectItem(acc.id)"
       >
         <v-alert class="mb-0 pa-0" border="left" colored-border :color="color">
           <v-list-item class="align-stretch">
@@ -57,9 +57,7 @@
                   <v-icon
                     class="mt-1"
                     color="error"
-                    @click.self="
-                      !dialogToDelete || showDeleteDialog(acc)
-                    "
+                    @click.self="!dialogToDelete || showDeleteDialog(acc)"
                     @dblclick.stop="dialogToDelete || deleteAccount(acc)"
                   >
                     mdi-delete
@@ -70,8 +68,8 @@
           </v-list-item>
         </v-alert>
       </v-card>
-    </v-col>
-  </v-hover>
+    </v-hover>
+  </v-col>
 </template>
 
 <script>

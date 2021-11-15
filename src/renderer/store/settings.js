@@ -8,7 +8,7 @@ export const state = () => ({
     pwDuplication: false,
     pwDupLimit: 0,
     driveKey: '',
-    accListView: '',
+    accListView: 'table',
 })
 
 export const getters = {
