@@ -42,7 +42,7 @@
                   <span>
                     Follow this link to create your Google Drive API Key :
                   </span>
-                  <br />
+                  <br>
                   <v-btn
                     class="mt-2"
                     color="orange"
@@ -89,46 +89,46 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 export default {
-  data() {
+  data () {
     return {
       dialog: false,
-      driveKeyModel: "",
+      driveKeyModel: '',
       formSetDriveApi: false,
-      btnLinkProps: {},
-    };
+      btnLinkProps: {}
+    }
   },
   computed: {
-    ...mapState("settings", ["driveKey"]),
-    keyRules: () => [(v) => !!v.trim() || "Key cannot be empty"],
+    ...mapState('settings', ['driveKey']),
+    keyRules: () => [v => !!v.trim() || 'Key cannot be empty']
   },
-  created() {
-    this.driveKeyModel = this.driveKey;
+  created () {
+    this.driveKeyModel = this.driveKey
   },
   methods: {
-    hideDialog() {
-      this.dialog = !this.dialog;
+    hideDialog () {
+      this.dialog = !this.dialog
     },
-    setDriveKey() {
-      this.$refs.formSetDriveApi.validate();
+    setDriveKey () {
+      this.$refs.formSetDriveApi.validate()
       if (this.formSetDriveApi) {
-        this.$store.dispatch("settings/setDriveKey", this.driveKeyModel);
-        this.hideDialog();
+        this.$store.dispatch('settings/setDriveKey', this.driveKeyModel)
+        this.hideDialog()
       }
     },
-    goToLink() {
-      this.$globals.openUrl("https://developers.google.com/drive/api/v3/enable-drive-api#enable_the_drive_api")
+    goToLink () {
+      this.$globals.window.openUrl('https://developers.google.com/drive/api/v3/enable-drive-api#enable_the_drive_api')
       this.btnLinkProps = {
         loading: true,
-        disabled: true,
-      };
+        disabled: true
+      }
       setTimeout(() => {
-        this.btnLinkProps = {};
-      }, 2000);
-    },
-  },
-};
+        this.btnLinkProps = {}
+      }, 2000)
+    }
+  }
+}
 </script>
 
 <style>

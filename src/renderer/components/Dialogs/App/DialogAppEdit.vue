@@ -50,28 +50,28 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters, mapState } from 'vuex'
 export default {
   data: () => ({
-    appName: "123",
-    appUrls: "",
-    formAppEdit: false,
+    appName: '123',
+    appUrls: '',
+    formAppEdit: false
   }),
   computed: {
-    ...mapGetters("app", ["getAppByName"]),
-    ...mapState("app", ["appEditValue"]),
+    ...mapGetters('app', ['getAppByName']),
+    ...mapState('app', ['appEditValue']),
     appEditDialog: {
-      get() {
-        return this.$store.getters['ui/isDialogActive']('APP_EDIT_DIALOG');
+      get () {
+        return this.$store.getters['ui/isDialogActive']('APP_EDIT_DIALOG')
       },
-      set(v) {
+      set (v) {
         this.hideDialog()
-      },
+      }
     },
-    appNameRules() {
+    appNameRules () {
       return [
         // IF appName is falsey (null,0,undefined) then it's error
-        (v) => !!(v || "").trim() || "Application name is required!",
+        v => !!(v || '').trim() || 'Application name is required!',
         // IF getAppByName() has value, then it's error
         // (v) => {
         //   v = (v || "").trim().toLowerCase();
@@ -81,13 +81,13 @@ export default {
         //   }
         //   if (error) return "Application already exists";
         // },
-        (v) =>
-          !this.getAppByName((v || "").trim()) || // check if name already exist
-          (v || "").trim().toLowerCase() ===
+        v =>
+          !this.getAppByName((v || '').trim()) || // check if name already exist
+          (v || '').trim().toLowerCase() ===
             this.appEditValue.name.trim().toLowerCase() || // check if the name is the same as already is
-          "Application already exists!",
-      ];
-    },
+          'Application already exists!'
+      ]
+    }
     // appName() {
     //   return this.appEditValue.name;
     // },
@@ -95,11 +95,11 @@ export default {
     //   return this.appEditValue.urls;
     // },
   },
-  created() {
-    this.appName = this.appEditValue.name;
-    this.appUrls = this.appEditValue.urls.toString().replaceAll(",", "\n");
+  created () {
+    this.appName = this.appEditValue.name
+    this.appUrls = this.appEditValue.urls.toString().replaceAll(',', '\n')
   },
-  mounted() {
+  mounted () {
     // window.addEventListener("keyup", (e) => {
     //   if (
     //     e.key === "Enter" ||
@@ -114,24 +114,24 @@ export default {
     // this.appUrls = this.appEditValue.urls;
   },
   methods: {
-    hideDialog() {
-      this.$store.dispatch('ui/toggleDialog', { type: 'APP_EDIT_DIALOG', val: false });
-      this.$store.dispatch("app/setAppEditValue", "");
+    hideDialog () {
+      this.$store.dispatch('ui/toggleDialog', { type: 'APP_EDIT_DIALOG', val: false })
+      this.$store.dispatch('app/setAppEditValue', '')
     },
-    editApp() {
-      this.$refs.formAppEdit.validate();
+    editApp () {
+      this.$refs.formAppEdit.validate()
       if (this.formAppEdit) {
-        this.$store.dispatch("app/editApp", {
+        this.$store.dispatch('app/editApp', {
           name: this.appName,
-          urls: this.$globals.lodash.compact(this.appUrls.trim().split("\n")),
-          oldName: this.appEditValue.name,
-        });
-        this.$refs.formAppEdit.reset();
-        this.hideDialog();
+          urls: this.$globals.lodash.compact(this.appUrls.trim().split('\n')),
+          oldName: this.appEditValue.name
+        })
+        this.$refs.formAppEdit.reset()
+        this.hideDialog()
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style>

@@ -22,9 +22,9 @@
 <script>
 export default {
   props: {
-    account: { type: Object, default: () => {} },
-  },
-};
+    account: { type: Object, default: () => {} }
+  }
+}
 </script>
 
 <style>

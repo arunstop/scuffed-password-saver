@@ -45,7 +45,7 @@
                   :type="!hoverToShowPw || !hover ? 'password' : 'text'"
                   style="width: 100%; max-width: 60px"
                   :class="$vuetify.theme.dark ? 'white--text' : 'black--text'"
-                />
+                >
               </div>
             </v-hover>
           </td>
@@ -68,49 +68,49 @@
 </template>
 
 <script>
-import _ from "lodash";
-import { mapGetters, mapState, mapActions } from "vuex";
+import _ from 'lodash'
+import { mapGetters, mapState, mapActions } from 'vuex'
 export default {
   props: {
-    data: { type: Array, default: () => [] },
+    data: { type: Array, default: () => [] }
   },
-  data() {
+  data () {
     return {
       selectMode: false,
 
       headers: [
-        { text: "App / Website", value: "appName" },
-        { text: "ID / Email / Phone Number", value: "accountId" },
-        { text: "Durability", value: "durab.percentage" },
-        { text: "Password / PIN", value: "accountPw", sortable: false },
-        { text: "Actions", value: "actions", sortable: false },
-      ],
-    };
+        { text: 'App / Website', value: 'appName' },
+        { text: 'ID / Email / Phone Number', value: 'accountId' },
+        { text: 'Durability', value: 'durab.percentage' },
+        { text: 'Password / PIN', value: 'accountPw', sortable: false },
+        { text: 'Actions', value: 'actions', sortable: false }
+      ]
+    }
   },
   computed: {
-    ...mapGetters("account", ["getAccountList"]),
-    ...mapGetters("ui/accountList", ["isSelected"]),
-    ...mapState("ui/accountList", ["selectionMode", "selectedItemList"]),
-    ...mapState("settings", [
-      "hoverToShowPw",
-      "dialogToDelete",
-      "dblClickToEdit",
-      "darkTheme",
+    ...mapGetters('account', ['getAccountList']),
+    ...mapGetters('ui/accountList', ['isSelected']),
+    ...mapState('ui/accountList', ['selectionMode', 'selectedItemList']),
+    ...mapState('settings', [
+      'hoverToShowPw',
+      'dialogToDelete',
+      'dblClickToEdit',
+      'darkTheme'
     ]),
-    sortedAccountList() {
-      return this.data;
-    },
+    sortedAccountList () {
+      return this.data
+    }
   },
   methods: {
-    ...mapActions("ui/accountList", [
-      "selectItem",
-      "clearSelection",
-      "showEditDialog",
-      "showDeleteDialog",
-      "deleteAccount",
-    ]),
-  },
-};
+    ...mapActions('ui/accountList', [
+      'selectItem',
+      'clearSelection',
+      'showEditDialog',
+      'showDeleteDialog',
+      'deleteAccount'
+    ])
+  }
+}
 </script>
 
 <style>

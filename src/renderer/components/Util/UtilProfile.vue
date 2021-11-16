@@ -14,7 +14,7 @@
           {{ alpha.charAt(1).toLowerCase() }}
         </span>
       </div>
-      <div class="util-alpha-stripe mx-auto"/>
+      <div class="util-alpha-stripe mx-auto" />
     </div>
   </v-card>
 </template>
@@ -22,10 +22,10 @@
 <script>
 export default {
   props: {
-    alpha: { type: String, default: "A" },
-    color: { type: String, default: "grey" },
-  },
-};
+    alpha: { type: String, default: 'A' },
+    color: { type: String, default: 'grey' }
+  }
+}
 </script>
 
 <style>

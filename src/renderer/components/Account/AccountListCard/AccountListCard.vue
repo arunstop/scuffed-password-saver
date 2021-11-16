@@ -40,19 +40,19 @@
 <script>
 export default {
   props: {
-    data: { type: Array, default: () => [] },
+    data: { type: Array, default: () => [] }
   },
   computed: {
-    sortedList() {
-      return this.data;
-    },
+    sortedList () {
+      return this.data
+    }
   },
   methods: {
-    resetSearch() {
-      this.$store.dispatch("account/setAccountSearch", "");
-    },
-  },
-};
+    resetSearch () {
+      this.$store.dispatch('account/setAccountSearch', '')
+    }
+  }
+}
 </script>
 
 <style>

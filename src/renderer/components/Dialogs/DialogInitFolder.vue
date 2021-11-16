@@ -34,47 +34,45 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { remote } from "electron";
+import { mapState } from 'vuex'
+import { remote } from 'electron'
 export default {
-  data() {
-    return { path: "" };
+  data () {
+    return { path: '' }
   },
   computed: {
-    ...mapState("settings", ["vaultPath"]),
+    ...mapState('settings', ['vaultPath']),
     initFolderDialog: {
-      get() {
-        return this.$store.getters['ui/isDialogActive']('INIT_FOLDER_DIALOG');
+      get () {
+        return this.$store.getters['ui/isDialogActive']('INIT_FOLDER_DIALOG')
       },
-      set(v) {
-        this.$store.dispatch('ui/toggleDialog', { type: 'INIT_FOLDER_DIALOG', val: v });
-      },
-    },
+      set (v) {
+        this.$store.dispatch('ui/toggleDialog', { type: 'INIT_FOLDER_DIALOG', val: v })
+      }
+    }
   },
-  created() {
-    this.path = this.vaultPath;
+  created () {
+    this.path = this.vaultPath
     // if(this.vaultPath){
     //   this.execChooseFolder()
     // }
   },
   methods: {
-    async execChooseFolder() {
+    async execChooseFolder () {
       const choosenPath = await remote.dialog.showOpenDialog({
-        properties: ["openDirectory"],
-      });
-      this.path = choosenPath.filePaths[0] || this.path;
+        properties: ['openDirectory']
+      })
+      this.path = choosenPath.filePaths[0] || this.path
     },
-    execSetPath() {
-      if (this.path.includes(":\\"))
-        this.$store.dispatch("settings/setVaultPath", this.path);
+    execSetPath () {
+      if (this.path.includes(':\\')) { this.$store.dispatch('settings/setVaultPath', this.path) }
     },
-    isValidPath() {
-      if (this.path === this.vaultPath) return false;
-      else if (this.path.includes(":\\")) return true;
-      return false;
-    },
-  },
-};
+    isValidPath () {
+      if (this.path === this.vaultPath) { return false } else if (this.path.includes(':\\')) { return true }
+      return false
+    }
+  }
+}
 </script>
 
 <style>

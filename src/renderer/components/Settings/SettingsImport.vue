@@ -28,28 +28,28 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 export default {
-  data() {
+  data () {
     return {
       dialog: false,
-      fileFormatModel: "",
-      formExportAccs: false,
-    };
+      fileFormatModel: '',
+      formExportAccs: false
+    }
   },
   computed: {
-    ...mapState("settings", ["reminderFreq", "vaultPath"]),
+    ...mapState('settings', ['reminderFreq', 'vaultPath'])
   },
   methods: {
-    showImportDialog() {
-      this.$store.dispatch("ui/toggleDialog", {
+    showImportDialog () {
+      this.$store.dispatch('ui/toggleDialog', {
         type: 'IMPORT_DIALOG',
-        val: true,
+        val: true
       })
     },
-    exportAccs() {},
-  },
-};
+    exportAccs () {}
+  }
+}
 </script>
 
 <style>

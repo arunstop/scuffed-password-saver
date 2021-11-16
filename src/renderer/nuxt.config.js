@@ -17,11 +17,10 @@ module.exports = {
     { ssr: true, src: '@/plugins/icons.js' },
     '~/plugins/local-storage',
     '~/plugins/globals',
-    '~/plugins/date',
-    '~/plugins/longclick',
+    '~/plugins/date'
 
   ],
-  css:[
+  css: [
     '~/assets/main.css'
   ],
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
@@ -36,14 +35,14 @@ module.exports = {
       '~/components',
       '~/components/Dialogs',
       '~/components/Dialogs/App',
-      '~/components/Dialogs/Account',
+      '~/components/Dialogs/Account'
     ]
   },
   modules: [
     // '@nuxtjs/vuetify'
   ],
   vuetify: {
-    
+
     theme: {
       options: {
         customProperties: true

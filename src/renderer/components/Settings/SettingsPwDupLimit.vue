@@ -87,55 +87,55 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 export default {
-  data() {
+  data () {
     return {
       pwDuplicationDialog: false,
       pwDupLimitModel: 0,
-      formSetPwDupLimit: false,
-    };
+      formSetPwDupLimit: false
+    }
   },
   computed: {
-    ...mapState("settings", [
-      "pwDuplication",
-      "pwDupLimit",
+    ...mapState('settings', [
+      'pwDuplication',
+      'pwDupLimit'
     ]),
     pwDuplicationModel: {
-      get() {
-        return this.pwDuplication;
+      get () {
+        return this.pwDuplication
       },
-      set(v) {
-        this.$store.dispatch("settings/togglePwDuplication", v);
-      },
-    },
-    pwDupLimitRules: () => [
-      (v) => !!v || "This field is required",
-      (v) => v * 1 >= 2 || "Limit cannot be less than 2",
-      (v) => /^\d+$/.test(v) || "This field only accept numbers",
-    ],
-  },
-  created() {
-    this.pwDupLimitModel = this.pwDupLimit;
-  },
-  methods: {
-    togglePwDupLimitDialog() {
-      this.pwDupLimitModel = this.pwDupLimit;
-      this.pwDuplicationDialog = !this.pwDuplicationDialog;
-    },
-    setPwDupLimit() {
-      this.$refs.formSetPwDupLimit.validate();
-      if (this.formSetPwDupLimit) {
-        this.$store.dispatch(
-          "settings/setPwDupLimit",
-          this.pwDupLimitModel * 1
-        );
-        this.togglePwDupLimitDialog();
-        this.pwDupLimitModel = this.pwDupLimitModel * 1;
+      set (v) {
+        this.$store.dispatch('settings/togglePwDuplication', v)
       }
     },
+    pwDupLimitRules: () => [
+      v => !!v || 'This field is required',
+      v => v * 1 >= 2 || 'Limit cannot be less than 2',
+      v => /^\d+$/.test(v) || 'This field only accept numbers'
+    ]
   },
-};
+  created () {
+    this.pwDupLimitModel = this.pwDupLimit
+  },
+  methods: {
+    togglePwDupLimitDialog () {
+      this.pwDupLimitModel = this.pwDupLimit
+      this.pwDuplicationDialog = !this.pwDuplicationDialog
+    },
+    setPwDupLimit () {
+      this.$refs.formSetPwDupLimit.validate()
+      if (this.formSetPwDupLimit) {
+        this.$store.dispatch(
+          'settings/setPwDupLimit',
+          this.pwDupLimitModel * 1
+        )
+        this.togglePwDupLimitDialog()
+        this.pwDupLimitModel = this.pwDupLimitModel * 1
+      }
+    }
+  }
+}
 </script>
 
 <style>

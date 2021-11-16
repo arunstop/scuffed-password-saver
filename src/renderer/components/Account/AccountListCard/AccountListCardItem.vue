@@ -75,60 +75,60 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from "vuex";
+import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
   props: {
-    acc: { type: Object, default: () => {} },
+    acc: { type: Object, default: () => {} }
   },
   computed: {
-    ...mapState("ui/accountList", ["selectionMode"]),
-    ...mapGetters("ui/accountList", ["isSelected"]),
-    ...mapState("settings", [
-      "hoverToShowPw",
-      "dialogToDelete",
-      "dblClickToEdit",
-      "darkTheme",
+    ...mapState('ui/accountList', ['selectionMode']),
+    ...mapGetters('ui/accountList', ['isSelected']),
+    ...mapState('settings', [
+      'hoverToShowPw',
+      'dialogToDelete',
+      'dblClickToEdit',
+      'darkTheme'
     ]),
-    color() {
-      return this.acc.durab.status;
+    color () {
+      return this.acc.durab.status
     },
-    hiddenPw() {
-      let stars = "";
+    hiddenPw () {
+      let stars = ''
       for (let index = 0; index < this.acc.accountPw.length; index++) {
-        stars = stars + "•";
+        stars = stars + '•'
       }
-      return stars;
-    },
+      return stars
+    }
   },
   methods: {
-    ...mapActions("ui/accountList", [
-      "selectItem",
-      "clearSelection",
-      "showEditDialog",
-      "showDeleteDialog",
-      "deleteAccount",
+    ...mapActions('ui/accountList', [
+      'selectItem',
+      'clearSelection',
+      'showEditDialog',
+      'showDeleteDialog',
+      'deleteAccount'
     ]),
     // :light="isSelectedInDark(acc.id)"
     //     :dark="isSelectedInLight(acc.id)"
-    isSelectedInDark(id) {
+    isSelectedInDark (id) {
       // IN DARK MODE
       // IF selected
       // TURN card into LIGHT THEME
-      return this.$vuetify.theme.dark && this.isSelected(id);
+      return this.$vuetify.theme.dark && this.isSelected(id)
     },
-    isSelectedInLight(id) {
+    isSelectedInLight (id) {
       // IN LIGHT MODE
       // IF selected
       // TURN card into DARK THEME
-      return !this.$vuetify.theme.dark && this.isSelected(id);
+      return !this.$vuetify.theme.dark && this.isSelected(id)
     },
-    getSelectedStyle(id) {
+    getSelectedStyle (id) {
       return this.isSelected(id)
-        ? { text: true, coloredBorder: false, color: "primary"}
-        : { text: false, coloredBorder: true,color:this.color  };
-    },
-  },
-};
+        ? { text: true, coloredBorder: false, color: 'primary' }
+        : { text: false, coloredBorder: true, color: this.color }
+    }
+  }
+}
 </script>
 
 <style>

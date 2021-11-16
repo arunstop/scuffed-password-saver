@@ -39,11 +39,11 @@
               </div>
             </v-list-item-content>
             <v-list-item-avatar>
-             <v-scale-transition origin="center center">
-                  <v-btn v-if="hover" icon color="error" @click.stop="deleteItem(app.name)">
+              <v-scale-transition origin="center center">
+                <v-btn v-if="hover" icon color="error" @click.stop="deleteItem(app.name)">
                   <v-icon>mdi-delete</v-icon>
-              </v-btn>
-             </v-scale-transition>
+                </v-btn>
+              </v-scale-transition>
             </v-list-item-avatar>
           </v-list-item>
         </v-alert>
@@ -57,67 +57,63 @@ export default {
   props: {
     app: { type: Object, default: () => {} },
     click: { type: Function, default: () => {} },
-    rclick: { type: Function, default: () => {} },
+    rclick: { type: Function, default: () => {} }
   },
-  data() {
+  data () {
     return {
       //   hovered: false,
-    };
+    }
   },
   computed: {
-    color() {
-      return this.app.urls.toString() ? "primary" : "warning";
+    color () {
+      return this.app.urls.toString() ? 'primary' : 'warning'
     },
-    trimmedName() {
-      return this.app.name.replaceAll("www.", "").replaceAll();
-    },
+    trimmedName () {
+      return this.app.name.replaceAll('www.', '').replaceAll()
+    }
   },
   methods: {
-    getUrlList(hover) {
+    getUrlList (hover) {
       // get only domain name
       const trimUrl = (url) => {
-        return url
-          .replaceAll("https://", "")
-          .replaceAll("http://", "")
-          .replaceAll("www.", "")
-          .split("/")[0];
-      };
+        return "google"
+      }
       // create array with trimmedUrl in it
-      const urlList = (this.app.urls || []).map((e) => ({
+      const urlList = (this.app.urls || []).map(e => ({
         url: e,
-        trimmedUrl: trimUrl(e),
-      }));
+        trimmedUrl: trimUrl(e)
+      }))
       // if hovered, only show the first item
       if (!hover) {
-        return urlList.slice(0, 1);
+        return urlList.slice(0, 1)
       }
-      return urlList;
+      return urlList
     },
-    openUrl(url) {
-      this.$globals.openUrl("http://" + url);
+    openUrl (url) {
+      this.$globals.window.openUrl('http://' + url)
     },
-   deleteApp(name) {
-      this.$store.dispatch("app/deleteApp", name);
+    deleteApp (name) {
+      this.$store.dispatch('app/deleteApp', name)
     },
-    deleteItem(name) {
-      this.$store.dispatch("ui/toggleDialog", {
-        type: "CONFIRMATION_DIALOG",
+    deleteItem (name) {
+      this.$store.dispatch('ui/toggleDialog', {
+        type: 'CONFIRMATION_DIALOG',
         val: true,
         data: {
-          color: "error",
-          title: "Delete application",
+          color: 'error',
+          title: 'Delete application',
           desc:
             `Are u sure you want to delete application: ${name}?`,
           actions: {
             y: () => {
-              this.deleteApp(name);
-            },
-          },
-        },
-      });
-    },
-  },
-};
+              this.deleteApp(name)
+            }
+          }
+        }
+      })
+    }
+  }
+}
 </script>
 
 <style>

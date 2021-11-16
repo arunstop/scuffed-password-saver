@@ -5,7 +5,7 @@
     text
     border="left"
   >
-    <span v-html="message"/>
+    <span v-html="message" />
   </v-alert>
 </template>
 
@@ -13,10 +13,10 @@
 export default {
   props: {
     message: { type: String, default: () => '' },
-    icon: {type:String,default:()=>''},
-    type:{type:String,default:()=>''}
-  },
-};
+    icon: { type: String, default: () => '' },
+    type: { type: String, default: () => '' }
+  }
+}
 </script>
 
 <style>

@@ -46,28 +46,28 @@ export default {
     title: { type: String, default: () => {} },
     actionN: { type: Function, default: () => {} },
     actionY: { type: Function, default: () => {} },
-    noAction: Boolean,
+    noAction: Boolean
   },
   computed: {
     dialog: {
-      get() {
-        return this.$store.getters["ui/isDialogActive"](this.type);
+      get () {
+        return this.$store.getters['ui/isDialogActive'](this.type)
       },
-      set() {
-        this.hideDialog();
-      },
-    },
+      set () {
+        this.hideDialog()
+      }
+    }
   },
   methods: {
-    hideDialog() {
-      this.actionN();
-      this.$store.dispatch("ui/toggleDialog", {
+    hideDialog () {
+      this.actionN()
+      this.$store.dispatch('ui/toggleDialog', {
         type: this.type,
-        val: false,
-      });
-    },
-  },
-};
+        val: false
+      })
+    }
+  }
+}
 </script>
 
 <style>

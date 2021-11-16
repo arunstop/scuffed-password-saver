@@ -94,44 +94,44 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
-import _ from "lodash";
+import { mapState, mapGetters } from 'vuex'
+import _ from 'lodash'
 export default {
   computed: {
-    ...mapGetters("account", ["getAccountList"]),
-    ...mapGetters("ui/accountList", ["getActiveSortByValue"]),
-    ...mapState("ui/accountList", ["sortByValue", "sortByList", "orderValue"]),
+    ...mapGetters('account', ['getAccountList']),
+    ...mapGetters('ui/accountList', ['getActiveSortByValue']),
+    ...mapState('ui/accountList', ['sortByValue', 'sortByList', 'orderValue']),
 
-    activeSortBy() {
-      return this.getActiveSortByValue();
+    activeSortBy () {
+      return this.getActiveSortByValue()
     },
-    sortedAccountList() {
+    sortedAccountList () {
       const sal = this.getAccountList().map((e) => {
         // adding pw durability
-        return { ...e, durab: this.pwDurab(e.editedPw) };
-      });
-      const salSorted = _.sortBy(sal, [this.sortByValue.val]);
-      return this.orderValue.val === "desc" ? salSorted.reverse() : salSorted;
-    },
+        return { ...e, durab: this.pwDurab(e.editedPw) }
+      })
+      const salSorted = _.sortBy(sal, [this.sortByValue.val])
+      return this.orderValue.val === 'desc' ? salSorted.reverse() : salSorted
+    }
   },
   methods: {
-    pwDurab(edited) {
+    pwDurab (edited) {
       return this.$globals.getPwDurability(
         edited,
         this.$store.state.settings.reminderFreq
-      );
+      )
     },
-    setSortByValue(sortByItem) {
+    setSortByValue (sortByItem) {
       this.$store.dispatch(
-        "ui/accountList/setSortByValue",
-        require("lodash").assign(sortByItem, { order: this.orderValue.val })
-      );
+        'ui/accountList/setSortByValue',
+        require('lodash').assign(sortByItem, { order: this.orderValue.val })
+      )
     },
-    setOrderValue(val) {
-      this.$store.dispatch("ui/accountList/setOrderValue", val);
-    },
-  },
-};
+    setOrderValue (val) {
+      this.$store.dispatch('ui/accountList/setOrderValue', val)
+    }
+  }
+}
 </script>
 
 <style>

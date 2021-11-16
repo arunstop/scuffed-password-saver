@@ -1,7 +1,8 @@
 <template>
   <v-dialog v-model="accountAddDialog" max-width="600" scrollable
-    :fullscreen="$vuetify.breakpoint.smAndDown"
-    transition="slide-y-reverse-transition">
+            :fullscreen="$vuetify.breakpoint.smAndDown"
+            transition="slide-y-reverse-transition"
+  >
     <v-form
       ref="formAccountAdd"
       v-model="formAccountAdd"
@@ -92,73 +93,72 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 export default {
   data: () => ({
-    appName: "",
-    appNameSearch: "",
-    accountId: "",
-    accountPw: "",
-    accountNote: "",
+    appName: '',
+    appNameSearch: '',
+    accountId: '',
+    accountPw: '',
+    accountNote: '',
     noteLabel:
-      "Enter important message about this account e.g. PIN, Recovery Number/Email/Phone number, etc)",
-    formAccountAdd: false,
+      'Enter important message about this account e.g. PIN, Recovery Number/Email/Phone number, etc)',
+    formAccountAdd: false
   }),
   computed: {
-    ...mapGetters("app", ["getAppByName", "getAppList"]),
-    ...mapGetters("account", ["isAccountExist"]),
+    ...mapGetters('app', ['getAppByName', 'getAppList']),
+    ...mapGetters('account', ['isAccountExist']),
     accountAddDialog: {
-      get() {
-        return this.$store.getters['ui/isDialogActive']('ACCOUNT_ADD_DIALOG');
+      get () {
+        return this.$store.getters['ui/isDialogActive']('ACCOUNT_ADD_DIALOG')
       },
-      set(v) {
+      set (v) {
         this.hideDialog()
-      },
+      }
     },
     appNameRules: () => [
       // IF appName is falsey (null,0,undefined) then it's error
-      (v) => !!v || "Please choose an app/website!",
+      v => !!v || 'Please choose an app/website!'
       // IF getAppByName() has value, then it's error
       //   (v) =>
       //     !this.getAppByName((v || "").trim()) || "Application already exists!",
     ],
-    accountIdRules() {
+    accountIdRules () {
       return [
-        (v) =>
-          !!(v || "").trim() ||
-          "ID / Username / Email / Phone number is required!",
-        (v) =>
-          !this.isAccountExist(this.appName?.name || "", (v || "").trim()) ||
-          "This ID already exists",
-      ];
+        v =>
+          !!(v || '').trim() ||
+          'ID / Username / Email / Phone number is required!',
+        v =>
+          !this.isAccountExist(this.appName?.name || '', (v || '').trim()) ||
+          'This ID already exists'
+      ]
     },
     accountPwRules: () => [
-      (v) => !!(v || "").trim() || "Password is required!",
+      v => !!(v || '').trim() || 'Password is required!'
     ],
-    appNameSuccess() {
-      if (!this.appNameSearch) return null;
-      else {
-        const selectedApp = this.getAppByName(this.appNameSearch);
+    appNameSuccess () {
+      if (!this.appNameSearch) { return null } else {
+        const selectedApp = this.getAppByName(this.appNameSearch)
         const successMsgUrlNotNull =
           this.$globals.lodash.isEmpty(selectedApp?.urls)
-            ? ""
-            : ", this account will work on : " +
-              selectedApp?.urls.toString().replaceAll(",", " | ");
+            ? ''
+            : ', this account will work on : ' +
+              selectedApp?.urls.toString().replaceAll(',', ' | ')
         return !selectedApp
-          ? "Application : " + this.appNameSearch + " will be created"
-          : this.appNameSearch + " is selected" + successMsgUrlNotNull;
+          ? 'Application : ' + this.appNameSearch + ' will be created'
+          : this.appNameSearch + ' is selected' + successMsgUrlNotNull
       }
-    },
+    }
   },
   watch: {
-    appName(v) {
+    appName (v) {
       if (this.accountId || this.accountPw) {
-        this.$refs.formAccountAdd.validate();
-        this.accountId = this.accountId + "";
+        this.$refs.formAccountAdd.validate()
+        this.accountId = this.accountId + ''
       }
-    },
+    }
   },
-  mounted() {
+  mounted () {
     // console.log(this.getAppList());
     // window.addEventListener("keyup", (e) => {
     //   if (
@@ -172,34 +172,34 @@ export default {
     // });
   },
   methods: {
-    hideDialog() {
-      this.$store.dispatch("ui/toggleDialog", {type:'ACCOUNT_ADD_DIALOG', val:false});
+    hideDialog () {
+      this.$store.dispatch('ui/toggleDialog', { type: 'ACCOUNT_ADD_DIALOG', val: false })
     },
-    accountAdd() {
-      this.$refs.formAccountAdd.validate();
+    accountAdd () {
+      this.$refs.formAccountAdd.validate()
       if (this.formAccountAdd) {
         const app = this.appName.name || this.appName
         if (!this.getAppByName(app)) {
-          this.$store.dispatch("app/addApp", {
+          this.$store.dispatch('app/addApp', {
             name: app,
-            urls: [],
-          });
+            urls: []
+          })
         }
-        this.$store.dispatch("account/addAccount", {
+        this.$store.dispatch('account/addAccount', {
           appName: this.appName?.name || this.appName,
           accountId: this.accountId,
           accountPw: this.accountPw,
-          accountNote: this.accountNote,
-        });
+          accountNote: this.accountNote
+        })
         // this.$store.dispatch("ui/showSnackbar", {
         //   label: this.appName + "has been added",
         //   color: "success",
         // });
-        this.$refs.formAccountAdd.reset();
+        this.$refs.formAccountAdd.reset()
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style>

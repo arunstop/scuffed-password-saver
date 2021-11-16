@@ -6,11 +6,11 @@ const winHandler = new BrowserWinHandler({
   minHeight: 600,
   minWidth: 600,
   // titleBarStyle:'hidden',
-  frame:false,
+  frame: false
 
 })
 
-winHandler.onCreated(_browserWindow => {
+winHandler.onCreated((_browserWindow) => {
   winHandler.loadPage('/')
   // Or load custom url
   // _browserWindow.loadURL('https://google.com')

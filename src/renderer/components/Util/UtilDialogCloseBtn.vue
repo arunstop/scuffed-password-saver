@@ -8,9 +8,9 @@
 <script>
 export default {
   props: {
-    action: { type: Function, default: () => {} },
-  },
-};
+    action: { type: Function, default: () => {} }
+  }
+}
 </script>
 
 <style>

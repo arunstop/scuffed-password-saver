@@ -27,31 +27,31 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 export default {
   computed: {
-    ...mapState("settings", ["vaultPath"]),
+    ...mapState('settings', ['vaultPath']),
     darkThemeModel: {
-      get() {
-        return this.darkTheme ? 1 : 0;
+      get () {
+        return this.darkTheme ? 1 : 0
       },
-      set(v) {
-        this.$store.dispatch("settings/toggleDarkTheme", v === 1);
-      },
-    },
-  },
-  methods: {
-    changeVaultPath() {
-      this.$store.dispatch("ui/toggleDialog", {
-          type: "INIT_FOLDER_DIALOG",
-          val: true,
-        });
-    },
-    openVaultPath(){
-      this.$globals.openPath(this.vaultPath)
+      set (v) {
+        this.$store.dispatch('settings/toggleDarkTheme', v === 1)
+      }
     }
   },
-};
+  methods: {
+    changeVaultPath () {
+      this.$store.dispatch('ui/toggleDialog', {
+        type: 'INIT_FOLDER_DIALOG',
+        val: true
+      })
+    },
+    openVaultPath () {
+      this.$globals.window.openPath(this.vaultPath)
+    }
+  }
+}
 </script>
 
 <style>

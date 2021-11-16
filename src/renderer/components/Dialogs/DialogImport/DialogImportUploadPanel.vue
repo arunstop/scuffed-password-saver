@@ -28,64 +28,64 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
-      importPanel: { color: "", button: "", loading: {} },
-    };
+      importPanel: { color: '', button: '', loading: {} }
+    }
   },
   computed: {
     fileAccountList: {
-      get() {
-        return this.$store.state.ui.dialogImport.fileAccountList;
+      get () {
+        return this.$store.state.ui.dialogImport.fileAccountList
       },
-      set(v) {
-        this.$store.dispatch("ui/dialogImport/setFileAccountList", v);
-      },
-    },
+      set (v) {
+        this.$store.dispatch('ui/dialogImport/setFileAccountList', v)
+      }
+    }
   },
   methods: {
-    uploadFiles() {
+    uploadFiles () {
       //   this.$refs.importFileInput.$refs.input.click();
-      this.$nuxt.$emit("clickImportFileInput");
+      this.$nuxt.$emit('clickImportFileInput')
     },
-    dragover(event) {
-      event.preventDefault();
-      this.toggleImportPanel(true);
+    dragover (event) {
+      event.preventDefault()
+      this.toggleImportPanel(true)
     },
-    dragleave(event) {
-      event.preventDefault();
-      this.toggleImportPanel(false);
+    dragleave (event) {
+      event.preventDefault()
+      this.toggleImportPanel(false)
     },
-    async drop(event) {
-      event.preventDefault();
-      this.toggleImportPanelLoading(true);
-      const fileList = Array.from(event.dataTransfer.files);
-      const extList = this.$store.state.account.extList;
-      const validFiles = fileList.filter((e) =>
-        extList.includes(e.name.toLowerCase().trim().split(".").reverse()[0])
-      );
+    async drop (event) {
+      event.preventDefault()
+      this.toggleImportPanelLoading(true)
+      const fileList = Array.from(event.dataTransfer.files)
+      const extList = this.$store.state.account.extList
+      const validFiles = fileList.filter(e =>
+        extList.includes(e.name.toLowerCase().trim().split('.').reverse()[0])
+      )
 
-      this.fileAccountList = validFiles;
-      this.toggleImportPanelLoading(false);
-      this.toggleImportPanel(false);
+      this.fileAccountList = validFiles
+      this.toggleImportPanelLoading(false)
+      this.toggleImportPanel(false)
     },
-    toggleImportPanelLoading(v) {
+    toggleImportPanelLoading (v) {
       if (v) {
-        this.importPanel.loading = { loading: true, disabled: true };
+        this.importPanel.loading = { loading: true, disabled: true }
       }
-      this.importPanel.loading = {};
+      this.importPanel.loading = {}
     },
-    toggleImportPanel(v) {
+    toggleImportPanel (v) {
       if (v) {
-        this.importPanel.color = "indigo";
-        this.importPanel.button = "pointer-events-none";
-        return;
+        this.importPanel.color = 'indigo'
+        this.importPanel.button = 'pointer-events-none'
+        return
       }
-      this.importPanel.color = "";
-      this.importPanel.button = "";
-    },
-  },
-};
+      this.importPanel.color = ''
+      this.importPanel.button = ''
+    }
+  }
+}
 </script>
 
 <style>

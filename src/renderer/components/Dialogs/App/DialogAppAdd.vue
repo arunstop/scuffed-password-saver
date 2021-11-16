@@ -48,34 +48,34 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 export default {
   data: () => ({
-    appName: "",
-    appUrls: "",
-    formAddApp: false,
+    appName: '',
+    appUrls: '',
+    formAddApp: false
   }),
   computed: {
-    ...mapGetters("app", ["getAppByName"]),
+    ...mapGetters('app', ['getAppByName']),
     appAddDialog: {
-      get() {
-        return this.$store.getters['ui/isDialogActive']('APP_ADD_DIALOG');
+      get () {
+        return this.$store.getters['ui/isDialogActive']('APP_ADD_DIALOG')
       },
-      set(v) {
+      set (v) {
         this.hideDialog()
-      },
+      }
     },
-    appNameRules() {
+    appNameRules () {
       return [
         // IF appName is falsey (null,0,undefined) then it's error
-        (v) => !!(v || "").trim() || "Application name is required!",
+        v => !!(v || '').trim() || 'Application name is required!',
         // IF getAppByName() has value, then it's error
-        (v) =>
-          !this.getAppByName((v || "").trim()) || "Application already exists!",
-      ];
-    },
+        v =>
+          !this.getAppByName((v || '').trim()) || 'Application already exists!'
+      ]
+    }
   },
-  mounted() {
+  mounted () {
     // window.addEventListener("keyup", (e) => {
     //   if (
     //     e.key === "Enter" ||
@@ -88,25 +88,25 @@ export default {
     // });
   },
   methods: {
-    hideDialog() {
-      this.$store.dispatch('ui/toggleDialog', { type: 'APP_ADD_DIALOG', val: false });
+    hideDialog () {
+      this.$store.dispatch('ui/toggleDialog', { type: 'APP_ADD_DIALOG', val: false })
     },
-    addApp() {
-      this.$refs.formAddApp.validate();
+    addApp () {
+      this.$refs.formAddApp.validate()
       if (this.formAddApp) {
-        this.$store.dispatch("app/addApp", {
+        this.$store.dispatch('app/addApp', {
           name: this.appName,
-          urls: require('lodash').compact(this.appUrls.trim().split("\n")),
-        });
+          urls: require('lodash').compact(this.appUrls.trim().split('\n'))
+        })
         // this.$store.dispatch("ui/showSnackbar", {
         //   label: this.appName + "has been added",
         //   color: "success",
         // });
-        this.$refs.formAddApp.reset();
+        this.$refs.formAddApp.reset()
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style>

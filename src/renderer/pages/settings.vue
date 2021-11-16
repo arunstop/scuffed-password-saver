@@ -11,23 +11,23 @@
     <!-- Vault Location -->
     <SettingsVaultLocation />
     <!-- Password reminder -->
-    <SettingsPwReminder/>
+    <SettingsPwReminder />
     <!-- Password duplication -->
-    <SettingsPwDuplication/>
+    <SettingsPwDuplication />
     <!-- Password duplication limit -->
-    <SettingsPwDupLimit/>
+    <SettingsPwDupLimit />
     <!-- Drive API Key -->
-    <SettingsDriveApi/>
+    <SettingsDriveApi />
     <!-- Export -->
-    <SettingsExport/>
+    <SettingsExport />
     <!-- Export -->
-    <SettingsImport/>
+    <SettingsImport />
   </v-list>
 </template>
 
 <script>
 export default {
-};
+}
 </script>
 
 <style>

@@ -18,21 +18,21 @@
 </template>
 
 <script>
-import { remote } from "electron";
-import { mapGetters } from "vuex";
+
+import { mapGetters } from 'vuex'
 export default {
   computed: {
-    ...mapGetters("ui", ["isDialogActive"]),
+    ...mapGetters('ui', ['isDialogActive']),
     logoutDialog: {
-      get() {
-        return this.isDialogActive("LOGOUT_DIALOG");
+      get () {
+        return this.isDialogActive('LOGOUT_DIALOG')
       },
-      set(v) {
+      set (v) {
         this.hideDialog()
-      },
-    },
+      }
+    }
   },
-  mounted() {
+  mounted () {
     // window.addEventListener("keyup", (e) => {
     //   if (
     //     e.key === "Enter" ||
@@ -45,19 +45,18 @@ export default {
     // });
   },
   methods: {
-    hideDialog() {
-      this.$store.dispatch("ui/toggleDialog", {
-          type: "LOGOUT_DIALOG",
-          val: false,
-        });
+    hideDialog () {
+      this.$store.dispatch('ui/toggleDialog', {
+        type: 'LOGOUT_DIALOG',
+        val: false
+      })
     },
-    exitApp() {
-      //   this.$store.dispatch("ui/toggleLogoutDialog", false);
-      // remote.getCurrentWindow().close()
-      remote.getCurrentWebContents().reload();
-    },
-  },
-};
+    exitApp () {
+      // close
+      this.$globals.window.close()
+    }
+  }
+}
 </script>
 
 <style>

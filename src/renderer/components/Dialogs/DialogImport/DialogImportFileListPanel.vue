@@ -55,18 +55,18 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from 'vuex'
 export default {
   computed: {
-    ...mapState("ui/dialogImport", ["fileAccountList"]),
+    ...mapState('ui/dialogImport', ['fileAccountList'])
   },
   methods: {
-    ...mapActions("ui/dialogImport", ["removeFile", "clearFiles"]),
-    uploadFiles() {
-      this.$nuxt.$emit("clickImportFileInput");
-    },
-  },
-};
+    ...mapActions('ui/dialogImport', ['removeFile', 'clearFiles']),
+    uploadFiles () {
+      this.$nuxt.$emit('clickImportFileInput')
+    }
+  }
+}
 </script>
 
 <style>

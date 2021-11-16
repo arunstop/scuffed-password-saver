@@ -24,59 +24,59 @@
 </template>
 
 <script>
-import { remote } from "electron";
+import { remote } from 'electron'
 export default {
-  data() {
+  data () {
     return {
-      minmax: "",
+      minmax: '',
       windowButtonList: [
         {
-          min: { icon: "mdi-window-minimize", action: "minimize" },
-          max: { icon: "mdi-window-minimize", action: "minimize" },
+          min: { icon: 'mdi-window-minimize', action: 'minimize' },
+          max: { icon: 'mdi-window-minimize', action: 'minimize' }
         },
         {
-          min: { icon: "mdi-window-maximize", action: "maximize" },
-          max: { icon: "mdi-window-restore", action: "unmaximize" },
+          min: { icon: 'mdi-window-maximize', action: 'maximize' },
+          max: { icon: 'mdi-window-restore', action: 'unmaximize' }
         },
         {
-          min: { icon: "mdi-close-thick", action: "close" },
-          max: { icon: "mdi-close-thick", action: "close" },
-        },
-      ],
-    };
+          min: { icon: 'mdi-close-thick', action: 'close' },
+          max: { icon: 'mdi-close-thick', action: 'close' }
+        }
+      ]
+    }
   },
-  created(){
+  created () {
     // initialize minmax
-    this.onResize();
+    this.onResize()
   },
-  mounted() {
+  mounted () {
     // this.onResize();
   },
   methods: {
-    onResize() {
+    onResize () {
       if (remote.getCurrentWindow().isMaximized()) {
-        this.minmax = "max";
+        this.minmax = 'max'
         // alert("max");
       } else {
-        this.minmax = "min";
+        this.minmax = 'min'
         // alert("min");
       }
     },
-    windowButtonAction(action) {
+    windowButtonAction (action) {
       // console.log(action);
-      const window = remote.getCurrentWindow();
-      if (action === "minimize") {
-        window.minimize();
-      } else if (action === "maximize") {
-        window.maximize();
-      } else if (action === "unmaximize") {
-        window.unmaximize();
-      } else if (action === "close") {
-        window.reload();
+      const window = this.$globals.window
+      if (action === 'minimize') {
+        window.minimize()
+      } else if (action === 'maximize') {
+        window.maximize()
+      } else if (action === 'unmaximize') {
+        window.unmaximize()
+      } else if (action === 'close') {
+        window.close()
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style>
@@ -93,6 +93,6 @@ export default {
   border-radius: 0px;
 }
 /* .titlebar {
-  
+
 } */
 </style>

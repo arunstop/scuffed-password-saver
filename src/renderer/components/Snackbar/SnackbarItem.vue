@@ -31,71 +31,70 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
-    snackbar: { type: Object, default: () => {} },
+    snackbar: { type: Object, default: () => {} }
   },
   data: () => ({
     // snackbar: false
     // timeout: 20000,
-    hover: false,
+    hover: false
   }),
   computed: {
-    ...mapGetters("ui", ["getSnackbarById"]),
+    ...mapGetters('ui', ['getSnackbarById']),
     show: {
-      get() {
-        return this.getSnackbarById(this.snackbar.id);
+      get () {
+        return this.getSnackbarById(this.snackbar.id)
       },
-      set() {
-        this.$store.dispatch("ui/removeSnackbar", this.snackbar.id);
-      },
+      set () {
+        this.$store.dispatch('ui/removeSnackbar', this.snackbar.id)
+      }
     },
-    timer(){
+    timer () {
       return this.timerInstance()
     }
   },
-  created() {
+  created () {
     this.timer.resume()
   },
   methods: {
-    timerInstance() {
+    timerInstance () {
       class Timer {
-        constructor(action, delay) {
-          let timerId = delay;
-          let start = delay;
-          let remaining = delay;
+        constructor (action, delay) {
+          let timerId = delay
+          let start = delay
+          let remaining = delay
 
           this.pause = () => {
             // alert('paused')
-            window.clearTimeout(timerId);
-            remaining -= Date.now() - start;
-          };
+            window.clearTimeout(timerId)
+            remaining -= Date.now() - start
+          }
           this.resume = () => {
-            start = Date.now();
-            window.clearTimeout(timerId);
-            timerId = window.setTimeout(action, remaining);
-          };
-          this.resume();
+            start = Date.now()
+            window.clearTimeout(timerId)
+            timerId = window.setTimeout(action, remaining)
+          }
+          this.resume()
         }
       }
 
-      return new Timer( () =>{
+      return new Timer(() => {
         this.removeSnackbar()
-      }, 2121);
+      }, 2121)
     },
-    removeSnackbar() {
+    removeSnackbar () {
       // alert(123);
-      this.$store.dispatch("ui/removeSnackbar", this.snackbar.id);
+      this.$store.dispatch('ui/removeSnackbar', this.snackbar.id)
     },
-    calculatePosition() {
-      if (this.snackbar.id !== 1)
-        return "margin-bottom: " + this.snackbar.id * 48 + "px";
-      return "";
-    },
-  },
-};
+    calculatePosition () {
+      if (this.snackbar.id !== 1) { return 'margin-bottom: ' + this.snackbar.id * 48 + 'px' }
+      return ''
+    }
+  }
+}
 </script>
 
 <style>

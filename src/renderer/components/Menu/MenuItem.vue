@@ -21,37 +21,37 @@
 export default {
   props: {
     menu: { type: Object, default: () => ({}) },
-    active:Boolean,
+    active: Boolean
   },
   methods: {
-    execMenuAction(page) {
-      if (page.toLowerCase() === "settings") {
-        this.$router.push({ name: "settings" });
-      } else if (page.toLowerCase() === "index") {
-        this.$router.push({ name: "index" });
-      } else if (page.toLowerCase() === "logout") {
-        this.$store.dispatch("ui/toggleDialog", {type:'LOGOUT_DIALOG', val:true});
+    execMenuAction (page) {
+      if (page.toLowerCase() === 'settings') {
+        this.$router.push({ name: 'settings' })
+      } else if (page.toLowerCase() === 'index') {
+        this.$router.push({ name: 'index' })
+      } else if (page.toLowerCase() === 'logout') {
+        this.$store.dispatch('ui/toggleDialog', { type: 'LOGOUT_DIALOG', val: true })
       }
     },
-    getStyle() {
+    getStyle () {
       if (this.active) {
         // return "v-item--active v-list-item--active";
         return {
-          menu :"v-item--active v-list-item--active primary dark",
-          iconColor : "white",
-          textStyles : "white--text"
-        };
+          menu: 'v-item--active v-list-item--active primary dark',
+          iconColor: 'white',
+          textStyles: 'white--text'
+        }
       }
-      return ""
+      return ''
     },
-    getIcon(){
+    getIcon () {
       if (this.active) {
         return this.menu.icons.on
       }
       return this.menu.icons.off
     }
-  },
-};
+  }
+}
 </script>
 
 <style>

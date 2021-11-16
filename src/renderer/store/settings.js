@@ -37,7 +37,7 @@ export const mutations = {
         state.vaultPath = path
     },
     SET_REMINDER_FREQ(state, val) {
-        val = val.split(' ')[0]
+        val = (val+"").split(' ')[0]
         state.reminderFreq = val
     },
     TOGGLE_PW_DUPLICATION(state, val) {

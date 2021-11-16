@@ -1,6 +1,6 @@
 export const state = () => ({
   counter: 123,
-  appName: "Scuffed Password Saver"
+  appName: 'Scuffed Password Saver'
 })
 
 export const mutations = {

@@ -42,8 +42,7 @@
                   :rules="[(v) => !!v || 'Please choose file format']"
                   outlined
                   label="Choose File Format"
-                >
-                </v-select>
+                />
               </v-card-text>
             </v-form>
             <v-card-actions class="px-6 pb-6">
@@ -69,86 +68,86 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 export default {
-  data() {
+  data () {
     return {
       dialog: false,
-      fileFormatModel: "",
-      formExportAccs: false,
-    };
+      fileFormatModel: '',
+      formExportAccs: false
+    }
   },
   computed: {
-    ...mapState("settings", ["reminderFreq", "vaultPath"]),
+    ...mapState('settings', ['reminderFreq', 'vaultPath']),
     reminderFreqModel: {
-      get() {
-        const v = this.reminderFreq;
-        return v + (v * 1 === 1 ? " month" : " months");
+      get () {
+        const v = this.reminderFreq
+        return v + (v * 1 === 1 ? ' month' : ' months')
       },
-      set(v) {
-        this.$store.dispatch("settings/setReminderFreq", v);
-      },
+      set (v) {
+        this.$store.dispatch('settings/setReminderFreq', v)
+      }
     },
-    fileFormatItems() {
-      const ff = [".JSON", ".TXT", ".CSV"];
-      return ff;
-    },
+    fileFormatItems () {
+      const ff = ['.JSON', '.TXT', '.CSV']
+      return ff
+    }
   },
   methods: {
-    toggleDialog() {
-      this.dialog = !this.dialog;
+    toggleDialog () {
+      this.dialog = !this.dialog
     },
-    exportAccs() {
-      this.$refs.formExportAccs.validate();
+    exportAccs () {
+      this.$refs.formExportAccs.validate()
       if (this.formExportAccs) {
-        const accList = JSON.stringify(this.$store.state.account.accountList);
-        const ext = this.fileFormatModel.toLowerCase();
+        const accList = JSON.stringify(this.$store.state.account.accountList)
+        const ext = this.fileFormatModel.toLowerCase()
 
         const url = () => {
-          if (ext === ".json") {
+          if (ext === '.json') {
             return (
-              "data:text/json;charset=utf-8," + encodeURIComponent(accList)
-            );
-          } else if (ext === ".txt") {
+              'data:text/json;charset=utf-8,' + encodeURIComponent(accList)
+            )
+          } else if (ext === '.txt') {
             return (
-              "data:text/plain;charset=utf-8," +
+              'data:text/plain;charset=utf-8,' +
               encodeURIComponent(
                 this.$globals.jsonToTxt(this.$store.state.account.accountList)
               )
-            );
-          } else if (ext === ".csv") {
+            )
+          } else if (ext === '.csv') {
             return (
-              "data:text/csv;charset=utf-8," +
+              'data:text/csv;charset=utf-8,' +
               encodeURIComponent(
                 this.$globals.jsonToCsv(this.$store.state.account.accountList)
               )
-            );
+            )
           }
-        };
-        
+        }
+
         const filename = () => {
           return `sps_backup_${this.$date
             .moment()
-            .format("YYYY-MM-DD@HH-mm-ss")}${ext}`;
-        };
+            .format('YYYY-MM-DD@HH-mm-ss')}${ext}`
+        }
 
         this.$globals.download({
           url: url(),
           filename: filename(),
           directory: this.vaultPath,
           successAction: (path) => {
-            this.$store.dispatch("ui/showSnackbar", {
-              label: "Exported to vault successfully",
-              color: "success",
-            });
-          },
-        });
+            this.$store.dispatch('ui/showSnackbar', {
+              label: 'Exported to vault successfully',
+              color: 'success'
+            })
+          }
+        })
 
-        this.toggleDialog();
+        this.toggleDialog()
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style>

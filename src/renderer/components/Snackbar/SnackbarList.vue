@@ -15,13 +15,13 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 
-export default {  
+export default {
   computed: {
-    ...mapGetters("ui", ["getSnackbarList"]),
-  },
-};
+    ...mapGetters('ui', ['getSnackbarList'])
+  }
+}
 </script>
 
 <style scoped>

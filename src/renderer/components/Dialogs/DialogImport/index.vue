@@ -54,116 +54,116 @@
           </div>
         </v-expand-transition>
         <v-card-actions class="d-flex px-0 mt-4">
-        <v-btn ref="btnDialogLogoutN" class="flex-grow-1" outlined @click.stop="hideDialog()">
-          Cancel
-        </v-btn>
-        <v-btn
-        ref="btnDialogLogoutY"
-          class="flex-grow-1"
-          color="primary"
-          :disabled="!getUploadResult().totalUnique"
-          @click.stop="importAccounts()"
-        >
-          OK
-        </v-btn>
-      </v-card-actions>
+          <v-btn ref="btnDialogLogoutN" class="flex-grow-1" outlined @click.stop="hideDialog()">
+            Cancel
+          </v-btn>
+          <v-btn
+            ref="btnDialogLogoutY"
+            class="flex-grow-1"
+            color="primary"
+            :disabled="!getUploadResult().totalUnique"
+            @click.stop="importAccounts()"
+          >
+            OK
+          </v-btn>
+        </v-card-actions>
       </v-card-text>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters } from 'vuex'
 export default {
-  data() {
+  data () {
     return {
-      option: "",
-      importPanel: { color: "", button: "", loading: {} },
-    };
+      option: '',
+      importPanel: { color: '', button: '', loading: {} }
+    }
   },
   computed: {
-    ...mapGetters("ui/dialogImport", [
-      "getUploadResult",
-      "getAlertList",
-      "getModeList",
+    ...mapGetters('ui/dialogImport', [
+      'getUploadResult',
+      'getAlertList',
+      'getModeList'
     ]),
-    ...mapState("account", ["accountList"]),
+    ...mapState('account', ['accountList']),
     importDialog: {
-      get() {
-        return this.$store.getters["ui/isDialogActive"]("IMPORT_DIALOG");
+      get () {
+        return this.$store.getters['ui/isDialogActive']('IMPORT_DIALOG')
       },
-      set(v) {
-        this.hideDialog();
-      },
+      set (v) {
+        this.hideDialog()
+      }
     },
     // FILES RAW to make input Files empty after clearing OK
     filesRaw: {
-      get() {
-        return this.$store.state.ui.dialogImport.filesRaw;
+      get () {
+        return this.$store.state.ui.dialogImport.filesRaw
       },
-      set(v) {
-        this.$store.dispatch("ui/dialogImport/setFilesRaw", v);
-      },
+      set (v) {
+        this.$store.dispatch('ui/dialogImport/setFilesRaw', v)
+      }
     },
     fileAccountList: {
-      get() {
-        return this.$store.state.ui.dialogImport.fileAccountList;
+      get () {
+        return this.$store.state.ui.dialogImport.fileAccountList
       },
-      set(v) {
-        this.$store.dispatch("ui/dialogImport/setFileAccountList", v);
-      },
-    },
+      set (v) {
+        this.$store.dispatch('ui/dialogImport/setFileAccountList', v)
+      }
+    }
   },
-  created() {
+  created () {
     // event to click hidden input file
-    this.$nuxt.$on("clickImportFileInput", () => {
-      this.$refs.importFileInput.$refs.input.click();
-    });
+    this.$nuxt.$on('clickImportFileInput', () => {
+      this.$refs.importFileInput.$refs.input.click()
+    })
   },
-  beforeDestroy() {
-    this.$store.dispatch("ui/dialogImport/clearFiles");
+  beforeDestroy () {
+    this.$store.dispatch('ui/dialogImport/clearFiles')
 
     // removing eventBus listener
-    this.$nuxt.$off("clickImportFileInput");
+    this.$nuxt.$off('clickImportFileInput')
   },
   methods: {
-    hideDialog() {
-      this.$store.dispatch("ui/toggleDialog", {
-        type: "IMPORT_DIALOG",
-        val: false,
-      });
+    hideDialog () {
+      this.$store.dispatch('ui/toggleDialog', {
+        type: 'IMPORT_DIALOG',
+        val: false
+      })
     },
-    onchange(event) {
+    onchange (event) {
       // if cancel click
-      if (!event.target.files.length) return;
-      const fetchedFiles = Array.from(event.target.files);
+      if (!event.target.files.length) { return }
+      const fetchedFiles = Array.from(event.target.files)
       // console.log(this.fileAccountList);
       if (!this.fileAccountList.length) {
-        this.fileAccountList = fetchedFiles;
-        return;
+        this.fileAccountList = fetchedFiles
+        return
       }
-      const _ = require("lodash");
-      console.log(_.unionBy(this.fileAccountList, fetchedFiles, "path"))
-      this.fileAccountList = _.unionBy(this.fileAccountList, fetchedFiles, "path");
+      const _ = require('lodash')
+      console.log(_.unionBy(this.fileAccountList, fetchedFiles, 'path'))
+      this.fileAccountList = _.unionBy(this.fileAccountList, fetchedFiles, 'path')
     },
-    importAccounts() {
-      const payload = { value: [], mode: this.option };
-      if (this.option === "REPLACE") {
-        payload.value = this.getUploadResult().accountListDuplicate;
-      } else if (this.option === "REPLACE_ADD") {
-        payload.value = this.getUploadResult().accountList;
-      } else if (this.option === "ADD") {
-        payload.value = this.getUploadResult().accountListNew;
+    importAccounts () {
+      const payload = { value: [], mode: this.option }
+      if (this.option === 'REPLACE') {
+        payload.value = this.getUploadResult().accountListDuplicate
+      } else if (this.option === 'REPLACE_ADD') {
+        payload.value = this.getUploadResult().accountList
+      } else if (this.option === 'ADD') {
+        payload.value = this.getUploadResult().accountListNew
       }
-      this.$store.dispatch("account/importAccount", payload);
-      this.hideDialog();
-      this.$store.dispatch("ui/showSnackbar", {
-        label: "Accounts has been imported successfully!",
-        color: "success",
-      });
-    },
-  },
-};
+      this.$store.dispatch('account/importAccount', payload)
+      this.hideDialog()
+      this.$store.dispatch('ui/showSnackbar', {
+        label: 'Accounts has been imported successfully!',
+        color: 'success'
+      })
+    }
+  }
+}
 </script>
 
 <style>

@@ -11,7 +11,7 @@
         >
           Some applications/websites for the accounts might not be listed in the
           system yet.
-          <br />
+          <br>
           <v-btn class="mt-2" color="primary" @click="completeListing()">
             Complete Listing
             <v-icon right>mdi-check</v-icon>
@@ -23,7 +23,7 @@
           ref="accSearchInput"
           v-model.lazy="accountSearchModel"
           :value="accountSearch"
-          class="col-6 me-1"
+          class="me-1"
           outlined
           label="Search : ctrl + f or /"
           placeholder="App / Email / ID / Username..."
@@ -32,9 +32,8 @@
           dense
           hide-details
           :loading="isLoading"
-        >
-        </v-text-field>
-        <v-row class="ms-1" no-gutters>
+        />
+        <v-row class="ms-2" no-gutters>
           <v-chip
             v-for="view in $store.state.ui.accViewOptList"
             :key="view.value"
@@ -71,82 +70,82 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from "vuex";
+import { mapState, mapGetters, mapActions } from 'vuex'
 export default {
   props: {
-    data: { type: Array, default: () => [] },
+    data: { type: Array, default: () => [] }
   },
-  data() {
+  data () {
     return {
-      isLoading: false,
-    };
+      isLoading: false
+    }
   },
   computed: {
-    ...mapState("account", ["accountSearch"]),
-    ...mapGetters("app", [
-      "getAppList",
-      "getAppListByAccount",
-      "getUnlistedApp",
+    ...mapState('account', ['accountSearch']),
+    ...mapGetters('app', [
+      'getAppList',
+      'getAppListByAccount',
+      'getUnlistedApp'
     ]),
-    getTrimmedAppList() {
-      return this.getAppListByAccount();
+    getTrimmedAppList () {
+      return this.getAppListByAccount()
     },
     accountSearchModel: {
-      get() {
-        return this.accountSearch || "";
+      get () {
+        return this.accountSearch || ''
       },
-      set(v) {
-        this.isLoading = true;
+      set (v) {
+        this.isLoading = true
         if (!v) {
-          this.search(v);
+          this.search(v)
         } else {
           this.$globals.lodash.debounce(() => {
-            this.search(v);
-          }, 1000)();
+            this.search(v)
+          }, 1000)()
         }
-      },
-    },
+      }
+    }
   },
-  mounted() {
+  mounted () {
     // Detect keydown
-    window.addEventListener("keydown", (event) => {
+    window.addEventListener('keydown', (event) => {
       // IF not in home page
       // AND there is dialog
       // THEN keydown does nothing
       if (
-        this.$nuxt.$route.name !== "index" ||
+        this.$nuxt.$route.name !== 'index' ||
         this.$store.state.ui.dialogList.length
       ) {
-        return;
+        return
       }
 
       // ctrl+f or /
-      if ((event.key === "f" && event.ctrlKey) || event.key === "/") {
-        event.preventDefault();
-        this.$refs.accSearchInput.focus();
+      if ((event.key === 'f' && event.ctrlKey) || event.key === '/') {
+        event.preventDefault()
+        this.$refs.accSearchInput.focus()
       }
-    });
+    })
   },
-  beforeDestroy() {
-    window.removeEventListener("keydown", (e) => {});
+  beforeDestroy () {
+    window.removeEventListener('keydown', (e) => {})
   },
   methods: {
-     ...mapActions("account", ["removeFilterByApp"]),
-    ...mapActions("settings", ["setAccListView"]),
-    search(v) {
-      this.$store.dispatch("account/setAccountSearch", v || "");
-      this.isLoading = false;
+    ...mapActions('account', ['removeFilterByApp']),
+    ...mapActions('settings', ['setAccListView']),
+    search (v) {
+      this.$store.dispatch('account/setAccountSearch', v || '')
+      this.isLoading = false
     },
-    completeListing() {
+    completeListing () {
       this.getUnlistedApp().forEach((e) => {
-        this.$store.dispatch("app/addApp", {
+        this.$store.dispatch('app/addApp', {
           name: e.name,
-          urls: "",
-        });
-      });
-    },
-  },
-};
+          urls: ''
+        })
+      })
+    }
+  }
+}
 </script>
 
 <style>

@@ -1,61 +1,68 @@
 <template>
   <!-- App.vue -->
   <div class="d-flex flex-column">
-    <UtilWindowTitleBar/>
+    <UtilWindowTitleBar />
     <div>
       <v-app>
-      <v-navigation-drawer v-model="drawer" floating app clipped absolute>
+        <v-navigation-drawer v-model="drawer" floating app clipped absolute>
+          <v-app-bar
+            v-if="$vuetify.breakpoint.mdAndDown"
+            color="primary"
+            dark
+            dense
+            flat
+          >
+            <v-app-bar-title>{{ $store.state.appName }}</v-app-bar-title>
+          </v-app-bar>
+          <v-list shaped class="deep-purple--text text--darken-3">
+            <!-- <v-list-item-group v-model="drawerModel" mandatory color="primary"> -->
+            <MenuItem
+              v-for="menu in getMenuList()"
+              :key="`sps-menu-${menu.page}`"
+              :menu="menu"
+              :active="$nuxt.$route.name === menu.page"
+            />
+            <!-- </v-list-item-group> -->
+          </v-list>
+        </v-navigation-drawer>
+
         <v-app-bar
-          v-if="$vuetify.breakpoint.mdAndDown"
           color="primary"
           dark
           dense
-          flat
+          absolute
+          app
+          clipped-left
+          elevation="0"
         >
-          <v-app-bar-title>{{ $store.state.appName }}</v-app-bar-title>
-        </v-app-bar>
-        <v-list shaped class="deep-purple--text text--darken-3">
-          <!-- <v-list-item-group v-model="drawerModel" mandatory color="primary"> -->
-          <MenuItem
-            v-for="menu in getMenuList()"
-            :key="`sps-menu-${menu.page}`"
-            :menu="menu"
-            :active="$nuxt.$route.name === menu.page"
+          <v-app-bar-nav-icon
+            v-if="$vuetify.breakpoint.mdAndDown"
+            @click.stop="toggleMainDrawer()"
           />
-          <!-- </v-list-item-group> -->
-        </v-list>
-      </v-navigation-drawer>
+          <v-app-bar-title>{{ $nuxt.$route.name }}</v-app-bar-title>
+        </v-app-bar>
 
-      <v-app-bar color="primary" dark dense absolute app clipped-left elevation="0">
-        <v-app-bar-nav-icon
-          v-if="$vuetify.breakpoint.mdAndDown"
-          @click.stop="toggleMainDrawer()"
-        />
-        <v-app-bar-title>{{ $nuxt.$route.name }}</v-app-bar-title>
-      </v-app-bar>
+        <!-- Sizes your content based upon application components -->
+        <v-main class="main-container">
+          <!-- Provides the application the proper gutter -->
+          <v-container fluid>
+            <v-slide-x-transition>
+              <Nuxt />
+            </v-slide-x-transition>
+          </v-container>
+        </v-main>
 
-      <!-- Sizes your content based upon application components -->
-      <v-main class="main-container">
-        <!-- Provides the application the proper gutter -->
-        <v-container fluid >
-          <v-slide-x-transition>
-            <Nuxt />
-          </v-slide-x-transition>
-        </v-container>
-      </v-main>
+        <!-- <v-footer app></v-footer> -->
 
-      <!-- <v-footer app></v-footer> -->
-
-      <DialogList />
-      <SnackbarList />
-    </v-app>
+        <DialogList />
+        <SnackbarList />
+      </v-app>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import { remote } from "electron";
 // import SystemInformation from "@/components/SystemInformation.vue";
 
 export default {
@@ -99,9 +106,6 @@ export default {
     // this.onResize()
   },
   methods: {
-    openURL(url) {
-      remote.shell.openExternal(url);
-    },
     toggleMainDrawer() {
       // alert(this.mainDrawer)
       // this.drawer1 = !this.drawer1
@@ -117,5 +121,5 @@ export default {
 </script>
 
 <style>
-
+@import "~/assets/main.css";
 </style>
