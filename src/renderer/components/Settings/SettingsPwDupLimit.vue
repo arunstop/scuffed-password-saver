@@ -2,16 +2,16 @@
   <div>
     <v-list-item class="" :disabled="!pwDuplicationModel">
       <v-list-item-content>
-        <v-list-item-title class="font-weight-black normal-white-space text-h5">
+        <v-list-item-title class="font-weight-black normal-white-space text-h5" >
           <v-icon class="mb-1" :class="!pwDuplicationModel || 'primary--text'">
             mdi-counter
           </v-icon>
-          Password Duplication Limit :
-          {{
+          Password Duplication Limit : {{pwDuplication ? pwDupLimit:''}}
+          <!-- {{
             pwDuplicationModel
               ? pwDupLimit + (pwDupLimit * 1 === 0 ? " (No limit)" : "")
               : "disabled"
-          }}
+          }} -->
         </v-list-item-title>
         <v-list-item-subtitle class="text-break normal-white-space subtitle-2">
           If password duplication is enabled. You may limit how many times the
