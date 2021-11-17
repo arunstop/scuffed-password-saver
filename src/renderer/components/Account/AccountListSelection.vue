@@ -15,7 +15,7 @@
             color="error"
             small
             :disabled="!selectedItemList.length"
-            @click="deleteItemMulti(data)"
+            @click="deleteAccountMulti(data)"
           >
             DELETE {{ selectedItemList.length }} item(s)
             <v-icon right small>mdi-delete</v-icon>
@@ -100,7 +100,7 @@ export default {
         event.key.toLowerCase() === 'delete' &&
         this.selectedItemList.length
       ) {
-        this.deleteItemMulti(this.data)
+        this.deleteAccountMulti(this.data)
       }
       // console.log(this.selectedItemList);
     })
@@ -126,7 +126,7 @@ export default {
       'clearSelection',
       'selectItem',
       'selectItemMulti',
-      'deleteItemMulti'
+      'deleteAccountMulti'
     ]),
     search (v) {
       this.$store.dispatch('account/setAccountSearch', v || '')

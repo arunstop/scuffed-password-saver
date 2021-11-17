@@ -178,15 +178,18 @@ export const actions = {
   },
   deleteAccount({ commit, dispatch, getters }, payload) {
     commit('DELETE_ACCOUNT', payload.id)
-    dispatch('ui/showSnackbar',
+    // remove filters of deleted apps
+    if (getters.countAccountByApp(payload.appName) === 0) {
+      dispatch('removeFilterByApp', payload.appName)
+    }
+    if(!payload.noSnackbar){
+      dispatch('ui/showSnackbar',
       {
         label: 'Account has been deleted',
         color: 'success'
       },
       { root: true }
     )
-    if (getters.countAccountByApp(payload.appName) === 0) {
-      dispatch('removeFilterByApp', payload.appName)
     }
   },
   setAccountSearch({ commit }, val) {

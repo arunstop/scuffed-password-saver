@@ -50,33 +50,33 @@ export const getters = {
 }
 
 export const mutations = {
-  INIT_APP_LIST (state, payload) {
+  INIT_APP_LIST(state, payload) {
     state.appList = payload
     this.$localStorage.set('appList', state.appList)
     // console.log(this.$localStorage.get('appList'))
   },
-  SET_APP_EDIT_VALUE (state, name) {
+  SET_APP_EDIT_VALUE(state, name) {
     state.appEditValue = state.appList.find(e => e.name.toLowerCase() === name.toLowerCase())
     // console.log(name)
   },
-  ADD_APP (state, payload) {
+  ADD_APP(state, payload) {
     // console.log(payload)
     state.appList.push(payload)
     this.$localStorage.set('appList', state.appList)
     // console.log(this.$localStorage.get('appList'))
   },
-  EDIT_APP (state, payload) {
+  EDIT_APP(state, payload) {
     const targetedApp = state.appList.find(e => e.name.toLowerCase() === payload.oldName.toLowerCase())
     targetedApp.name = payload.name
     targetedApp.urls = payload.urls
     this.$localStorage.set('appList', state.appList)
     // console.log(targetedApp)
   },
-  DELETE_APP (state, name) {
+  DELETE_APP(state, name) {
     state.appList = state.appList.filter(e => e.name.toLowerCase() !== name.toLowerCase())
     this.$localStorage.set('appList', state.appList)
   },
-  IMPORT_APPS (state, payload) {
+  IMPORT_APPS(state, payload) {
     payload = _.uniqBy(payload.map(e => ({ name: e.appName, urls: '' })), 'name')
     // console.log(payload)
     const newApps = _.differenceBy(payload, state.appList, 'name')
@@ -86,22 +86,24 @@ export const mutations = {
 }
 
 export const actions = {
-  initAppList ({ commit }, payload) {
+  initAppList({ commit }, payload) {
     commit('INIT_APP_LIST', payload)
   },
-  setAppEditValue ({ commit }, val) {
+  setAppEditValue({ commit }, val) {
     commit('SET_APP_EDIT_VALUE', val)
   },
-  addApp ({ commit, dispatch }, payload) {
+  addApp({ commit, dispatch }, payload) {
     payload.urls = require('lodash').uniqBy(payload.urls)
     commit('ADD_APP', payload)
-    dispatch('ui/showSnackbar', {
-      label: 'App : ' + payload.name + ' has been added',
-      color: 'success'
-    },
-    { root: true })
+    if (!payload.noSnackbar) {
+      dispatch('ui/showSnackbar', {
+        label: 'App : ' + payload.name + ' has been added',
+        color: 'success'
+      },
+        { root: true })
+    }
   },
-  editApp ({ commit, dispatch }, payload) {
+  editApp({ commit, dispatch }, payload) {
     // console.log(payload)
     commit('EDIT_APP', payload)
     dispatch('ui/showSnackbar',
@@ -111,7 +113,7 @@ export const actions = {
       },
       { root: true })
   },
-  deleteApp ({ commit, dispatch }, name) {
+  deleteApp({ commit, dispatch }, name) {
     commit('DELETE_APP', name)
     dispatch('ui/showSnackbar',
       {
@@ -120,7 +122,36 @@ export const actions = {
       },
       { root: true })
   },
-  importApps ({ commit }, payload) {
+  importApps({ commit }, payload) {
     commit('IMPORT_APPS', payload)
+  },
+  completeAppListing({ dispatch }, unlistedAppList) {
+    // if only 1 app to be added
+    if (unlistedAppList.length === 1) {
+      const app = unlistedAppList[0]
+      dispatch('addApp', {
+        name: app.name,
+        urls: '',
+      }
+      )
+    } 
+    // if multiple apps to be added
+    else {
+      unlistedAppList.forEach((e) => {
+        dispatch('addApp', {
+          name: e.name,
+          urls: '',
+          noSnackbar: true
+        }
+        )
+      })
+      dispatch('ui/showSnackbar',
+        {
+          label: `${unlistedAppList.length} apps/websites has been added`,
+          color: 'success'
+        },
+        { root: true }
+      )
+    }
   }
 }

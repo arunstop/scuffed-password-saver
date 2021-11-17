@@ -44,7 +44,7 @@ const macOS = {
 }
 
 module.exports = {
-  productName: 'scuffed-password-saver',
+  productName: 'Scuffed Password Saver',
   appId: 'com.arunstop.scuffed.password.saver',
   artifactName: 'setup-${name}-${version}.${ext}',
   directories: {

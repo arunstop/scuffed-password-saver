@@ -57,28 +57,11 @@
           </span>
         </v-btn>
       </div>
-      <!-- <v-select
-        v-model="sortByValue"
-        :items="sortByList"
-        item-value="val"
-        item-text="label"
-        outlined
-        hide-details
-      >
-        <template #item="{ item }">
-          <v-icon left>
-            {{ item.icon }}
-          </v-icon>
-          <span class="font-weight-bold">
-            {{ item.label }}
-          </span>
-        </template>
-      </v-select> -->
       <div class="ms-auto">
         <LazyAccountListSelection :data="sortedAccountList" />
       </div>
     </v-row>
-    <v-fade-transition leave-absolute group>
+    <v-fade-transition hide-on-leave group>
       <LazyAccountListTable
         v-if="$store.state.settings.accListView === 'table'"
         :key="'al-table'"
