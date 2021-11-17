@@ -2,9 +2,7 @@
   <v-dialog v-model="confirmationDialog" max-width="420">
     <v-card outlined>
       <v-card-title :class="dialog.data.color + '--text'">
-        {{
-          dialog.data.title
-        }}
+        {{ dialog.data.title }}
       </v-card-title>
       <v-card-text>
         {{ dialog.data.desc }}
@@ -33,49 +31,55 @@
 <script>
 export default {
   computed: {
-    dialog () {
-      return this.$store.getters['ui/isDialogActive']('CONFIRMATION_DIALOG')
+    dialog() {
+      return this.$store.getters["ui/isDialogActive"]("CONFIRMATION_DIALOG");
     },
     confirmationDialog: {
-      get () {
-        return !!this.dialog
+      get() {
+        return !!this.dialog;
       },
-      set (v) {
-        this.hideDialog()
-      }
-    }
+      set(v) {
+        this.hideDialog();
+      },
+    },
   },
-  mounted () {
+  mounted() {
     // console.log(this.data);
-    window.addEventListener('keyup', (e) => {
-      if (
-        e.key === 'Enter' ||
-        e.key === ' ' ||
-        e.key === 'Spacebar' ||
-        e.key === 'Space bar'
-      ) {
-        this.$refs.btnConfirmationY.$el.click()
-      }
-    })
+    window.addEventListener(
+      "keyup",
+      (e) => {
+        if (
+          e.key === "Enter" ||
+          e.key === " " ||
+          e.key === "Spacebar" ||
+          e.key === "Space bar"
+        ) {
+          // this.$refs.btnConfirmationY.$el.click()
+          this.actionY();
+        }
+      },
+      { once: true }
+    );
   },
-  beforeDestroy () {
-    window.removeEventListener('keyup', {})
-  },
+  // beforeDestroy() {
+  //   window.removeEventListener("keyup", () => {});
+  // },
   methods: {
-    actionN () {
-      this.dialog.data.actions.n?.() || this.hideDialog()
+    actionN() {
+      this.dialog.data.actions.n?.() || this.hideDialog();
     },
-    actionY () {
-      this.dialog.data.actions?.y() || this.hideDialog()
+    actionY() {
+      // this.hideDialog()
+      this.dialog.data.actions?.y() || this.hideDialog();
     },
-    hideDialog () {
-      this.$store.dispatch('ui/toggleDialog', {
-        type: 'CONFIRMATION_DIALOG',
-        val: false
-      })
-    }
-  }
-}
+    hideDialog() {
+      this.$store.dispatch("ui/toggleDialog", {
+        type: "CONFIRMATION_DIALOG",
+        val: false,
+      });
+    },
+  },
+};
 </script>
 
 <style>
