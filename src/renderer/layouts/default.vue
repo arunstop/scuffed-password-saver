@@ -39,7 +39,7 @@
             v-if="$vuetify.breakpoint.mdAndDown"
             @click.stop="toggleMainDrawer()"
           />
-          <v-app-bar-title>{{ $nuxt.$route.name }}</v-app-bar-title>
+          <v-app-bar-title class="text-capitalize">{{ pageName }}</v-app-bar-title>
         </v-app-bar>
 
         <!-- Sizes your content based upon application components -->
@@ -90,6 +90,11 @@ export default {
         this.$store.dispatch("ui/toggleDrawer", val);
       },
     },
+    pageName(){
+const routeName = this.$nuxt.$route.name
+      return routeName==="index"
+      ? "Home":routeName
+    }
   },
   watch: {
     "$vuetify.breakpoint.mdAndDown"(val) {

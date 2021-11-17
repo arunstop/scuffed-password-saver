@@ -84,7 +84,7 @@ export const mutations = {
     //     })[0].replace('ACC', '')
     // const id = 'ACC' + ((maxId || 0) * 1 + 1)
     const id = this.$globals.str.generateId()
-    const now = this.$date.moment()
+    const now = this.$date.moment().format()
     const dates = { created: now, edited: now, editedPw: now }
     state.accountList.push({ id, ...payload, ...dates })
     this.$localStorage.set('accountList', state.accountList)
@@ -115,7 +115,7 @@ export const mutations = {
     // console.log(payload)
     const targetedItem = state.accountList.find(e => e.id === payload.id)
     // console.log(targetedItem)
-    const now = this.$date.moment()
+    const now = this.$date.moment().format()
     const editedPw = () => {
       if (payload.accountPw !== targetedItem.accountPw) {
         return now

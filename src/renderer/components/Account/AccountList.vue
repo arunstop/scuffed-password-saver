@@ -94,6 +94,7 @@ export default {
         return { ...e, durab: this.pwDurab(e.editedPw) }
       })
       const salSorted = _.sortBy(sal, [this.sortByValue.val])
+      console.log(salSorted.map(e=>({accId:e.accountId,date:e.edited})))
       return this.orderValue.val === 'desc' ? salSorted.reverse() : salSorted
     }
   },
