@@ -49,6 +49,9 @@ export default ({ app }, inject) => {
         window.close()
       }
     },
+    getMyDocPath(){
+      return remote.app.getAppPath('documents')
+    },
     jsonToTxt (data) {
       return require('json-to-txt')({ data })
     },

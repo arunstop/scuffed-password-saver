@@ -6,7 +6,7 @@ export const state = () => ({
     vaultPath: '',
     reminderFreq: 3,
     pwDuplication: false,
-    pwDupLimit: 0,
+    pwDupLimit: 2,
     driveKey: '',
     accListView: 'table',
 })
@@ -37,7 +37,7 @@ export const mutations = {
         state.vaultPath = path
     },
     SET_REMINDER_FREQ(state, val) {
-        val = (val+"").split(' ')[0]
+        val = (val + "").split(' ')[0]
         state.reminderFreq = val
     },
     TOGGLE_PW_DUPLICATION(state, val) {
@@ -68,7 +68,10 @@ export const actions = {
             dispatch('setPwDupLimit', payload.pwDupLimit)
             dispatch('setDriveKey', payload.driveKey)
             dispatch('setAccListView', payload.accListView)
+        } else {
+            dispatch('setVaultPath', this.$globals.getMyDocPath())
         }
+        // set local storage settings
         commit('SET_LOCAL_SETTINGS')
 
     },
@@ -91,9 +94,14 @@ export const actions = {
     setVaultPath({ commit, dispatch }, path) {
         commit('SET_VAULT_PATH', path)
         commit('SET_LOCAL_SETTINGS')
-        // dispatch('ui/toggleDialog', { type: 'INIT_FOLDER_DIALOG', val: false }, { root: true })
-        const snackbar = { label: "Vault folder is set! But, shhh! Don't tell anyone ;)", color: "success" }
-        dispatch('ui/showSnackbar', snackbar, { root: true })
+        // console.log(path)
+        // if no vault path
+        // if(!path){
+        // dispatch('ui/toggleDialog', { type: 'INIT_FOLDER_DIALOG', val: true }, { root: true })
+        // }else{
+        // const snackbar = { label: "Vault folder is set! But, shhh! Don't tell anyone ;)", color: "success" }
+        // dispatch('ui/showSnackbar', snackbar, { root: true })
+        // }
     },
     setReminderFreq({ commit }, val) {
         commit('SET_REMINDER_FREQ', val)
