@@ -3,12 +3,14 @@ const ICONS_DIR = 'build/icons/'
 const windowsOS = {
   win: {
     icon: ICONS_DIR + 'win-icon.ico',
-    publisherName: 'michal',
+    publisherName: 'arunstop',
     target: 'nsis'
   },
 
   nsis: {
-    differentialPackage: true
+    differentialPackage: true,
+    oneClick:false,
+    allowToChangeInstallationDirectory:true,
   }
 }
 
@@ -44,7 +46,7 @@ const macOS = {
 module.exports = {
   productName: 'scuffed-password-saver',
   appId: 'com.arunstop.scuffed.password.saver',
-  artifactName: 'setup-${version}.${ext}',
+  artifactName: 'setup-${name}-${version}.${ext}',
   directories: {
     output: 'build'
   },
