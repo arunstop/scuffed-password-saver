@@ -39,44 +39,39 @@ export default {
         return !!this.dialog;
       },
       set(v) {
-        this.hideDialog();
+        this.$store.dispatch("ui/toggleDialog", {
+          type: "CONFIRMATION_DIALOG",
+          val: v,
+        });
       },
     },
   },
   mounted() {
     // console.log(this.data);
-    window.addEventListener(
-      "keyup",
-      (e) => {
-        if (
-          e.key === "Enter" ||
-          e.key === " " ||
-          e.key === "Spacebar" ||
-          e.key === "Space bar"
-        ) {
-          // this.$refs.btnConfirmationY.$el.click()
-          this.actionY();
-        }
-      },
-      { once: true }
-    );
+    window.addEventListener("keyup", this.keyUp);
   },
-  // beforeDestroy() {
-  //   window.removeEventListener("keyup", () => {});
-  // },
+  beforeDestroy() {
+    window.removeEventListener("keyup", this.keyUp);
+  },
   methods: {
     actionN() {
       this.dialog.data.actions.n?.() || this.hideDialog();
     },
     actionY() {
-      // this.hideDialog()
       this.dialog.data.actions?.y() || this.hideDialog();
     },
+    keyUp(event) {
+      if (
+        event.key === "Enter" ||
+        event.key === " " ||
+        event.key === "Spacebar" ||
+        event.key === "Space bar"
+      ) {
+        this.actionY();
+      }
+    },
     hideDialog() {
-      this.$store.dispatch("ui/toggleDialog", {
-        type: "CONFIRMATION_DIALOG",
-        val: false,
-      });
+      this.confirmationDialog = false;
     },
   },
 };
