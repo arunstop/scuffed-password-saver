@@ -1,7 +1,10 @@
 <template>
-  <v-dialog v-model="accountAddDialog" max-width="600" scrollable
-            :fullscreen="$vuetify.breakpoint.smAndDown"
-            transition="slide-y-reverse-transition"
+  <v-dialog
+    v-model="accountAddDialog"
+    max-width="600"
+    scrollable
+    :fullscreen="$vuetify.breakpoint.smAndDown"
+    transition="slide-y-reverse-transition"
   >
     <v-form
       ref="formAccountAdd"
@@ -49,13 +52,14 @@
             outlined
             prepend-icon="mdi-at"
           />
-          <v-text-field
+           <v-text-field
             v-model="accountPw"
             :rules="accountPwRules"
             placeholder="Enter Password/PIN or any other keyword"
             label="Password"
             outlined
             prepend-icon="mdi-key-variant"
+            v-bind="getPwDupWarning"
           />
           <v-textarea
             v-model="accountNote"
@@ -93,72 +97,105 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from "vuex";
 export default {
   data: () => ({
-    appName: '',
-    appNameSearch: '',
-    accountId: '',
-    accountPw: '',
-    accountNote: '',
+    appName: "",
+    appNameSearch: "",
+    accountId: "",
+    accountPw: "",
+    accountNote: "",
     noteLabel:
-      'Enter important message about this account e.g. PIN, Recovery Number/Email/Phone number, etc)',
-    formAccountAdd: false
+      "Enter important message about this account e.g. PIN, Recovery Number/Email/Phone number, etc)",
+    formAccountAdd: false,
   }),
   computed: {
-    ...mapGetters('app', ['getAppByName', 'getAppList']),
-    ...mapGetters('account', ['isAccountExist']),
+    ...mapGetters("app", ["getAppByName", "getAppList"]),
+    ...mapGetters("account", ["isAccountExist", "countPwDuplicates"]),
+    ...mapState("settings", ["reminderFreq", "pwDuplication"]),
     accountAddDialog: {
-      get () {
-        return this.$store.getters['ui/isDialogActive']('ACCOUNT_ADD_DIALOG')
+      get() {
+        return this.$store.getters["ui/isDialogActive"]("ACCOUNT_ADD_DIALOG");
       },
-      set (v) {
-        this.hideDialog()
-      }
+      set(v) {
+        this.hideDialog();
+      },
     },
     appNameRules: () => [
       // IF appName is falsey (null,0,undefined) then it's error
-      v => !!v || 'Please choose an app/website!'
+      (v) => !!v || "Please choose an app/website!",
       // IF getAppByName() has value, then it's error
       //   (v) =>
       //     !this.getAppByName((v || "").trim()) || "Application already exists!",
     ],
-    accountIdRules () {
+    accountIdRules() {
       return [
-        v =>
-          !!(v || '').trim() ||
-          'ID / Username / Email / Phone number is required!',
-        v =>
-          !this.isAccountExist(this.appName?.name || '', (v || '').trim()) ||
-          'This ID already exists'
-      ]
+        (v) =>
+          !!(v || "").trim() ||
+          "ID / Username / Email / Phone number is required!",
+        (v) =>
+          !this.isAccountExist(this.appName?.name || "", (v || "").trim()) ||
+          "This ID already exists",
+      ];
     },
-    accountPwRules: () => [
-      v => !!(v || '').trim() || 'Password is required!'
-    ],
-    appNameSuccess () {
-      if (!this.appNameSearch) { return null } else {
-        const selectedApp = this.getAppByName(this.appNameSearch)
-        const successMsgUrlNotNull =
-          this.$globals.lodash.isEmpty(selectedApp?.urls)
-            ? ''
-            : ', this account will work on : ' +
-              selectedApp?.urls.toString().replaceAll(',', ' | ')
+    accountPwRules() {
+      return [
+        (v) => !!(v || "").trim() || "Password is required!",
+        (v) => {
+          const cPwDup = this.countPwDuplicates(v || "");
+          if (this.pwDuplication && cPwDup.full) {
+            return `This password has reached its usage limit ${cPwDup.count}/${cPwDup.limit}`;
+          } else if (!this.pwDuplication && cPwDup.count !== 0) {
+            return "This exact password already exists";
+          }
+          return true;
+        },
+      ];
+    },
+    appNameSuccess() {
+      if (!this.appNameSearch) {
+        return null;
+      } else {
+        const selectedApp = this.getAppByName(this.appNameSearch);
+        const successMsgUrlNotNull = this.$globals.lodash.isEmpty(
+          selectedApp?.urls
+        )
+          ? ""
+          : ", this account will work on : " +
+            selectedApp?.urls.toString().replaceAll(",", " | ");
         return !selectedApp
-          ? 'Application : ' + this.appNameSearch + ' will be created'
-          : this.appNameSearch + ' is selected' + successMsgUrlNotNull
+          ? "Application : " + this.appNameSearch + " will be created"
+          : this.appNameSearch + " is selected" + successMsgUrlNotNull;
       }
-    }
+    },
+    getPwDupWarning() {
+      const pw = this.accountPw;
+      const cPwDup = this.countPwDuplicates(pw || "");
+      if (
+        !!pw&&
+        this.pwDuplication &&
+        cPwDup.available
+      ) {
+        // alert(cPwDup.count)
+        return {
+          color: "warning",
+          messages: `After this action, this exact password usage limit will be ${
+            cPwDup.count + 1
+          }/${cPwDup.limit}`,
+        };
+      }
+      return null;
+    },
   },
   watch: {
-    appName (v) {
+    appName(v) {
       if (this.accountId || this.accountPw) {
-        this.$refs.formAccountAdd.validate()
-        this.accountId = this.accountId + ''
+        this.$refs.formAccountAdd.validate();
+        this.accountId = this.accountId + "";
       }
-    }
+    },
   },
-  mounted () {
+  mounted() {
     // console.log(this.getAppList());
     // window.addEventListener("keyup", (e) => {
     //   if (
@@ -172,34 +209,37 @@ export default {
     // });
   },
   methods: {
-    hideDialog () {
-      this.$store.dispatch('ui/toggleDialog', { type: 'ACCOUNT_ADD_DIALOG', val: false })
+    hideDialog() {
+      this.$store.dispatch("ui/toggleDialog", {
+        type: "ACCOUNT_ADD_DIALOG",
+        val: false,
+      });
     },
-    accountAdd () {
-      this.$refs.formAccountAdd.validate()
+    accountAdd() {
+      this.$refs.formAccountAdd.validate();
       if (this.formAccountAdd) {
-        const app = this.appName.name || this.appName
+        const app = this.appName.name || this.appName;
         if (!this.getAppByName(app)) {
-          this.$store.dispatch('app/addApp', {
+          this.$store.dispatch("app/addApp", {
             name: app,
-            urls: []
-          })
+            urls: [],
+          });
         }
-        this.$store.dispatch('account/addAccount', {
+        this.$store.dispatch("account/addAccount", {
           appName: this.appName?.name || this.appName,
           accountId: this.accountId,
           accountPw: this.accountPw,
-          accountNote: this.accountNote
-        })
+          accountNote: this.accountNote,
+        });
         // this.$store.dispatch("ui/showSnackbar", {
         //   label: this.appName + "has been added",
         //   color: "success",
         // });
-        this.$refs.formAccountAdd.reset()
+        this.$refs.formAccountAdd.reset();
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style>

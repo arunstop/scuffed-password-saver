@@ -26,12 +26,12 @@
           >
             Password Durability :
             <span class="sps-text-highlight"> {{ pwDurab.percentage }}% </span>
-            <br>
+            <br />
             <span class="sps-text-highlight">{{
               pwDurab.daysLeft + " days left"
             }}</span>
             {{ " to change this password" }}
-            <br>
+            <br />
             {{ "On " + pwDurab.dueDate + "" }}
           </v-alert>
           <v-alert type="info" dense text border="left" icon="mdi-plus-circle">
@@ -39,13 +39,15 @@
             <span class="sps-text-highlight">
               {{ dates.created.fromNow }}
             </span>
-            <br>
+            <br />
             {{ "On " + dates.created.fullDate + "" }}
           </v-alert>
           <v-alert type="info" dense text border="left" icon="mdi-pencil">
             Edited
-            <u><b>{{ dates.edited.fromNow }}</b></u>
-            <br>
+            <u
+              ><b>{{ dates.edited.fromNow }}</b></u
+            >
+            <br />
             {{ "On " + dates.edited.fullDate + "" }}
           </v-alert>
           <v-combobox
@@ -129,140 +131,144 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState } from "vuex";
 export default {
   data: () => ({
-    appName: '',
-    appNameSearch: '',
-    accountId: '',
-    accountPw: '',
-    accountNote: '',
+    appName: "",
+    appNameSearch: "",
+    accountId: "",
+    accountPw: "",
+    accountNote: "",
     noteLabel:
-      'Enter important message about this account e.g. PIN, Recovery Number/Email/Phone number, etc)',
-    formAccountEdit: false
+      "Enter important message about this account e.g. PIN, Recovery Number/Email/Phone number, etc)",
+    formAccountEdit: false,
   }),
   computed: {
-    ...mapGetters('app', ['getAppByName', 'getAppList']),
-    ...mapGetters('account', [
-      'isAccountExist',
-      'isPwExist',
-      'countPwDuplicates'
+    ...mapGetters("app", ["getAppByName", "getAppList"]),
+    ...mapGetters("account", [
+      "isAccountExist",
+      "isPwExist",
+      "countPwDuplicates",
     ]),
-    ...mapState('account', ['accountEditValue']),
-    ...mapState('settings', ['reminderFreq', 'pwDuplication']),
+    ...mapState("account", ["accountEditValue"]),
+    ...mapState("settings", ["reminderFreq", "pwDuplication"]),
     accountEditDialog: {
-      get () {
-        return this.$store.getters['ui/isDialogActive']('ACCOUNT_EDIT_DIALOG')
+      get() {
+        return this.$store.getters["ui/isDialogActive"]("ACCOUNT_EDIT_DIALOG");
       },
-      set (v) {
-        this.hideDialog()
-      }
+      set(v) {
+        this.hideDialog();
+      },
     },
     appNameRules: () => [
       // IF appName is falsey (null,0,undefined) then it's error
-      v => !!v || 'Please choose an app/website!'
+      (v) => !!v || "Please choose an app/website!",
       // IF getAppByName() has value, then it's error
       //   (v) =>
       //     !this.getAppByName((v || "").trim()) || "Application already exists!",
     ],
-    accountIdRules () {
+    accountIdRules() {
       return [
-        v =>
-          !!(v || '').trim() ||
-          'ID / Username / Email / Phone number is required!',
-        v =>
-          !this.isAccountExist(this.appName?.name || '', (v || '').trim()) ||
+        (v) =>
+          !!(v || "").trim() ||
+          "ID / Username / Email / Phone number is required!",
+        (v) =>
+          !this.isAccountExist(this.appName?.name || "", (v || "").trim()) ||
           v === this.accountEditValue.accountId ||
-          'This ID already exists'
-      ]
+          "This ID already exists",
+      ];
     },
-    accountPwRules () {
+    accountPwRules() {
       return [
-        v => !!(v || '').trim() || 'Password is required!',
+        (v) => !!(v || "").trim() || "Password is required!",
         (v) => {
-          const cPwDup = this.countPwDuplicates(v || '')
+          const cPwDup = this.countPwDuplicates(v || "");
           if (v !== this.accountEditValue.accountPw) {
             if (this.pwDuplication && cPwDup.full) {
-              return `This password has reached its usage limit ${cPwDup.count}/${cPwDup.limit}`
+              return `This password has reached its usage limit ${cPwDup.count}/${cPwDup.limit}`;
             } else if (!this.pwDuplication && cPwDup.count !== 0) {
-              return 'This exact password already exists'
+              return "This exact password already exists";
             }
           }
-          return true
-        }
-      ]
+          return true;
+        },
+      ];
     },
-    appNameSuccess () {
-      if (!this.appNameSearch) { return null } else {
-        const selectedApp = this.getAppByName(this.appNameSearch)
+    appNameSuccess() {
+      if (!this.appNameSearch) {
+        return null;
+      } else {
+        const selectedApp = this.getAppByName(this.appNameSearch);
         const successMsgUrlNotNull = this.$globals.lodash.isEmpty(
           selectedApp?.urls
         )
-          ? ''
-          : ', this account will work on : ' +
-            selectedApp?.urls.toString().replaceAll(',', ' | ')
+          ? ""
+          : ", this account will work on : " +
+            selectedApp?.urls.toString().replaceAll(",", " | ");
         return !selectedApp
-          ? 'Application : ' + this.appNameSearch + ' will be created'
-          : this.appNameSearch + ' is selected' + successMsgUrlNotNull
+          ? "Application : " + this.appNameSearch + " will be created"
+          : this.appNameSearch + " is selected" + successMsgUrlNotNull;
       }
     },
-    dates () {
-      const created = this.$date.moment(this.accountEditValue.created)
-      const edited = this.$date.moment(this.accountEditValue.edited)
+    dates() {
+      const created = this.$date.moment(this.accountEditValue.created);
+      const edited = this.$date.moment(this.accountEditValue.edited);
       return {
         created: {
           fromNow: created.fromNow(),
-          fullDate: created.format('dddd, DD MMMM YYYY [at] HH:mm')
+          fullDate: created.format("dddd, DD MMMM YYYY [at] HH:mm"),
         },
         edited: {
           fromNow: edited.fromNow(),
-          fullDate: edited.format('dddd, DD MMMM YYYY [at] HH:mm')
-        }
-      }
+          fullDate: edited.format("dddd, DD MMMM YYYY [at] HH:mm"),
+        },
+      };
     },
-    pwDurab () {
+    pwDurab() {
       return this.$globals.getPwDurability(
         this.accountEditValue.editedPw,
         this.reminderFreq
-      )
+      );
     },
-    getPwDupWarning () {
-      const pw = this.accountPw
-      const cPwDup = this.countPwDuplicates(pw || '')
+    getPwDupWarning() {
+      const pw = this.accountPw;
+      const cPwDup = this.countPwDuplicates(pw || "");
+
       if (
+        pw&&
         pw !== this.accountEditValue.accountPw &&
         this.pwDuplication &&
         cPwDup.available
       ) {
         // alert(cPwDup.count)
         return {
-          color: 'warning',
+          color: "warning",
           messages: `After this action, this exact password usage limit will be ${
             cPwDup.count + 1
-          }/${cPwDup.limit}`
-        }
+          }/${cPwDup.limit}`,
+        };
       }
-      return null
-    }
+      return null;
+    },
   },
   watch: {
-    appName (v) {
+    appName(v) {
       if (this.accountId || this.accountPw) {
-        this.$refs.formAccountEdit.validate()
-        this.accountId = this.accountId + ''
+        this.$refs.formAccountEdit.validate();
+        this.accountId = this.accountId + "";
       }
-    }
+    },
   },
-  created () {
+  created() {
     this.appName =
       this.getAppByName(this.accountEditValue.appName) ||
-      this.accountEditValue.appName
-    this.appNameSearch = this.appName?.name || this.appName
-    this.accountId = this.accountEditValue.accountId
-    this.accountPw = this.accountEditValue.accountPw
-    this.accountNote = this.accountEditValue.accountNote
+      this.accountEditValue.appName;
+    this.appNameSearch = this.appName?.name || this.appName;
+    this.accountId = this.accountEditValue.accountId;
+    this.accountPw = this.accountEditValue.accountPw;
+    this.accountNote = this.accountEditValue.accountNote;
   },
-  mounted () {
+  mounted() {
     // console.log(this.getAppList());
     // window.addEventListener("keyup", (e) => {
     //   if (
@@ -276,47 +282,50 @@ export default {
     // });
   },
   methods: {
-    hideDialog () {
-      this.$store.dispatch('ui/toggleDialog', { type: 'ACCOUNT_EDIT_DIALOG', val: false })
+    hideDialog() {
+      this.$store.dispatch("ui/toggleDialog", {
+        type: "ACCOUNT_EDIT_DIALOG",
+        val: false,
+      });
     },
-    isUnchanged () {
+    isUnchanged() {
       if (
         this.appName === this.getAppByName(this.accountEditValue.appName) &&
         this.accountId === this.accountEditValue.accountId &&
         this.accountPw === this.accountEditValue.accountPw &&
         this.accountNote === this.accountEditValue.accountNote
       ) {
-        return true
+        return true;
       }
-      return false
+      return false;
     },
-    accountEdit () {
-      this.$refs.formAccountEdit.validate()
+    accountEdit() {
+      this.$refs.formAccountEdit.validate();
       if (this.formAccountEdit) {
-        const app = this.appName.name || this.appName
+        const app = this.appName.name || this.appName;
         if (!this.getAppByName(app)) {
-          this.$store.dispatch('app/addApp', {
+          this.$store.dispatch("app/addApp", {
             name: app,
-            urls: []
-          })
+            urls: [],
+          });
         }
-        this.$store.dispatch('account/editAccount', {
+        this.$store.dispatch("account/editAccount", {
           id: this.accountEditValue.id,
           appName: this.appName.name || this.appName,
           accountId: this.accountId,
           accountPw: this.accountPw,
-          accountNote: this.accountNote
-        })
+          accountNote: this.accountNote,
+        });
         // this.$store.dispatch("ui/showSnackbar", {
         //   label: this.appName + "has been added",
         //   color: "success",
         // });
-        this.$refs.formAccountEdit.reset()
-        this.hideDialog()
+        this.$refs.formAccountEdit.reset();
+        this.hideDialog();
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style>
