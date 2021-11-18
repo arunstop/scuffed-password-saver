@@ -1,7 +1,8 @@
 <template>
-  <v-col class="pa-0" lg="4" md="6" sm="6">
+  <v-col class="pa-0" lg="4" md="4" sm="6">
     <v-hover v-slot="{ hover }">
       <v-card
+      max-width="350px"
         class="ma-2 pa-0 elevation-2 transparent"
         link
         @contextmenu.prevent="!selectionMode && selectItem(acc.id)"
