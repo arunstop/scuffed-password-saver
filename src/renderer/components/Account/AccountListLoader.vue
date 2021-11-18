@@ -35,10 +35,11 @@ export default {
       btnLoadMoreLoading: false,
     };
   },
+  computed: {
+    ...mapState("settings", ["scrollAutoLoad", "hoverToShowPw"]),
+  },
   methods: {
     ...mapActions("ui/accountList", ["nextPage"]),
-    ...mapState("settings", ["scrollAutoLoad"]),
-
     loadMore() {
       this.busy = true;
       setTimeout(() => {
