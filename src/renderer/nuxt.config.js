@@ -17,8 +17,8 @@ module.exports = {
     { ssr: true, src: '@/plugins/icons.js' },
     '~/plugins/local-storage',
     '~/plugins/globals',
-    '~/plugins/date'
-
+    '~/plugins/date',
+    '~/plugins/infinite-scroll'
   ],
   css: [
     '~/assets/main.css'

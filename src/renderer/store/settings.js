@@ -9,6 +9,7 @@ export const state = () => ({
     pwDupLimit: 2,
     driveKey: '',
     accListView: 'table',
+    scrollAutoLoad:true,
 })
 
 export const getters = {
@@ -42,6 +43,9 @@ export const mutations = {
     },
     TOGGLE_PW_DUPLICATION(state, val) {
         state.pwDuplication = val
+    },
+    TOGGLE_SCROLL_AUTO_LOAD(state, val) {
+        state.scrollAutoLoad = val
     },
     SET_PW_DUP_LIMIT(state, val) {
         state.pwDupLimit = val
@@ -87,6 +91,10 @@ export const actions = {
         commit('TOGGLE_DBL_CLICK_TO_EDIT', val)
         commit('SET_LOCAL_SETTINGS')
     },
+    toggleScrollAutoLoad({ commit }, val) {
+        commit('TOGGLE_SCROLL_AUTO_LOAD', val)
+        commit('SET_LOCAL_SETTINGS')
+    },
     toggleDarkTheme({ commit }, val) {
         commit('TOGGLE_DARK_THEME', val)
         commit('SET_LOCAL_SETTINGS')
@@ -122,6 +130,7 @@ export const actions = {
     setAccListView({ commit }, val) {
         commit('SET_ACC_LIST_VIEW', val)
         commit('SET_LOCAL_SETTINGS')
-    }
+    },
+    
 }
 

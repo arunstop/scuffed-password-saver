@@ -57,8 +57,13 @@
         <LazyAccountListSelection :data="sortedAccountList" />
       </div>
     </v-row>
-    <v-slide-y-reverse-transition class="row" leave-absolute group>
-      <v-card v-if="!sortedAccountList.length" key="al-nodata" class="mx-auto" elevation="0">
+    <v-slide-y-transition class="row" leave-absolute group>
+      <v-card
+        v-if="!sortedAccountList.length"
+        key="al-nodata"
+        class="mx-auto"
+        elevation="0"
+      >
         <v-card-text
           v-if="$store.state.account.accountList.length"
           class="d-flex flex-column text-center"
@@ -107,7 +112,7 @@
           :data="sortedAccountList"
         />
       </v-fade-transition>
-    </v-slide-y-reverse-transition>
+    </v-slide-y-transition>
   </div>
 </template>
 
@@ -118,7 +123,12 @@ export default {
   computed: {
     ...mapGetters("account", ["getAccountList"]),
     ...mapGetters("ui/accountList", ["getActiveSortByValue"]),
-    ...mapState("ui/accountList", ["sortByValue", "sortByList", "orderValue"]),
+    ...mapState("ui/accountList", [
+      "sortByValue",
+      "sortByList",
+      "orderValue",
+      "paging",
+    ]),
 
     activeSortBy() {
       return this.getActiveSortByValue();
@@ -128,9 +138,13 @@ export default {
         // adding pw durability
         return { ...e, durab: this.pwDurab(e.editedPw) };
       });
-      const salSorted = _.sortBy(sal, [this.sortByValue.val]);
-      // console.log(salSorted.map(e=>({accId:e.accountId,date:e.edited})))
-      return this.orderValue.val === "desc" ? salSorted.reverse() : salSorted;
+      const sorted = _.sortBy(sal, [this.sortByValue.val]);
+      // console.log(sorted.map(e=>({accId:e.accountId,date:e.edited})))
+      const dataSum = this.paging.page * this.paging.count
+      const paged = (
+        this.orderValue.val === "desc" ? sorted.reverse() : sorted
+      ).slice(0, dataSum);
+      return paged;
     },
   },
   methods: {

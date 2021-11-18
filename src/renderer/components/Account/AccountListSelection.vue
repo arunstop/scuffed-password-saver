@@ -100,6 +100,7 @@ export default {
         event.key.toLowerCase() === 'delete' &&
         this.selectedItemList.length
       ) {
+        // console.log(this.data)
         this.deleteAccountMulti(this.data)
       }
       // console.log(this.selectedItemList);

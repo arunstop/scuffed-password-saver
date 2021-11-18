@@ -6,6 +6,8 @@
     <SettingsDialogDelete />
     <!-- Double Click to view -->
     <SettingsDblClickEdit />
+    <!-- Scroll down to load more data -->
+    <SettingsScrollAutoLoad />
     <!-- Theme -->
     <SettingsTheme />
     <!-- Vault Location -->

@@ -14,7 +14,11 @@ export const state = () => ({
   orderList: [
     { val: 'asc', label: 'ASCENDING', icon: 'mdi-sort-ascending' },
     { val: 'desc', label: 'DESCENDING', icon: 'mdi-sort-descending' }
-  ]
+  ],
+  paging:{
+    page:1,
+    count:10,
+  }
 })
 
 export const getters = {
@@ -48,6 +52,9 @@ export const mutations = {
   },
   SET_ORDER_VALUE(state, v) {
     state.orderValue = state.orderList.find(e => e.val !== v)
+  },
+  NEXT_PAGE(state){
+    state.paging.page+=1
   }
 }
 
@@ -148,5 +155,8 @@ export const actions = {
         { root: true })
     }
   },
+  nextPage({commit}){
+commit('NEXT_PAGE')
+  }
   
 }
