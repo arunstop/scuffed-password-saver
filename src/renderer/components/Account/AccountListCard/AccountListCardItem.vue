@@ -1,15 +1,15 @@
 <template>
-  <v-col class="pa-0" lg="4" md="6" sm="6">
+  <v-col class="pa-1" lg="4" md="6" sm="6">
     <v-hover v-slot="{ hover }">
       <v-card
-        class="ma-2 pa-0 elevation-6"
+        class="ma-2 pa-0 elevation-0 transparent"
         link
         @contextmenu.prevent="!selectionMode && selectItem(acc.id)"
         @dblclick="!selectionMode && (!dblClickToEdit || showEditDialog(acc))"
         @click="selectionMode && selectItem(acc.id)"
       >
         <v-alert
-          class="mb-0 pa-0"
+          class="mb-0 pa-0 alc-item-outlined elevation-6"
           v-bind="getSelectedStyle(acc.id)"
           border="left"
         >
@@ -75,61 +75,77 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState, mapActions, mapGetters } from "vuex";
 export default {
   props: {
-    acc: { type: Object, default: () => {} }
+    acc: { type: Object, default: () => {} },
   },
   computed: {
-    ...mapState('ui/accountList', ['selectionMode']),
-    ...mapGetters('ui/accountList', ['isSelected']),
-    ...mapState('settings', [
-      'hoverToShowPw',
-      'dialogToDelete',
-      'dblClickToEdit',
-      'darkTheme'
+    ...mapState("ui/accountList", ["selectionMode"]),
+    ...mapGetters("ui/accountList", ["isSelected"]),
+    ...mapState("settings", [
+      "hoverToShowPw",
+      "dialogToDelete",
+      "dblClickToEdit",
+      "darkTheme",
     ]),
-    color () {
-      return this.acc.durab.status
+    color() {
+      return this.acc.durab.status;
     },
-    hiddenPw () {
-      let stars = ''
+    hiddenPw() {
+      let stars = "";
       for (let index = 0; index < this.acc.accountPw.length; index++) {
-        stars = stars + '•'
+        stars = stars + "•";
       }
-      return stars
-    }
+      return stars;
+    },
   },
   methods: {
-    ...mapActions('ui/accountList', [
-      'selectItem',
-      'clearSelection',
-      'showEditDialog',
-      'showDeleteDialog',
-      'deleteAccount'
+    ...mapActions("ui/accountList", [
+      "selectItem",
+      "clearSelection",
+      "showEditDialog",
+      "showDeleteDialog",
+      "deleteAccount",
     ]),
     // :light="isSelectedInDark(acc.id)"
     //     :dark="isSelectedInLight(acc.id)"
-    isSelectedInDark (id) {
+    isSelectedInDark(id) {
       // IN DARK MODE
       // IF selected
       // TURN card into LIGHT THEME
-      return this.$vuetify.theme.dark && this.isSelected(id)
+      return this.$vuetify.theme.dark && this.isSelected(id);
     },
-    isSelectedInLight (id) {
+    isSelectedInLight(id) {
       // IN LIGHT MODE
       // IF selected
       // TURN card into DARK THEME
-      return !this.$vuetify.theme.dark && this.isSelected(id)
+      return !this.$vuetify.theme.dark && this.isSelected(id);
     },
-    getSelectedStyle (id) {
+    getSelectedStyle(id) {
       return this.isSelected(id)
-        ? { text: true, coloredBorder: false, color: 'primary' }
-        : { text: false, coloredBorder: true, color: this.color }
-    }
-  }
-}
+        ? {
+            text: true,
+            coloredBorder: false,
+            outlined: true,
+            class: !this.$vuetify.theme.dark ? "alc-item-selected" : "",
+            color: "primary",
+          }
+        : { text: false, coloredBorder: true, color: this.color };
+    },
+  },
+};
 </script>
 
 <style>
+.alc-item-outlined {
+  box-sizing: border-box !important;
+  -moz-box-sizing: border-box !important;
+  -webkit-box-sizing: border-box !important;
+  border: thin solid;
+}
+.alc-item-selected{
+ background-color: var(--v-primary-lighten4) !important;
+    /* border-color: var(--v-error-lighten4) !important; */
+}
 </style>

@@ -29,41 +29,46 @@ export default ({ app }, inject) => {
       generateId: () => nanoid().replaceAll('-', '0')
     },
     window: {
-      openUrl (url) {
+      openUrl(url) {
         shell.openExternal(url)
       },
-      openPath (path) {
+      openPath(path) {
         shell.openPath(path)
         // shell.showItemInFolder(path)
       },
-      minimize () {
+      minimize() {
         window.minimize()
       },
-      maximize () {
+      maximize() {
         window.maximize()
       },
-      unmaximize () {
+      unmaximize() {
         window.unmaximize()
       },
-      close () {
+      close() {
         window.close()
       }
     },
-    getMyDocPath(){
-      return remote.app.getAppPath('documents')
+    getAppPath() {
+      const path = remote.app.getAppPath('documents')
+        .split('\\')
+        .slice(0, -2)
+        .toString()
+        .replaceAll(",", '\\')
+      return path
     },
-    jsonToTxt (data) {
+    jsonToTxt(data) {
       return require('json-to-txt')({ data })
     },
-    txtToJson (filePath) {
+    txtToJson(filePath) {
       return require('txt-file-to-json')({ filePath })
     },
-    jsonToCsv (data) {
+    jsonToCsv(data) {
       return require('papaparse').unparse(data, {
         quotes: true
       })
     },
-    async csvToJson (files, funk) {
+    async csvToJson(files, funk) {
       return await new Promise((resolve) => {
         require('papaparse').parse(files, {
           header: true,
@@ -74,7 +79,7 @@ export default ({ app }, inject) => {
         })
       })
     },
-    download ({ url, filename, directory, successAction }) {
+    download({ url, filename, directory, successAction }) {
       renderer.once('download-reply', (event, arg) => {
         // arg = JSON.parse(arg)
         successAction(arg)
@@ -91,7 +96,7 @@ export default ({ app }, inject) => {
         }
       )
     },
-    getPwDurability (lastEdited, freq) {
+    getPwDurability(lastEdited, freq) {
       const now = app.$date.moment()
       const edited = app.$date.moment(lastEdited)
       const dueDate = app.$date

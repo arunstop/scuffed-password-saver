@@ -69,7 +69,7 @@ export const actions = {
             dispatch('setDriveKey', payload.driveKey)
             dispatch('setAccListView', payload.accListView)
         } else {
-            dispatch('setVaultPath', this.$globals.getMyDocPath())
+            dispatch('setVaultPath', this.$globals.getAppPath())
         }
         // set local storage settings
         commit('SET_LOCAL_SETTINGS')
