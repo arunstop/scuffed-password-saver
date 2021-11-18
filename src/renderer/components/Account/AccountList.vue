@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="position: relative; min-height: 100vh">
     <LazyAccountSearch :data="sortedAccountList" />
     <v-row class="d-flex justify-sm-space-between" no-gutters>
       <div class="my-2 ms-1">
@@ -113,6 +113,7 @@
         />
       </v-fade-transition>
     </v-slide-y-transition>
+    <LazyAccountListLoader  v-if="!lastPage"/>
   </div>
 </template>
 
@@ -129,7 +130,7 @@ export default {
       "orderValue",
       "paging",
     ]),
-
+    ...mapState("settings", ["scrollAutoLoad"]),
     activeSortBy() {
       return this.getActiveSortByValue();
     },
@@ -145,6 +146,9 @@ export default {
         this.orderValue.val === "desc" ? sorted.reverse() : sorted
       ).slice(0, dataSum);
       return paged;
+    },
+    lastPage() {
+      return this.paging.page * this.paging.count >= this.getAccountList().length;
     },
   },
   methods: {

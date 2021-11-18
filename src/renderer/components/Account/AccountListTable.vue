@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-data-table :headers="headers" :items="sortedAccountList" item-key="id">
+    <v-data-table :headers="headers" :items="sortedAccountList" item-key="id" hide-default-footer disable-pagination>
       <template #item="{ item: acc }">
         <tr
           class="cursor-pointer"
