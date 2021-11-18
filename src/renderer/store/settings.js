@@ -65,6 +65,7 @@ export const actions = {
             dispatch('toggleHoverToShowPw', payload.hoverToShowPw)
             dispatch('toggleDialogToDelete', payload.dialogToDelete)
             dispatch('toggleDblClickToEdit', payload.dblClickToEdit)
+            dispatch('toggleScrollAutoLoad', payload.scrollAutoLoad)
             dispatch('toggleDarkTheme', payload.darkTheme)
             dispatch('setVaultPath', payload.vaultPath)
             dispatch('setReminderFreq', payload.reminderFreq)
