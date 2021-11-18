@@ -1,15 +1,15 @@
 <template>
-  <v-col class="pa-1" lg="4" md="6" sm="6">
+  <v-col class="pa-0" lg="4" md="6" sm="6">
     <v-hover v-slot="{ hover }">
       <v-card
-        class="ma-2 pa-0 elevation-0 transparent"
+        class="ma-2 pa-0 elevation-2 transparent"
         link
         @contextmenu.prevent="!selectionMode && selectItem(acc.id)"
         @dblclick="!selectionMode && (!dblClickToEdit || showEditDialog(acc))"
         @click="selectionMode && selectItem(acc.id)"
       >
         <v-alert
-          class="mb-0 pa-0 alc-item-outlined elevation-6"
+          class="mb-0 pa-0 alc-item-outlined elevation-2"
           v-bind="getSelectedStyle(acc.id)"
           border="left"
         >
