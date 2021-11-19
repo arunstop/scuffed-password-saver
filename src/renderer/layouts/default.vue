@@ -39,17 +39,30 @@
             v-if="$vuetify.breakpoint.mdAndDown"
             @click.stop="toggleMainDrawer()"
           />
-          <v-app-bar-title class="text-capitalize">{{ pageName }}</v-app-bar-title>
+          <v-app-bar-title class="text-capitalize">{{
+            pageName
+          }}</v-app-bar-title>
         </v-app-bar>
 
         <!-- Sizes your content based upon application components -->
-        <v-main class="main-container">
+        <v-main ref="mainContainer" class="main-container">
           <!-- Provides the application the proper gutter -->
           <v-container fluid>
             <v-slide-x-transition>
               <Nuxt />
             </v-slide-x-transition>
           </v-container>
+          <!-- Scroll to top button -->
+          <v-slide-y-reverse-transition>
+            <v-btn
+              v-if="scrolled"
+              class="sps-btn-scroll-to-top white--text"
+              color="orange ligthen-2"
+              @click="scrollToTop"
+            >
+              <v-icon x-large>mdi-chevron-up</v-icon>
+            </v-btn>
+          </v-slide-y-reverse-transition>
         </v-main>
 
         <!-- <v-footer app></v-footer> -->
@@ -73,6 +86,7 @@ export default {
       externalContent: "",
       drawerAttrs: {},
       drawerModel: 0,
+      scrolled: false,
     };
   },
   computed: {
@@ -90,11 +104,10 @@ export default {
         this.$store.dispatch("ui/toggleDrawer", val);
       },
     },
-    pageName(){
-const routeName = this.$nuxt.$route.name
-      return routeName==="index"
-      ? "Home":routeName
-    }
+    pageName() {
+      const routeName = this.$nuxt.$route.name;
+      return routeName === "index" ? "Home" : routeName;
+    },
   },
   watch: {
     "$vuetify.breakpoint.mdAndDown"(val) {
@@ -108,7 +121,14 @@ const routeName = this.$nuxt.$route.name
     },
   },
   mounted() {
-    // this.onResize()
+    const mainContainer = this.$refs.mainContainer.$el.childNodes[0];
+    mainContainer.onscroll = () => {
+      if (mainContainer.scrollTop >= 100) {
+        this.scrolled = true;
+      } else {
+        this.scrolled = false;
+      }
+    };
   },
   methods: {
     toggleMainDrawer() {
@@ -121,10 +141,27 @@ const routeName = this.$nuxt.$route.name
       //   alert('MD AND DOWN')
       // }
     },
+    scrollToTop() {
+      // scroll to top
+      this.$refs.mainContainer.$el.childNodes[0].scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
+    },
+    showBtnScrollToTop() {},
   },
 };
 </script>
 
 <style>
 @import "~/assets/main.css";
+
+.sps-btn-scroll-to-top {
+  position: fixed;
+  margin-right: 24px;
+  margin-bottom: 12px;
+  bottom: 0;
+  right: 0;
+}
 </style>

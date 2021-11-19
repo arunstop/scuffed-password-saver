@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative; min-height: 100vh">
+  <div class="mb-12" style="position: relative; min-height: 100vh">
     <LazyAccountSearch :data="sortedAccountList" />
     <v-row class="d-flex justify-sm-space-between" no-gutters>
       <div class="my-2 ms-1">
