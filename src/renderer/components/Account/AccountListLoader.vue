@@ -4,7 +4,7 @@
       v-if="scrollAutoLoad"
       v-infinite-scroll="loadMore"
       infinite-scroll-disabled="busy"
-      infinite-scroll-distance="10"
+      infinite-scroll-distance="200"
       :loading="busy"
       x-large
       class="transparent primary--text"

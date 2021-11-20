@@ -47,7 +47,7 @@
         <!-- Sizes your content based upon application components -->
         <v-main ref="mainContainer" class="main-container">
           <!-- Provides the application the proper gutter -->
-          <v-container fluid>
+          <v-container fluid class="pb-12">
             <v-slide-x-transition>
               <Nuxt />
             </v-slide-x-transition>

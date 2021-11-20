@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-12" style="position: relative; min-height: 100vh">
+  <div style="position: relative; min-height: 100vh">
     <LazyAccountSearch :data="sortedAccountList" />
     <v-row class="d-flex justify-sm-space-between" no-gutters>
       <div class="my-2 ms-1">
@@ -53,10 +53,11 @@
           </span>
         </v-btn>
       </div>
-      <div class="ms-auto">
+      <!-- <div class="ms-auto">
         <LazyAccountListSelection :data="sortedAccountList" />
-      </div>
+      </div> -->
     </v-row>
+    <LazyAccountListSelection :data="sortedAccountList" />
     <v-slide-y-transition class="row" leave-absolute group>
       <v-card
         v-if="!sortedAccountList.length"
@@ -113,7 +114,7 @@
         />
       </v-fade-transition>
     </v-slide-y-transition>
-    <LazyAccountListLoader  v-if="!lastPage"/>
+    <LazyAccountListLoader v-if="!lastPage" />
   </div>
 </template>
 
@@ -141,14 +142,16 @@ export default {
       });
       const sorted = _.sortBy(sal, [this.sortByValue.val]);
       // console.log(sorted.map(e=>({accId:e.accountId,date:e.edited})))
-      const dataSum = this.paging.page * this.paging.count
+      const dataSum = this.paging.page * this.paging.count;
       const paged = (
         this.orderValue.val === "desc" ? sorted.reverse() : sorted
       ).slice(0, dataSum);
       return paged;
     },
     lastPage() {
-      return this.paging.page * this.paging.count >= this.getAccountList().length;
+      return (
+        this.paging.page * this.paging.count >= this.getAccountList().length
+      );
     },
   },
   methods: {
