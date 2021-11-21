@@ -1,62 +1,7 @@
 <template>
   <div style="position: relative; min-height: 100vh">
     <LazyAccountSearch :data="sortedAccountList" />
-    <v-row class="d-flex justify-sm-space-between" no-gutters>
-      <div class="my-2 ms-1">
-        <v-menu>
-          <template #activator="{ on, attrs }">
-            <v-btn
-              class="text-none me-2"
-              color="primary"
-              outlined
-              v-bind="attrs"
-              v-on="on"
-            >
-              <span class="me-2 font-weight-black"> SORT BY : </span>
-              <v-icon left>
-                {{ activeSortBy.icon }}
-              </v-icon>
-              <span class="text-decoration-underline">
-                {{ activeSortBy.label }}
-              </span>
-            </v-btn>
-          </template>
-
-          <v-list class="py-0">
-            <v-list-item
-              v-for="sb in sortByList"
-              :key="sb.val"
-              class="font-weight-medium"
-              :class="
-                activeSortBy.val === sb.val
-                  ? `primary--text v-list-item--active v-list-item--highlighted`
-                  : ''
-              "
-              active-class="primary"
-              @click="setSortByValue(sb)"
-            >
-              <v-list-item-icon class="me-2">
-                <v-icon>{{ sb.icon }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>
-                {{ sb.label }}
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-        <v-btn color="primary" outlined @click="setOrderValue(orderValue.val)">
-          <v-icon left>
-            {{ orderValue.icon }}
-          </v-icon>
-          <span class="font-weight-black">
-            {{ orderValue.label }}
-          </span>
-        </v-btn>
-      </div>
-      <!-- <div class="ms-auto">
-        <LazyAccountListSelection :data="sortedAccountList" />
-      </div> -->
-    </v-row>
+    
     <LazyAccountListSelection :data="sortedAccountList" />
     <v-slide-y-transition class="row" leave-absolute group>
       <v-card
@@ -124,7 +69,6 @@ import _ from "lodash";
 export default {
   computed: {
     ...mapGetters("account", ["getAccountList"]),
-    ...mapGetters("ui/accountList", ["getActiveSortByValue"]),
     ...mapState("ui/accountList", [
       "sortByValue",
       "sortByList",
@@ -132,9 +76,7 @@ export default {
       "paging",
     ]),
     ...mapState("settings", ["scrollAutoLoad"]),
-    activeSortBy() {
-      return this.getActiveSortByValue();
-    },
+    
     sortedAccountList() {
       const sal = this.getAccountList().map((e) => {
         // adding pw durability
@@ -160,15 +102,6 @@ export default {
         edited,
         this.$store.state.settings.reminderFreq
       );
-    },
-    setSortByValue(sortByItem) {
-      this.$store.dispatch(
-        "ui/accountList/setSortByValue",
-        require("lodash").assign(sortByItem, { order: this.orderValue.val })
-      );
-    },
-    setOrderValue(val) {
-      this.$store.dispatch("ui/accountList/setOrderValue", val);
     },
     ...mapActions("ui", ["toggleDialog"]),
     resetSearch() {

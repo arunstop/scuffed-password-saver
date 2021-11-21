@@ -1,148 +1,230 @@
 <template>
   <v-expand-transition>
-    <div
-      v-show="selectionMode"
-      ref="selectionOpt"
-      class="selection-opt pointer-events-none"
-    >
-      <div class="d-flex justify-end selection-opt">
-        <v-card
-          class="pa-4 rounded-0 rounded-b-xl pointer-events"
-          elevation="0"
-        >
-          <v-chip
-            class="font-weight-bold"
-            color="error"
-            small
-            :disabled="!selectedItemList.length"
-            @click="deleteAccountMulti(data)"
-          >
-            DELETE {{ selectedItemList.length }} item(s)
-            <v-icon right small>mdi-delete</v-icon>
-          </v-chip>
-          <v-chip
-            class="font-weight-bold ms-2"
-            small
-            @click="clearSelection()"
-          >
-            CANCEL
-            <v-icon right small>mdi-close-thick</v-icon>
-          </v-chip>
-        </v-card>
-      </div>
+    <div ref="selectionOpt" class="selection-opt">
+      <v-card
+        class="rounded-lg row no-gutters"
+        no-gutters
+        style="position:min-height:48px"
+      >
+        <!-- SORTING BUTTONS -->
+        <div>
+          <div class="my-3 ms-4">
+            <v-menu>
+              <template #activator="{ on, attrs }">
+                <v-btn
+                  class="text-none me-2"
+                  :color="!pinned ? 'primary' : 'white'"
+                  v-bind="attrs"
+                  outlined
+                  small
+                  v-on="on"
+                >
+                  <span class="me-2 font-weight-black"> SORT BY : </span>
+                  <v-icon left>
+                    {{ activeSortBy.icon }}
+                  </v-icon>
+                  <span class="text-decoration-underline">
+                    {{ activeSortBy.label }}
+                  </span>
+                </v-btn>
+              </template>
+
+              <v-list class="py-0">
+                <v-list-item
+                  v-for="sb in sortByList"
+                  :key="sb.val"
+                  class="font-weight-medium"
+                  :class="
+                    activeSortBy.val === sb.val
+                      ? `primary--text v-list-item--active v-list-item--highlighted`
+                      : ''
+                  "
+                  active-class="primary"
+                  @click="setSortByValue(sb)"
+                >
+                  <v-list-item-icon class="me-2">
+                    <v-icon>{{ sb.icon }}</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-title>
+                    {{ sb.label }}
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+            <v-btn
+              :color="!pinned ? 'primary' : 'white'"
+              outlined
+              small
+              @click="setOrderValue(orderValue.val)"
+            >
+              <v-icon left>
+                {{ orderValue.icon }}
+              </v-icon>
+              <span class="font-weight-black">
+                {{ orderValue.label }}
+              </span>
+            </v-btn>
+          </div>
+        </div>
+        <!-- SELECTION BUTTONS -->
+        <div class="ms-auto">
+          <v-slide-x-transition>
+            <div v-if="selectionMode" class="d-flex justify-end">
+              <div class="px-4 py-3">
+                <v-btn
+                  class="font-weight-bold"
+                  color="error"
+                  small
+                  :disabled="!selectedItemList.length"
+                  @click="deleteAccountMulti(data)"
+                >
+                  DELETE {{ selectedItemList.length }} item(s)
+                  <v-icon right>mdi-delete</v-icon>
+                </v-btn>
+                <v-btn
+                  class="font-weight-bold ms-2"
+                  small
+                  outlined
+                  :color="pinned ? 'white' : ''"
+                  @click="clearSelection()"
+                >
+                  CANCEL
+                  <v-icon right>mdi-close-thick</v-icon>
+                </v-btn>
+              </div>
+            </div>
+          </v-slide-x-transition>
+        </div>
+      </v-card>
     </div>
   </v-expand-transition>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from "vuex";
 export default {
   props: {
-    data: { type: Array, default: () => [] }
+    data: { type: Array, default: () => [] },
   },
-  data () {
+  data() {
     return {
-      isLoading: false
-    }
+      isLoading: false,
+      pinned: false,
+    };
   },
   computed: {
-    ...mapState('account', ['accountSearch']),
-    ...mapState('ui/accountList', ['selectionMode', 'selectedItemList']),
-    ...mapGetters('app', [
-      'getAppList',
-      'getAppListByAccount',
-      'getUnlistedApp'
+    ...mapState("account", ["accountSearch"]),
+    ...mapState("ui/accountList", [
+      "selectionMode",
+      "selectedItemList",
+      "sortByValue",
+      "sortByList",
+      "orderValue",
+      "paging",
     ]),
-    getTrimmedAppList () {
-      return this.getAppListByAccount()
+    ...mapGetters("app", [
+      "getAppList",
+      "getAppListByAccount",
+      "getUnlistedApp",
+    ]),
+    ...mapGetters("ui/accountList", ["getActiveSortByValue"]),
+
+    activeSortBy() {
+      return this.getActiveSortByValue();
     },
-    accountSearchModel: {
-      get () {
-        return this.accountSearch || ''
-      },
-      set (v) {
-        this.isLoading = true
-        if (!v) {
-          this.search(v)
-        } else {
-          this.$globals.lodash.debounce(() => {
-            this.search(v)
-          }, 1000)()
-        }
-      }
-    }
+    getTrimmedAppList() {
+      return this.getAppListByAccount();
+    },
+    btnNeutColor() {
+      return this.$vuetify.theme.dark ? "black" : "white";
+    },
   },
-  mounted () {
+  mounted() {
     // Detect keydown
-    window.addEventListener('keydown', (event) => {
+    window.addEventListener("keydown", (event) => {
       // IF not in home page
       // AND there is dialog
       // THEN keydown does nothing
       if (
-        this.$nuxt.$route.name !== 'index' ||
+        this.$nuxt.$route.name !== "index" ||
         this.$store.state.ui.dialogList.length ||
         !this.data.length
       ) {
-        return
+        return;
       }
 
       // esc
-      if (event.key === 'Escape') {
-        this.clearSelection()
+      if (event.key === "Escape") {
+        this.clearSelection();
       }
       // ctrl+a
-      else if (event.ctrlKey && event.key.toLowerCase() === 'a') {
-        event.preventDefault()
-        this.selectItemMulti(this.data.map(e => e.id))
+      else if (event.ctrlKey && event.key.toLowerCase() === "a") {
+        event.preventDefault();
+        this.selectItemMulti(this.data.map((e) => e.id));
       }
       // delete
       else if (
-        event.key.toLowerCase() === 'delete' &&
+        event.key.toLowerCase() === "delete" &&
         this.selectedItemList.length
       ) {
         // console.log(this.data)
-        this.deleteAccountMulti(this.data)
+        this.deleteAccountMulti(this.data);
       }
       // console.log(this.selectedItemList);
-    })
+    });
     // console.log(this.$vuetify)
-    const selectionOpt = this.$refs.selectionOpt
+    const selectionOpt = this.$refs.selectionOpt;
     const observer = new IntersectionObserver(
       ([e]) => {
-        const soChild = e.target.firstChild.firstChild.classList
-        soChild.toggle('primary-t', e.intersectionRatio < 1)
-        soChild.toggle('elevation-0', e.intersectionRatio >= 1)
-        soChild.toggle('elevation-6', e.intersectionRatio < 1)
+        const pinned = e.intersectionRatio < 1;
+        this.pinned = pinned;
+        const selectionDiv = e.target.classList;
+
+        const selectionBox = e.target.firstChild.classList;
+        // if (this.$vuetify.theme.dark) {
+        //   selectionBox.toggle("theme--dark", !pinned);
+        //   selectionBox.toggle("theme--light", pinned);
+        // } else {
+        //   selectionBox.toggle("theme--dark", pinned);
+        // }
+        selectionBox.toggle("sps-selection-opt-pinned", pinned);
+        selectionBox.toggle("elevation-0", !pinned);
+        selectionBox.toggle("elevation-6", pinned);
       },
       { threshold: [1] }
-    )
+    );
     // console.log(selectionOpt.firstChild.classList);
-    observer.observe(selectionOpt)
+    observer.observe(selectionOpt);
   },
-  beforeDestroy () {
-    window.removeEventListener('keydown', (e) => {})
+  beforeDestroy() {
+    window.removeEventListener("keydown", (e) => {});
   },
   methods: {
-    ...mapActions('ui/accountList', [
-      'clearSelection',
-      'selectItem',
-      'selectItemMulti',
-      'deleteAccountMulti'
+    ...mapActions("ui/accountList", [
+      "clearSelection",
+      "selectItem",
+      "selectItemMulti",
+      "deleteAccountMulti",
     ]),
-    search (v) {
-      this.$store.dispatch('account/setAccountSearch', v || '')
-      this.isLoading = false
+    setSortByValue(sortByItem) {
+      this.$store.dispatch(
+        "ui/accountList/setSortByValue",
+        require("lodash").assign(sortByItem, { order: this.orderValue.val })
+      );
     },
-    completeListing () {
+    setOrderValue(val) {
+      this.$store.dispatch("ui/accountList/setOrderValue", val);
+    },
+    completeListing() {
       this.getUnlistedApp().forEach((e) => {
-        this.$store.dispatch('app/addApp', {
+        this.$store.dispatch("app/addApp", {
           name: e.name,
-          urls: ''
-        })
-      })
-    }
-  }
-}
+          urls: "",
+        });
+      });
+    },
+  },
+};
 </script>
 
 <style>
@@ -154,10 +236,13 @@ export default {
   position: sticky;
   top: -1px;
   z-index: 100;
+  display: flex;
+  justify-content: space-between;
 }
-.primary-t {
+.sps-selection-opt-pinned {
+  margin-top: 24px !important;
   background-color: var(--v-primary-base) !important;
-  transition: 0.6s;
+  transition: 0.4s;
 }
 /* .selection-opt-pinned{
   border-left: thin var(--v-primary-base) solid !important;
