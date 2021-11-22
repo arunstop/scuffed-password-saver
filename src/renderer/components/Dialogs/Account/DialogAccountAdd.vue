@@ -255,15 +255,22 @@ export default {
     accountAdd() {
       this.$refs.formAccountAdd.validate();
       if (this.formAccountAdd) {
-        const app = this.appName.name || this.appName;
-        if (!this.getAppByName(app)) {
+        // check if app exists and get the value (obj)
+        let targetedApp = this.getAppByName(this.appNameSearch);
+        if (!targetedApp) {
+          // NO = adding the app first
+          alert("add first");
+          targetedApp = this.appNameSearch;
           this.$store.dispatch("app/addApp", {
-            name: app,
+            name: targetedApp,
             urls: [],
           });
+        } else {
+          // YES = changing the app value into found appName value
+          targetedApp = targetedApp.name;
         }
         this.$store.dispatch("account/addAccount", {
-          appName: this.appName?.name || this.appName,
+          appName: targetedApp,
           accountId: this.accountId,
           accountPw: this.accountPw,
           accountTags: require('lodash').compact(this.accountTags),

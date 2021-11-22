@@ -29,7 +29,7 @@ export const getters = {
     let tl = []
     state.accountList.forEach((e) => {
       if (e.accountTags || e.accountTags?.length) {
-        tl = tl.concat(_.compact(e.accountTags)); console.log(tl)
+        tl = tl.concat(_.compact(e.accountTags));
       }
     })
 

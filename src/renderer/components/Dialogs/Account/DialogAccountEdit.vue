@@ -13,7 +13,7 @@
     >
       <v-card outlined>
         <v-card-title>
-          Edit Account {{ accountEditValue.accountId }}
+          Edit Account {{ accountEditValue.appName }}
           <UtilDialogCloseBtn :action="() => hideDialog()" />
         </v-card-title>
         <v-card-text class="">
@@ -108,7 +108,7 @@
             prepend-icon="mdi-tag"
             clearable
           >
-            <template v-if="(accTagsSearch||'').trim()!==''" #no-data>
+            <template v-if="(accTagsSearch || '').trim() !== ''" #no-data>
               <v-list-item>
                 <span class="subtitle-1">Add</span>
                 <v-chip class="mx-2 white--text" small label color="indigo">
@@ -123,7 +123,8 @@
                 close
                 small
                 label
-                color="indigo" class="white--text"
+                color="indigo"
+                class="white--text"
                 @click:close="accTagsDeleteItem(item)"
               >
                 {{ item }}
@@ -245,7 +246,7 @@ export default {
             selectedApp?.urls.toString().replaceAll(",", " | ");
         return !selectedApp
           ? "Application : " + this.appNameSearch + " will be created"
-          : this.appNameSearch + " is selected" + successMsgUrlNotNull;
+          : selectedApp.name + " is selected" + successMsgUrlNotNull;
       }
     },
     dates() {
@@ -334,12 +335,19 @@ export default {
     isUnchanged() {
       // detect if tags is unchanged
       const changedTags = require("lodash").xor(
-        this.accountTags||[],
-        this.accountEditValue.accountTags||[]
-      ).length
-      
+        this.accountTags || [],
+        this.accountEditValue.accountTags || []
+      ).length;
+      const unchangedApp = () => {
+        // check if the searched value of appName app text-field
+        // is included in listed apps
+        // return !!this.getAppByName(this.appNameSearch)
+        if (!this.appNameSearch) return true;
+        return this.appNameSearch.trim().toLowerCase() === this.accountEditValue.appName.trim().toLowerCase();
+      };
       if (
-        this.appName === this.getAppByName(this.accountEditValue.appName) &&
+        // this.appName === this.getAppByName(this.accountEditValue.appName) &&
+        unchangedApp() &&
         this.accountId === this.accountEditValue.accountId &&
         this.accountPw === this.accountEditValue.accountPw &&
         !changedTags &&
@@ -352,25 +360,28 @@ export default {
     accountEdit() {
       this.$refs.formAccountEdit.validate();
       if (this.formAccountEdit) {
-        const app = this.appName.name || this.appName;
-        if (!this.getAppByName(app)) {
+        // check if app exists and get the value (obj)
+        let targetedApp = this.getAppByName(this.appNameSearch);
+        if (!targetedApp) {
+          // NO = adding the app first
+          alert("add first");
+          targetedApp = this.appNameSearch;
           this.$store.dispatch("app/addApp", {
-            name: app,
+            name: targetedApp,
             urls: [],
           });
+        } else {
+          // YES = changing the app value into found appName value
+          targetedApp = targetedApp.name;
         }
         this.$store.dispatch("account/editAccount", {
           id: this.accountEditValue.id,
-          appName: this.appName.name || this.appName,
+          appName: targetedApp,
           accountId: this.accountId,
           accountPw: this.accountPw,
           accountTags: require("lodash").compact(this.accountTags),
           accountNote: this.accountNote,
         });
-        // this.$store.dispatch("ui/showSnackbar", {
-        //   label: this.appName + "has been added",
-        //   color: "success",
-        // });
         this.$refs.formAccountEdit.reset();
         this.hideDialog();
       }
