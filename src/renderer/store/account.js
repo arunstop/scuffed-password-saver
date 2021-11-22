@@ -24,6 +24,18 @@ export const getters = {
         acc.accountId.toLowerCase().trim().includes(keyword)
       )
   },
+  getTagList: state => () => {
+    const _ = require('lodash')
+    let tl = []
+    state.accountList.forEach((e) => {
+      if (e.accountTags || e.accountTags?.length) {
+        tl = tl.concat(_.compact(e.accountTags)); console.log(tl)
+      }
+    })
+
+    // console.log(require('lodash').uniqBy(tl))
+    return _.uniqBy(tl)
+  },
   isAccountExist: state => (appName, accountId) => {
     // console.log(appName)
     // console.log(accountId)
@@ -182,14 +194,14 @@ export const actions = {
     if (getters.countAccountByApp(payload.appName) === 0) {
       dispatch('removeFilterByApp', payload.appName)
     }
-    if(!payload.noSnackbar){
+    if (!payload.noSnackbar) {
       dispatch('ui/showSnackbar',
-      {
-        label: 'Account has been deleted',
-        color: 'success'
-      },
-      { root: true }
-    )
+        {
+          label: 'Account has been deleted',
+          color: 'success'
+        },
+        { root: true }
+      )
     }
   },
   setAccountSearch({ commit }, val) {

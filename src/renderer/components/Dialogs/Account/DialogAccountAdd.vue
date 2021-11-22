@@ -52,7 +52,7 @@
             outlined
             prepend-icon="mdi-at"
           />
-           <v-text-field
+          <v-text-field
             v-model="accountPw"
             :rules="accountPwRules"
             placeholder="Enter Password/PIN or any other keyword"
@@ -61,6 +61,39 @@
             prepend-icon="mdi-key-variant"
             v-bind="getPwDupWarning"
           />
+          <v-combobox
+            v-model="accountTags"
+            :items="getTagList()"
+            multiple
+            small-chips
+            hide-selected
+            :search-input.sync="accTagsSearch"
+            placeholder="Tag 1 [enter] Tag 2 [enter]"
+            label="Tags"
+            outlined
+            prepend-icon="mdi-tag"
+            clearable
+          >
+          <template v-if="(accTagsSearch||'').trim()!==''" #no-data>
+              <v-list-item>
+                <span class="subtitle-1">Add</span>
+                <v-chip class="mx-2" small label color="indigo">
+                  {{ accTagsSearch }}
+                </v-chip>
+                <span>tag</span>
+              </v-list-item>
+            </template>
+            <template #selection="{ attrs, item }">
+              <v-chip
+                v-bind="attrs"
+                close
+                small label
+                @click:close="accTagsDeleteItem(item)"
+              >
+                {{ item }}
+              </v-chip>
+            </template>
+          </v-combobox>
           <v-textarea
             v-model="accountNote"
             :placeholder="noteLabel"
@@ -105,13 +138,15 @@ export default {
     accountId: "",
     accountPw: "",
     accountNote: "",
+    accountTags: [],
+    accTagsSearch: "",
     noteLabel:
       "Enter important message about this account e.g. PIN, Recovery Number/Email/Phone number, etc)",
     formAccountAdd: false,
   }),
   computed: {
     ...mapGetters("app", ["getAppByName", "getAppList"]),
-    ...mapGetters("account", ["isAccountExist", "countPwDuplicates"]),
+    ...mapGetters("account", ["isAccountExist", "countPwDuplicates","getTagList"]),
     ...mapState("settings", ["reminderFreq", "pwDuplication"]),
     accountAddDialog: {
       get() {
@@ -171,11 +206,7 @@ export default {
     getPwDupWarning() {
       const pw = this.accountPw;
       const cPwDup = this.countPwDuplicates(pw || "");
-      if (
-        !!pw&&
-        this.pwDuplication &&
-        cPwDup.available
-      ) {
+      if (!!pw && this.pwDuplication && cPwDup.available) {
         // alert(cPwDup.count)
         return {
           color: "warning",
@@ -185,7 +216,7 @@ export default {
         };
       }
       return null;
-    },
+    }
   },
   watch: {
     appName(v) {
@@ -215,6 +246,10 @@ export default {
         val: false,
       });
     },
+    accTagsDeleteItem(tag) {
+      this.accountTags = this.accountTags.filter((e) => e !== tag);
+      this.accountTagsSearch=''
+    },
     accountAdd() {
       this.$refs.formAccountAdd.validate();
       if (this.formAccountAdd) {
@@ -229,6 +264,7 @@ export default {
           appName: this.appName?.name || this.appName,
           accountId: this.accountId,
           accountPw: this.accountPw,
+          accountTags: require('lodash').compact(this.accountTags),
           accountNote: this.accountNote,
         });
         // this.$store.dispatch("ui/showSnackbar", {

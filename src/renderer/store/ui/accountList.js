@@ -133,7 +133,7 @@ const accList = rootState.account.accountList
           color: 'error',
           title: 'Delete account',
           desc:
-            'Are u sure you want to delete these ' +
+            'Are you sure you want to delete these ' +
             itemList.length +
             ' accounts ?',
           actions: {

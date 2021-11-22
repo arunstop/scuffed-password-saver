@@ -39,7 +39,7 @@ export default {
           data: {
             color: "primary",
             title: "Exit",
-            desc: "Are u sure you want to exit from this application? ",
+            desc: "Are you sure you want to exit from this application? ",
             actions: {
               y: () => {
                 this.$globals.window.close();
