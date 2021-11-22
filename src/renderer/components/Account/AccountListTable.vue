@@ -50,7 +50,7 @@
             <td>
               <v-hover v-slot="{ hover }">
                 <div
-                  class="text-truncate sps-acc-pw"
+                  class="text-truncate sps-lite-transition"
                   style="max-width: 90px"
                   :style="!hover && 'letter-spacing:1.4px; font-weight:bolder;'"
                 >

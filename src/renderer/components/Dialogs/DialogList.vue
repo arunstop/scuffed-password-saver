@@ -1,7 +1,6 @@
 <template>
   <div>
     <DialogInitFolder v-if="isDialogActive('INIT_FOLDER_DIALOG')" />
-    <DialogLogout v-if="isDialogActive('LOGOUT_DIALOG')" />
     <DialogAppAdd v-if="isDialogActive('APP_ADD_DIALOG')" />
     <DialogAppEdit v-if="isDialogActive('APP_EDIT_DIALOG')" />
     <DialogConfirmation v-if="isDialogActive('CONFIRMATION_DIALOG')" />

@@ -13,8 +13,8 @@
     "icons": { "on": "mdi-cog", "off": "mdi-cog-outline" }
   },
   {
-    "label": "Logout",
-    "page": "logout",
+    "label": "Exit",
+    "page": "exit",
     "icons": { "on": "mdi-logout", "off": "mdi-logout" }
   }
 ]

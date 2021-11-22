@@ -1,10 +1,10 @@
 <template>
   <v-dialog v-model="confirmationDialog" max-width="420">
     <v-card outlined>
-      <v-card-title :class="dialog.data.color + '--text'">
+      <v-card-title class="font-weight-black" :class="dialog.data.color + '--text'">
         {{ dialog.data.title }}
       </v-card-title>
-      <v-card-text>
+      <v-card-text class="font-weight-medium">
         {{ dialog.data.desc }}
       </v-card-text>
       <v-card-actions class="d-flex justify-end pb-4">

@@ -81,7 +81,7 @@
             <div v-if="selectionMode" class="d-flex justify-end">
               <div class="px-4 py-3">
                 <v-btn
-                  class="font-weight-bold"
+                  class="font-weight-bold sps-lite-transition"
                   color="error"
                   small
                   :disabled="!selectedItemList.length"
