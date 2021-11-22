@@ -3,21 +3,21 @@ export const state = () => ({
   selectedItemList: [],
   sortByValue: { val: 'edited', order: 'desc' },
   sortByList: [
-    { val: 'edited', label: 'Last Edited', icon: 'mdi-pencil-outline' },
-    { val: 'appName', label: 'Application/Website', icon: 'mdi-application-outline' },
-    { val: 'accountId', label: 'ID/Email/Phone', icon: 'mdi-at' },
-    { val: 'durab.percentage', label: 'Password Durability', icon: 'mdi-shield-plus-outline' },
-    { val: 'created', label: 'Date Created', icon: 'mdi-plus-circle-outline' }
+    { val: 'edited', label: 'Last Edited', labelSort: 'Edited', icon: 'mdi-pencil-outline' },
+    { val: 'appName', label: 'Application/Website', labelSort: 'App/Web', icon: 'mdi-application-outline' },
+    { val: 'accountId', label: 'ID/Username/Email/Phone', labelSort: 'ID/Email', icon: 'mdi-at' },
+    { val: 'durab.percentage', label: 'Password Durability', labelSort: 'Pw Durab.', icon: 'mdi-shield-plus-outline' },
+    { val: 'created', label: 'Date Created', labelSort: 'Created', icon: 'mdi-plus-circle-outline' }
 
   ],
-  orderValue: { val: 'desc', label: 'Descending', icon: 'mdi-sort-descending' },
+  orderValue: { val: 'desc', label: 'Descending',labelSort: 'DESC', icon: 'mdi-sort-descending' },
   orderList: [
-    { val: 'asc', label: 'ASCENDING', icon: 'mdi-sort-ascending' },
-    { val: 'desc', label: 'DESCENDING', icon: 'mdi-sort-descending' }
+    { val: 'asc', label: 'ASCENDING', labelSort: 'ASC', icon: 'mdi-sort-ascending' },
+    { val: 'desc', label: 'DESCENDING', labelSort: 'DESC', icon: 'mdi-sort-descending' }
   ],
-  paging:{
-    page:1,
-    count:10,
+  paging: {
+    page: 1,
+    count: 10,
   }
 })
 
@@ -53,8 +53,8 @@ export const mutations = {
   SET_ORDER_VALUE(state, v) {
     state.orderValue = state.orderList.find(e => e.val !== v)
   },
-  NEXT_PAGE(state){
-    state.paging.page+=1
+  NEXT_PAGE(state) {
+    state.paging.page += 1
   }
 }
 
@@ -155,8 +155,8 @@ export const actions = {
         { root: true })
     }
   },
-  nextPage({commit}){
-commit('NEXT_PAGE')
+  nextPage({ commit }) {
+    commit('NEXT_PAGE')
   }
-  
+
 }

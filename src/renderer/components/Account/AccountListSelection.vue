@@ -24,7 +24,11 @@
                     {{ activeSortBy.icon }}
                   </v-icon>
                   <span class="text-decoration-underline">
-                    {{ activeSortBy.label }}
+                    {{
+                  $vuetify.breakpoint.smAndDown
+                    ? activeSortBy.labelSort
+                    : activeSortBy.label
+                }}
                   </span>
                 </v-btn>
               </template>
@@ -61,7 +65,11 @@
                 {{ orderValue.icon }}
               </v-icon>
               <span class="font-weight-black">
-                {{ orderValue.label }}
+                {{
+                  $vuetify.breakpoint.smAndDown
+                    ? orderValue.labelSort
+                    : orderValue.label
+                }}
               </span>
             </v-btn>
           </div>
@@ -78,7 +86,11 @@
                   :disabled="!selectedItemList.length"
                   @click="deleteAccountMulti(data)"
                 >
-                  DELETE {{ selectedItemList.length }} item(s)
+                  {{
+                    $vuetify.breakpoint.smAndDown
+                      ? `DELETE ${selectedItemList.length}`
+                      : `DELETE ${selectedItemList.length} item(s)`
+                  }}
                   <v-icon right>mdi-delete</v-icon>
                 </v-btn>
                 <v-btn
@@ -87,9 +99,12 @@
                   outlined
                   :color="pinned ? 'white' : ''"
                   @click="clearSelection()"
+                  
                 >
-                  CANCEL
-                  <v-icon right>mdi-close-thick</v-icon>
+                  {{ $vuetify.breakpoint.smAndDown ? "" : `CANCEL` }}
+                  <v-icon :right="!$vuetify.breakpoint.smAndDown"
+                    >mdi-close-thick</v-icon
+                  >
                 </v-btn>
               </div>
             </div>
@@ -235,7 +250,7 @@ export default {
   position: -webkit-sticky;
   position: sticky;
   top: -1px;
-  z-index: 100;
+  /* z-index: 100; */
   display: flex;
   justify-content: space-between;
 }
