@@ -94,3 +94,7 @@ body {
 .theme--dark.v-data-table tbody tr.v-data-table__selected {
   background: var(--v-secondary-base) !important;
 }
+
+.v-overlay{
+  top:28px !important;
+}

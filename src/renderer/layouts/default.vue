@@ -4,7 +4,29 @@
     <UtilWindowTitleBar />
     <div>
       <v-app>
-        <v-navigation-drawer v-model="drawer" floating app clipped absolute>
+        <!-- Sizes your content based upon application components -->
+        <v-main ref="mainContainer" class="main-container">
+          <!-- Provides the application the proper gutter -->
+          <v-container fluid class="pb-12">
+            <v-slide-x-transition>
+              <Nuxt />
+            </v-slide-x-transition>
+          </v-container>
+          <!-- Scroll to top button -->
+          <v-slide-y-reverse-transition>
+            <v-btn
+              v-if="scrolled"
+              class="sps-btn-scroll-to-top white--text"
+              color="orange ligthen-2"
+              @click="scrollToTop"
+            >
+              <v-icon x-large>mdi-chevron-up</v-icon>
+            </v-btn>
+          </v-slide-y-reverse-transition>
+        </v-main>
+
+        <div>
+          <v-navigation-drawer v-model="drawer" floating app clipped absolute>
           <v-app-bar
             v-if="$vuetify.breakpoint.mdAndDown"
             color="primary"
@@ -43,28 +65,7 @@
             pageName
           }}</v-app-bar-title>
         </v-app-bar>
-
-        <!-- Sizes your content based upon application components -->
-        <v-main ref="mainContainer" class="main-container">
-          <!-- Provides the application the proper gutter -->
-          <v-container fluid class="pb-12">
-            <v-slide-x-transition>
-              <Nuxt />
-            </v-slide-x-transition>
-          </v-container>
-          <!-- Scroll to top button -->
-          <v-slide-y-reverse-transition>
-            <v-btn
-              v-if="scrolled"
-              class="sps-btn-scroll-to-top white--text"
-              color="orange ligthen-2"
-              @click="scrollToTop"
-            >
-              <v-icon x-large>mdi-chevron-up</v-icon>
-            </v-btn>
-          </v-slide-y-reverse-transition>
-        </v-main>
-
+        </div>
         <!-- <v-footer app></v-footer> -->
 
         <DialogList />

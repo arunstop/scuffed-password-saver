@@ -101,8 +101,8 @@
                   :color="pinned ? 'white' : ''"
                   @click="clearSelection()"
                 >
-                  {{ $vuetify.breakpoint.smAndDown ? "" : `CANCEL` }}
-                  <v-icon :right="!$vuetify.breakpoint.smAndDown">
+                  CANCEL
+                  <v-icon right>
                     mdi-close-thick
                   </v-icon>
                 </v-btn>
@@ -250,7 +250,7 @@ export default {
   position: -webkit-sticky;
   position: sticky;
   top: -1px;
-  /* z-index: 100; */
+  z-index: 1;
   display: flex;
   justify-content: space-between;
 }
