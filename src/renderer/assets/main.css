@@ -95,6 +95,12 @@ body {
   background: var(--v-secondary-base) !important;
 }
 
+/* OVERLAY ADJUSTING THE HEIGHT OF CUSTOM WINDOW BAR */
 .v-overlay{
   top:28px !important;
+}
+
+/* TRANSITION FOR ACCOUNT PASSWORD WHEN HOVERED */
+.sps-acc-pw{
+  transition: 0.4s;
 }

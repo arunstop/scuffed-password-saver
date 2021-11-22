@@ -2,7 +2,7 @@
   <v-col class="pa-0" lg="4" md="4" sm="6">
     <v-hover v-slot="{ hover }">
       <v-card
-      max-width="350px"
+        max-width="350px"
         class="ma-2 pa-0 elevation-2 transparent"
         link
         @contextmenu.prevent="!selectionMode && selectItem(acc.id)"
@@ -27,20 +27,25 @@
                 {{ acc.accountId }}
               </v-list-item-title>
               <v-list-item-title
-                class="text-truncate"
+                class="text-truncate sps-acc-pw"
                 style="max-width: 150px"
                 :style="!hover && 'letter-spacing:1.4px; font-weight:bolder;'"
               >
                 {{ hover && hoverToShowPw ? acc.accountPw : hiddenPw }}
               </v-list-item-title>
               <v-list-item-title class="font-weight-bold">
-                <v-chip outlined small label color="primary">
+                <v-chip
+                  :outlined="!inSelection"
+                  small
+                  label
+                  color="primary"
+                >
                   {{ acc.appName }}
                 </v-chip>
                 <v-chip
                   class="ms-1 font-weight-bold"
                   :color="color"
-                  outlined
+                  :outlined="!inSelection"
                   small
                 >
                   <v-icon left small>mdi-shield-plus-outline</v-icon>
@@ -90,6 +95,9 @@ export default {
       "dblClickToEdit",
       "darkTheme",
     ]),
+    inSelection(){
+      return this.isSelected(this.acc.id)
+    },
     color() {
       return this.acc.durab.status;
     },
@@ -145,8 +153,9 @@ export default {
   -webkit-box-sizing: border-box !important;
   border: thin solid;
 }
-.alc-item-selected{
- background-color: var(--v-primary-lighten4) !important;
-    /* border-color: var(--v-error-lighten4) !important; */
+.alc-item-selected {
+  background-color: var(--v-primary-lighten4) !important;
+  /* border-color: var(--v-error-lighten4) !important; */
 }
+
 </style>
