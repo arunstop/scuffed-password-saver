@@ -77,7 +77,7 @@
           <template v-if="(accTagsSearch||'').trim()!==''" #no-data>
               <v-list-item>
                 <span class="subtitle-1">Add</span>
-                <v-chip class="mx-2" small label color="indigo">
+                <v-chip class="mx-2 white--text" small label color="indigo">
                   {{ accTagsSearch }}
                 </v-chip>
                 <span>tag</span>
@@ -86,8 +86,10 @@
             <template #selection="{ attrs, item }">
               <v-chip
                 v-bind="attrs"
+                class="white--text"
                 close
                 small label
+                color="indigo"
                 @click:close="accTagsDeleteItem(item)"
               >
                 {{ item }}
