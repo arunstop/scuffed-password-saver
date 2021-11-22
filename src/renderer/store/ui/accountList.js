@@ -118,11 +118,12 @@ export const actions = {
     }
       , { root: true })
   },
-  deleteAccountMulti({ dispatch, state }, sortedAccountList) {
+  deleteAccountMulti({ dispatch, state,rootState }) {
+const accList = rootState.account.accountList
     if (state.selectedItemList.length === 1) {
-      dispatch('showDeleteDialog', sortedAccountList.find(e => e.id === state.selectedItemList[0]))
+      dispatch('showDeleteDialog', accList.find(e => e.id === state.selectedItemList[0]))
     } else {
-      const itemList = sortedAccountList.filter(e =>
+      const itemList = accList.filter(e =>
         state.selectedItemList.includes(e.id)
       )
       dispatch('ui/toggleDialog', {

@@ -25,10 +25,10 @@
                   </v-icon>
                   <span class="text-decoration-underline">
                     {{
-                  $vuetify.breakpoint.smAndDown
-                    ? activeSortBy.labelSort
-                    : activeSortBy.label
-                }}
+                      $vuetify.breakpoint.smAndDown
+                        ? activeSortBy.labelSort
+                        : activeSortBy.label
+                    }}
                   </span>
                 </v-btn>
               </template>
@@ -74,6 +74,7 @@
             </v-btn>
           </div>
         </div>
+        <!-- {{$store.state.ui.accountList.selectedItemList}} -->
         <!-- SELECTION BUTTONS -->
         <div class="ms-auto">
           <v-slide-x-transition>
@@ -84,7 +85,7 @@
                   color="error"
                   small
                   :disabled="!selectedItemList.length"
-                  @click="deleteAccountMulti(data)"
+                  @click="deleteAccountMulti()"
                 >
                   {{
                     $vuetify.breakpoint.smAndDown
@@ -99,12 +100,11 @@
                   outlined
                   :color="pinned ? 'white' : ''"
                   @click="clearSelection()"
-                  
                 >
                   {{ $vuetify.breakpoint.smAndDown ? "" : `CANCEL` }}
-                  <v-icon :right="!$vuetify.breakpoint.smAndDown"
-                    >mdi-close-thick</v-icon
-                  >
+                  <v-icon :right="!$vuetify.breakpoint.smAndDown">
+                    mdi-close-thick
+                  </v-icon>
                 </v-btn>
               </div>
             </div>
@@ -183,7 +183,7 @@ export default {
         this.selectedItemList.length
       ) {
         // console.log(this.data)
-        this.deleteAccountMulti(this.data);
+        this.deleteAccountMulti();
       }
       // console.log(this.selectedItemList);
     });
