@@ -79,13 +79,13 @@ export default {
     },
     toggleImportPanel (v) {
       if (v) {
-        this.importPanel.color = 'indigo'
+        this.importPanel.color = 'indigo' 
         this.importPanel.textColor = 'white--text'
         this.importPanel.buttonAttrs = {
           class : 'pointer-events-none',
           outlined : false,
         }
-        return
+        // return
       }
       this.importPanel.color = ''
       this.importPanel.textColor = ''

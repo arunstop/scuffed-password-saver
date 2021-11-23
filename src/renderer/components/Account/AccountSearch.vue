@@ -25,6 +25,7 @@
       <v-row class="" no-gutters align="center">
         <v-text-field
           ref="accSearchInput"
+          v-model="accountSearchModel"
           class="me-1"
           outlined
           label="Search : ctrl + f or /"
@@ -100,17 +101,7 @@ export default {
       get() {
         return this.accountSearch || "";
       },
-      set(v) {
-        this.search(v);
-        // this.isLoading = true;
-        // if (!v) {
-        //   this.search(v);
-        // } else {
-        //   this.$globals.lodash.debounce(() => {
-        //     this.search(v);
-        //   }, 1000)();
-        // }
-      },
+      set(v) {},
     },
   },
   mounted() {
@@ -146,10 +137,14 @@ export default {
       }
     },
     debounceSearch(value) {
-      this.isLoading = true
+      if (value === null) {
+        this.search(value);
+        return;
+      }
+      this.isLoading = true;
       clearTimeout(this.debounce);
       this.debounce = setTimeout(() => {
-        this.search(value)
+        this.search(value);
       }, 600);
     },
   },
