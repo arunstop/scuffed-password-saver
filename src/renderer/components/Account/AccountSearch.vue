@@ -41,7 +41,7 @@
           <v-chip
             v-for="view in $store.state.ui.accViewOptList"
             :key="view.value"
-            class="mx-2"
+            class="mx-2 elevation-2"
             :outlined="$store.state.settings.accListView !== view.value"
             :color="
               $store.state.settings.accListView === view.value ? 'primary' : ''

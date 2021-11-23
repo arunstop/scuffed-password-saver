@@ -9,7 +9,7 @@ export const state = () => ({
     pwDupLimit: 2,
     driveKey: '',
     accListView: 'table',
-    scrollAutoLoad:true,
+    scrollAutoLoad:false,
 })
 
 export const getters = {

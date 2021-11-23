@@ -1,9 +1,9 @@
 <template>
   <div style="position: relative; min-height: 100vh">
-    <LazyAccountSearch :data="sortedAccountList" />
+    <LazyAccountSearch v-if="accountList.length" :data="sortedAccountList" />
     
-    <LazyAccountListSelection :data="sortedAccountList" />
-    <v-slide-y-transition class="row" leave-absolute group>
+    <LazyAccountListSelection v-if="accountList.length" :data="sortedAccountList" />
+    <v-slide-y-transition class="row my-4" leave-absolute group>
       <v-card
         v-if="!sortedAccountList.length"
         key="al-nodata"
@@ -30,22 +30,22 @@
           <v-icon size="90">mdi-robot-confused</v-icon>
           <h3 class="font-weight-bold">You account list is currently empty.</h3>
           <v-btn
-            class="mt-4 font-weight-bold"
+            class="text-none mt-4 font-weight-bold"
             outlined
             color="primary"
             @click="openAccountAddDialog()"
           >
-            Add Account
+            Add an account
             <v-icon right>mdi-plus-circle-outline</v-icon>
           </v-btn>
           <h3 class="font-weight-bold mt-2">OR</h3>
           <v-btn
-            class="mt-2 font-weight-bold"
+            class="text-none mt-2 font-weight-bold"
             outlined
             color="primary"
             @click="showImportDialog()"
           >
-            Import Accounts
+            Import accounts
             <v-icon right>mdi-download-multiple</v-icon>
           </v-btn>
         </v-card-text>
@@ -86,6 +86,7 @@ export default {
       "paging",
     ]),
     ...mapState("settings", ["scrollAutoLoad"]),
+    ...mapState("account", ["accountList"]),
     
     sortedAccountList() {
       const sal = this.getAccountList().map((e) => {
