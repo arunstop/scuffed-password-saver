@@ -25,6 +25,7 @@
   "devDependencies": {
     "@mdi/font": "5.9.55",
     "@nuxtjs/eslint-config": "6.0.0",
+    "@nuxtjs/eslint-module": "^3.0.2",
     "@nuxtjs/vuetify": "1.11.3",
     "@xpda-dev/core": "^0.1.6",
     "@xpda-dev/electron-builder": "^0.2.1",

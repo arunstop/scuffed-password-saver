@@ -25,8 +25,6 @@
       <v-row class="" no-gutters align="center">
         <v-text-field
           ref="accSearchInput"
-          v-model.lazy="accountSearchModel"
-          :value="accountSearch"
           class="me-1"
           outlined
           label="Search : ctrl + f or /"
@@ -36,6 +34,7 @@
           dense
           hide-details
           :loading="isLoading"
+          @input="debounceSearch"
         />
         <v-row class="ms-2" no-gutters>
           <v-chip
@@ -84,6 +83,7 @@ export default {
   data() {
     return {
       isLoading: false,
+      debounce: null,
     };
   },
   computed: {
@@ -101,20 +101,34 @@ export default {
         return this.accountSearch || "";
       },
       set(v) {
-        this.isLoading = true;
-        if (!v) {
-          this.search(v);
-        } else {
-          this.$globals.lodash.debounce(() => {
-            this.search(v);
-          }, 1000)();
-        }
+        this.search(v);
+        // this.isLoading = true;
+        // if (!v) {
+        //   this.search(v);
+        // } else {
+        //   this.$globals.lodash.debounce(() => {
+        //     this.search(v);
+        //   }, 1000)();
+        // }
       },
     },
   },
   mounted() {
     // Detect keydown
-    window.addEventListener("keydown", (event) => {
+    window.addEventListener("keydown", this.keydown);
+  },
+  beforeDestroy() {
+    window.removeEventListener("keydown", this.keydown);
+  },
+  methods: {
+    ...mapActions("account", ["removeFilterByApp"]),
+    ...mapActions("app", ["completeAppListing"]),
+    ...mapActions("settings", ["setAccListView"]),
+    search(v) {
+      this.$store.dispatch("account/setAccountSearch", v || "");
+      this.isLoading = false;
+    },
+    keydown(event) {
       // IF not in home page
       // AND there is dialog
       // THEN keydown does nothing
@@ -130,18 +144,13 @@ export default {
         event.preventDefault();
         this.$refs.accSearchInput.focus();
       }
-    });
-  },
-  beforeDestroy() {
-    window.removeEventListener("keydown", (e) => {});
-  },
-  methods: {
-    ...mapActions("account", ["removeFilterByApp"]),
-    ...mapActions("app", ["completeAppListing"]),
-    ...mapActions("settings", ["setAccListView"]),
-    search(v) {
-      this.$store.dispatch("account/setAccountSearch", v || "");
-      this.isLoading = false;
+    },
+    debounceSearch(value) {
+      this.isLoading = true
+      clearTimeout(this.debounce);
+      this.debounce = setTimeout(() => {
+        this.search(value)
+      }, 600);
     },
   },
 };

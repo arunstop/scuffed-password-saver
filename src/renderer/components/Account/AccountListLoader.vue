@@ -10,7 +10,7 @@
       class="transparent primary--text"
       outlined
     >
-      Load
+      Load More
     </v-btn>
 
     <v-btn
