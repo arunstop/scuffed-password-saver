@@ -3,7 +3,7 @@
     <v-list-item class="">
       <v-list-item-content>
         <v-list-item-title class="font-weight-black normal-white-space text-h5">
-          <v-icon class="primary--text mb-1"> mdi-export mdi-flip-h </v-icon>
+          <v-icon class="primary--text mb-1"> mdi-upload-multiple </v-icon>
           Export accounts
         </v-list-item-title>
         <v-list-item-subtitle class="text-break normal-white-space subtitle-2">

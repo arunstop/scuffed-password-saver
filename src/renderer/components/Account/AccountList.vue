@@ -38,6 +38,16 @@
             Add Account
             <v-icon right>mdi-plus-circle-outline</v-icon>
           </v-btn>
+          <h3 class="font-weight-bold mt-2">OR</h3>
+          <v-btn
+            class="mt-2 font-weight-bold"
+            outlined
+            color="primary"
+            @click="showImportDialog()"
+          >
+            Import Accounts
+            <v-icon right>mdi-download-multiple</v-icon>
+          </v-btn>
         </v-card-text>
       </v-card>
       <v-fade-transition
@@ -109,6 +119,12 @@ export default {
     },
     openAccountAddDialog() {
       this.toggleDialog({ type: "ACCOUNT_ADD_DIALOG", val: true });
+    },
+    showImportDialog () {
+      this.$store.dispatch('ui/toggleDialog', {
+        type: 'IMPORT_DIALOG',
+        val: true
+      })
     },
   },
 };

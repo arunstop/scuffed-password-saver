@@ -13,13 +13,13 @@
       @drop="drop"
     >
       <div class="d-flex align-center justify-center fill-height">
-        <div class="text-center" :class="importPanel.button">
-          <v-btn color="primary" large>
+        <div class="text-center" v-bind="importPanel.buttonAttrs" >
+          <v-btn color="primary" v-bind="importPanel.buttonAttrs" large>
             UPLOAD
             <v-icon>mdi-upload</v-icon>
           </v-btn>
 
-          <h4 class="mt-4">Click the button above or drag Files here.</h4>
+          <h4 class="mt-4" :class="importPanel.textColor">Click the button above or drag Files here.</h4>
         </div>
       </div>
     </v-card>
@@ -30,7 +30,9 @@
 export default {
   data () {
     return {
-      importPanel: { color: '', button: '', loading: {} }
+      importPanel: { color: '',textColor: '', buttonAttrs: {
+        outlined:true
+      }, loading: {} }
     }
   },
   computed: {
@@ -78,11 +80,18 @@ export default {
     toggleImportPanel (v) {
       if (v) {
         this.importPanel.color = 'indigo'
-        this.importPanel.button = 'pointer-events-none'
+        this.importPanel.textColor = 'white--text'
+        this.importPanel.buttonAttrs = {
+          class : 'pointer-events-none',
+          outlined : false,
+        }
         return
       }
       this.importPanel.color = ''
-      this.importPanel.button = ''
+      this.importPanel.textColor = ''
+      this.importPanel.buttonAttrs = {
+        outlined:false
+      }
     }
   }
 }
