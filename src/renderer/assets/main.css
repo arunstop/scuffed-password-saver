@@ -104,3 +104,11 @@ body {
 .sps-acc-pw{
   transition: 0.4s;
 }
+
+.sps-btn-scroll-to-top {
+  position: fixed !important;
+  margin-right: 24px;
+  margin-bottom: 12px;
+  bottom: 0;
+  right: 0;
+}

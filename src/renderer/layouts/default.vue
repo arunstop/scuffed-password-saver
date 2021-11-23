@@ -157,12 +157,4 @@ export default {
 
 <style>
 @import "~/assets/main.css";
-
-.sps-btn-scroll-to-top {
-  position: fixed;
-  margin-right: 24px;
-  margin-bottom: 12px;
-  bottom: 0;
-  right: 0;
-}
 </style>

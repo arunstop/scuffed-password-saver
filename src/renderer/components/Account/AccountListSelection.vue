@@ -2,7 +2,7 @@
   <v-expand-transition>
     <div ref="selectionOpt" class="selection-opt">
       <v-card
-        class="rounded-lg row no-gutters"
+        class="rounded-lg row no-gutters d-flex justify-space-between"
         no-gutters
         style="position:min-height:48px"
       >
@@ -242,7 +242,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .cursor-pointer {
   cursor: pointer;
 }
