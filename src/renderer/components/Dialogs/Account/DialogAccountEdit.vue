@@ -28,7 +28,7 @@
             <span class="sps-text-highlight"> {{ pwDurab.percentage }}% </span>
             <br />
             <span class="sps-text-highlight">{{
-              pwDurab.daysLeft + " days left"
+              pwChangeDaysIndicator(pwDurab.daysLeft)
             }}</span>
             {{ " to change this password" }}
             <br />
@@ -343,7 +343,10 @@ export default {
         // is included in listed apps
         // return !!this.getAppByName(this.appNameSearch)
         if (!this.appNameSearch) return true;
-        return this.appNameSearch.trim().toLowerCase() === this.accountEditValue.appName.trim().toLowerCase();
+        return (
+          this.appNameSearch.trim().toLowerCase() ===
+          this.accountEditValue.appName.trim().toLowerCase()
+        );
       };
       if (
         // this.appName === this.getAppByName(this.accountEditValue.appName) &&
@@ -385,6 +388,17 @@ export default {
         this.$refs.formAccountEdit.reset();
         this.hideDialog();
       }
+    },
+    pwChangeDaysIndicator(daysLeft) {
+      daysLeft = daysLeft * 1
+      const dlAbs = Math.abs(daysLeft)
+      const day = "day"+ (dlAbs>1?"s":"")
+      if (daysLeft < 0) {
+        return dlAbs + ` ${day} late`;
+      } else if (daysLeft > 0) {
+        return dlAbs + ` ${day} left`;
+      }
+      return "Today is the last day";
     },
   },
 };

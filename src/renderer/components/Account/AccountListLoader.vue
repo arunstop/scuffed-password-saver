@@ -15,6 +15,7 @@
 
     <v-btn
       v-else-if="!scrollAutoLoad"
+      class="rounded-lg"
       color="primary"
       :loading="btnLoadMoreLoading"
       @click="goToNextPage()"

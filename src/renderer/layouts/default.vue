@@ -16,7 +16,7 @@
           <v-slide-y-reverse-transition>
             <v-btn
               v-if="scrolled"
-              class="sps-btn-scroll-to-top white--text rounded-lg"
+              class="sps-btn-scroll-to-top white--text rounded-lg elevation-6"
               color="orange ligthen-2"
               @click="scrollToTop"
             >
