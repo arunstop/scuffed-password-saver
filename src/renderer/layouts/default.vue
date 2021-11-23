@@ -120,6 +120,9 @@ export default {
         this.drawerAttrs = { permanent: true };
       }
     },
+    "$nuxt.$route.name"(val){
+      this.$refs.mainContainer.$el.childNodes[0].scrollTop =0
+    }
   },
   mounted() {
     const mainContainer = this.$refs.mainContainer.$el.childNodes[0];
