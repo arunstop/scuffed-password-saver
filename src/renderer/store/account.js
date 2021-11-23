@@ -21,7 +21,8 @@ export const getters = {
           : true
       )
       .filter(acc =>
-        acc.accountId.toLowerCase().trim().includes(keyword)
+        acc.accountId.toLowerCase().trim().includes(keyword) ||
+        acc.accountTags?.toString().toLowerCase().trim().includes(keyword)
       )
   },
   getTagList: state => () => {
