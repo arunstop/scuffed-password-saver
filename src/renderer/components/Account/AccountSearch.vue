@@ -29,7 +29,7 @@
           outlined
           label="Search : ctrl + f or /"
           placeholder="App / Email / ID / Username..."
-          prepend-icon="mdi-magnify"
+          prepend-inner-icon="mdi-magnify"
           clearable
           dense
           hide-details

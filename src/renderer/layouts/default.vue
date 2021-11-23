@@ -16,7 +16,7 @@
           <v-slide-y-reverse-transition>
             <v-btn
               v-if="scrolled"
-              class="sps-btn-scroll-to-top white--text"
+              class="sps-btn-scroll-to-top white--text rounded-lg"
               color="orange ligthen-2"
               @click="scrollToTop"
             >
@@ -27,44 +27,44 @@
 
         <div>
           <v-navigation-drawer v-model="drawer" floating app clipped absolute>
+            <v-app-bar
+              v-if="$vuetify.breakpoint.mdAndDown"
+              color="primary"
+              dark
+              dense
+              flat
+            >
+              <v-app-bar-title>{{ $store.state.appName }}</v-app-bar-title>
+            </v-app-bar>
+            <v-list shaped class="deep-purple--text text--darken-3">
+              <!-- <v-list-item-group v-model="drawerModel" mandatory color="primary"> -->
+              <MenuItem
+                v-for="menu in getMenuList()"
+                :key="`sps-menu-${menu.page}`"
+                :menu="menu"
+                :active="$nuxt.$route.name === menu.page"
+              />
+              <!-- </v-list-item-group> -->
+            </v-list>
+          </v-navigation-drawer>
+
           <v-app-bar
-            v-if="$vuetify.breakpoint.mdAndDown"
             color="primary"
             dark
             dense
-            flat
+            absolute
+            app
+            clipped-left
+            elevation="0"
           >
-            <v-app-bar-title>{{ $store.state.appName }}</v-app-bar-title>
-          </v-app-bar>
-          <v-list shaped class="deep-purple--text text--darken-3">
-            <!-- <v-list-item-group v-model="drawerModel" mandatory color="primary"> -->
-            <MenuItem
-              v-for="menu in getMenuList()"
-              :key="`sps-menu-${menu.page}`"
-              :menu="menu"
-              :active="$nuxt.$route.name === menu.page"
+            <v-app-bar-nav-icon
+              v-if="$vuetify.breakpoint.mdAndDown"
+              @click.stop="toggleMainDrawer()"
             />
-            <!-- </v-list-item-group> -->
-          </v-list>
-        </v-navigation-drawer>
-
-        <v-app-bar
-          color="primary"
-          dark
-          dense
-          absolute
-          app
-          clipped-left
-          elevation="0"
-        >
-          <v-app-bar-nav-icon
-            v-if="$vuetify.breakpoint.mdAndDown"
-            @click.stop="toggleMainDrawer()"
-          />
-          <v-app-bar-title class="text-capitalize">{{
-            pageName
-          }}</v-app-bar-title>
-        </v-app-bar>
+            <v-app-bar-title class="text-capitalize">
+              {{ pageName }}
+            </v-app-bar-title>
+          </v-app-bar>
         </div>
         <!-- <v-footer app></v-footer> -->
 
