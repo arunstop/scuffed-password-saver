@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="confirmationDialog" max-width="420">
+  <v-dialog v-model="confirmationDialog" max-width="420" transition="slide-y-reverse-transition">
     <v-card outlined>
       <v-card-title class="font-weight-black" :class="dialog.data.color + '--text'">
         {{ dialog.data.title }}

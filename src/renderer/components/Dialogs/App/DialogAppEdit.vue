@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="appEditDialog" max-width="480" attach=".main-container">
+  <v-dialog v-model="appEditDialog" max-width="480" transition="slide-y-reverse-transition">
     <v-form ref="formAppEdit" v-model="formAppEdit" @submit.prevent="editApp()">
       <v-card outlined>
         <v-card-title>

@@ -12,7 +12,7 @@
 
   <v-card
     v-if="show"
-    class="ma-2 pointer-events"
+    class="ma-2 pointer-events rounded-lg"
     :dark="!$vuetify.theme.dark"
     :color="snackbar.color"
     max-height="60px"
@@ -22,7 +22,7 @@
   >
     <div class="d-flex align-center pa-2 font-weight-regular">
       <span class="ms-4">{{ snackbar.label }}</span>
-      <v-spacer />
+      <v-spacer />  
       <v-btn class="ms-4" color="white" outlined @click="removeSnackbar()">
         Close
       </v-btn>

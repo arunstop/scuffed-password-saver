@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="appAddDialog" max-width="480">
+  <v-dialog v-model="appAddDialog" max-width="480" transition="slide-y-reverse-transition">
     <v-form ref="formAddApp" v-model="formAddApp" @submit="addApp()">
       <v-card outlined>
         <v-card-title>Add New Application</v-card-title>

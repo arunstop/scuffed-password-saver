@@ -1,11 +1,20 @@
 <template>
   <div style="position: relative; min-height: 100vh">
-    <LazyAccountSearch v-if="accountList.length" :data="sortedAccountList" />
-    
-    <LazyAccountListSelection v-if="accountList.length" :data="sortedAccountList" />
-    <v-slide-y-transition class="row my-4" leave-absolute group>
+    <!-- Searchbar and app filter -->
+    <LazyAccountSearch v-if="accountList.length" :data="pagedAccountList" />
+    <!-- Account selection -->
+    <LazyAccountListSelection
+      v-if="accountList.length"
+      :data="pagedAccountList"
+    />
+    <!-- Total items indicator -->
+    <v-alert v-if="pagedAccountList.length" class="mt-2" text type="info">
+      {{ totalItemsIndicator }}
+    </v-alert>
+    <!-- No data template -->
+    <v-slide-y-transition class="row mb-4" leave-absolute group>
       <v-card
-        v-if="!sortedAccountList.length"
+        v-if="!pagedAccountList.length"
         key="al-nodata"
         class="mx-auto"
         elevation="0"
@@ -60,16 +69,20 @@
         <LazyAccountListTable
           v-if="$store.state.settings.accListView === 'table'"
           :key="'al-table'"
-          :data="sortedAccountList"
+          :data="pagedAccountList"
         />
         <LazyAccountListCard
           v-else-if="$store.state.settings.accListView === 'card'"
           :key="'al-card'"
-          :data="sortedAccountList"
+          :data="pagedAccountList"
         />
       </v-fade-transition>
     </v-slide-y-transition>
-    <LazyAccountListLoader v-if="!lastPage" />
+    <!-- More items Loader -->
+    <LazyAccountListLoader
+      v-if="!lastPage"
+      :items-left="sortedAccountList.length - pagedAccountList.length"
+    />
   </div>
 </template>
 
@@ -87,17 +100,19 @@ export default {
     ]),
     ...mapState("settings", ["scrollAutoLoad"]),
     ...mapState("account", ["accountList"]),
-    
     sortedAccountList() {
       const sal = this.getAccountList().map((e) => {
         // adding pw durability
         return { ...e, durab: this.pwDurab(e.editedPw) };
       });
-      const sorted = _.sortBy(sal, [this.sortByValue.val]);
+      return _.sortBy(sal, [this.sortByValue.val]);
+    },
+    pagedAccountList() {
+      const sal = this.sortedAccountList;
       // console.log(sorted.map(e=>({accId:e.accountId,date:e.edited})))
       const dataSum = this.paging.page * this.paging.count;
       const paged = (
-        this.orderValue.val === "desc" ? sorted.reverse() : sorted
+        this.orderValue.val === "desc" ? sal.reverse() : sal
       ).slice(0, dataSum);
       return paged;
     },
@@ -105,6 +120,15 @@ export default {
       return (
         this.paging.page * this.paging.count >= this.getAccountList().length
       );
+    },
+    totalItemsIndicator() {
+      const total = this.sortedAccountList.length;
+      const tPaged = this.pagedAccountList.length;
+      const itemLabel = () => " item" + (tPaged > 1 ? "s" : "");
+
+      if (total === tPaged)
+        return "Showing all " + total + itemLabel() + " found";
+      return "Showing " + tPaged + " out of " + total + itemLabel() + " found";
     },
   },
   methods: {
@@ -121,11 +145,11 @@ export default {
     openAccountAddDialog() {
       this.toggleDialog({ type: "ACCOUNT_ADD_DIALOG", val: true });
     },
-    showImportDialog () {
-      this.$store.dispatch('ui/toggleDialog', {
-        type: 'IMPORT_DIALOG',
-        val: true
-      })
+    showImportDialog() {
+      this.$store.dispatch("ui/toggleDialog", {
+        type: "IMPORT_DIALOG",
+        val: true,
+      });
     },
   },
 };

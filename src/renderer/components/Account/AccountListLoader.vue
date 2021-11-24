@@ -20,7 +20,7 @@
       :loading="btnLoadMoreLoading"
       @click="goToNextPage()"
     >
-      Load More
+      {{"Load " + $store.state.ui.accountList.paging.count +" More"}}
       <v-icon right>mdi-chevron-down</v-icon>
     </v-btn>
   </div>
@@ -30,6 +30,9 @@
 import { mapState, mapActions } from "vuex";
 
 export default {
+  props:{
+    itemsLeft : {type:Number, default:()=>0}
+  },
   data() {
     return {
       busy: false,

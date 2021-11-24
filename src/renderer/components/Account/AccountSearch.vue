@@ -95,7 +95,7 @@ export default {
       "getUnlistedApp",
     ]),
     getTrimmedAppList() {
-      return this.getAppListByAccount();
+      return require('lodash').sortBy(this.getAppListByAccount(), 'name');
     },
     accountSearchModel: {
       get() {
