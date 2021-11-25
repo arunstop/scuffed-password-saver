@@ -3,7 +3,7 @@
     <v-list-item class="">
       <v-list-item-content>
         <v-list-item-title class="font-weight-black normal-white-space text-h5">
-          <v-icon class="mb-1" :class="!driveKey || 'primary--text'">
+          <v-icon class="mb-1" :class="!driveToken || 'primary--text'">
             mdi-google-drive
           </v-icon>
           Google Drive API Key
@@ -40,29 +40,29 @@
               <v-card-text class="pb-0">
                 <v-alert type="info" dense text>
                   <span>
-                    Follow this link to create your Google Drive API Key :
+                    In order to make enable Google Drive backup, first you must
+                    authorize this app into your Google Drive account :
                   </span>
-                  <br>
+                  <br />
                   <v-btn
                     class="mt-2"
                     color="orange"
-                    small
                     v-bind="btnLinkProps"
                     @click="goToLink()"
                   >
-                    Create
+                    Authorize
                     <v-icon right size="20">mdi-open-in-new</v-icon>
                   </v-btn>
                 </v-alert>
                 <v-text-field
-                  v-model="driveKeyModel"
-                  :rules="keyRules"
+                  v-model="driveTokenModel"
+                  :rules="driveTokenRules"
                   class="mt-4 mb-0"
                   autofocus
                   outlined
                   prepend-icon="mdi-key"
-                  label="Google Drive API Key"
-                  placeholder="Enter Google Drive API Key"
+                  label="Authorization Code"
+                  placeholder="Enter Authorization Code"
                 />
               </v-card-text>
             </v-form>
@@ -75,9 +75,15 @@
                 ref="btnDialogDaY"
                 color="primary"
                 :disabled="!formSetDriveApi"
-                @click="setDriveKey()"
+                @click="setDriveToken()"
               >
                 OK
+              </v-btn>
+              <v-btn
+                color="primary"
+                @click="showFiles()"
+              >
+                Show Files
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -89,46 +95,49 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 export default {
-  data () {
+  data() {
     return {
       dialog: false,
-      driveKeyModel: '',
+      driveTokenModel: "",
       formSetDriveApi: false,
-      btnLinkProps: {}
-    }
+      btnLinkProps: {},
+    };
   },
   computed: {
-    ...mapState('settings', ['driveKey']),
-    keyRules: () => [v => !!v.trim() || 'Key cannot be empty']
+    ...mapState("settings", ["driveToken"]),
+    driveTokenRules: () => [(v) => !!v.trim() || "Key cannot be empty"],
   },
-  created () {
-    this.driveKeyModel = this.driveKey
+  created() {
+    this.driveTokenModel = '';
   },
   methods: {
-    hideDialog () {
-      this.dialog = !this.dialog
+    hideDialog() {
+      this.dialog = !this.dialog;
     },
-    setDriveKey () {
-      this.$refs.formSetDriveApi.validate()
+    setDriveToken() {
+      this.$refs.formSetDriveApi.validate();
       if (this.formSetDriveApi) {
-        this.$store.dispatch('settings/setDriveKey', this.driveKeyModel)
-        this.hideDialog()
+        this.$API_gdrive.getToken(this.driveTokenModel);
+        this.hideDialog();
       }
     },
-    goToLink () {
-      this.$globals.window.openUrl('https://developers.google.com/drive/api/v3/enable-drive-api#enable_the_drive_api')
+    goToLink() {
+      this.$API_gdrive.init();
       this.btnLinkProps = {
         loading: true,
-        disabled: true
-      }
+        disabled: true,
+      };
       setTimeout(() => {
-        this.btnLinkProps = {}
-      }, 2000)
+        this.btnLinkProps = {};
+      }, 2000);
+    },
+    showFiles(){
+      this.$API_gdrive.getDriveFiles()
     }
-  }
-}
+  },
+};
 </script>
 
 <style>

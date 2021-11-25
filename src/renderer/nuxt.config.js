@@ -18,7 +18,8 @@ module.exports = {
     '~/plugins/local-storage',
     '~/plugins/globals',
     '~/plugins/date',
-    '~/plugins/infinite-scroll'
+    '~/plugins/infinite-scroll',
+    '~/plugins/api-gdrive',
   ],
   css: [
     '~/assets/main.css'

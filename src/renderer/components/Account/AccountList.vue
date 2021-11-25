@@ -8,11 +8,16 @@
       :data="pagedAccountList"
     />
     <!-- Total items indicator -->
-    <v-alert v-if="pagedAccountList.length" class="mt-2" text type="info">
+    <v-alert
+      v-if="pagedAccountList.length"
+      class="mt-2 font-weight-bold"
+      text
+      type="info"
+    >
       {{ totalItemsIndicator }}
     </v-alert>
     <!-- No data template -->
-    <v-slide-y-transition class="row mb-4" leave-absolute group>
+    <v-slide-y-transition class="row my-4 no-gutters" leave-absolute group>
       <v-card
         v-if="!pagedAccountList.length"
         key="al-nodata"
@@ -81,7 +86,7 @@
     <!-- More items Loader -->
     <LazyAccountListLoader
       v-if="!lastPage"
-      :items-left="sortedAccountList.length - pagedAccountList.length"
+      :items-left="rawAccountList.length - pagedAccountList.length"
     />
   </div>
 </template>
@@ -100,15 +105,17 @@ export default {
     ]),
     ...mapState("settings", ["scrollAutoLoad"]),
     ...mapState("account", ["accountList"]),
-    sortedAccountList() {
-      const sal = this.getAccountList().map((e) => {
+    rawAccountList() {
+      return  this.getAccountList().map((e) => {
         // adding pw durability
         return { ...e, durab: this.pwDurab(e.editedPw) };
       });
-      return _.sortBy(sal, [this.sortByValue.val]);
+      // return _.sortBy(sal, [this.sortByValue.val]);
     },
     pagedAccountList() {
-      const sal = this.sortedAccountList;
+      
+      const sal = _.sortBy(this.rawAccountList, [this.sortByValue.val]);
+      // const sal = this.rawAccountList;
       // console.log(sorted.map(e=>({accId:e.accountId,date:e.edited})))
       const dataSum = this.paging.page * this.paging.count;
       const paged = (
@@ -122,7 +129,7 @@ export default {
       );
     },
     totalItemsIndicator() {
-      const total = this.sortedAccountList.length;
+      const total = this.rawAccountList.length;
       const tPaged = this.pagedAccountList.length;
       const itemLabel = () => " item" + (tPaged > 1 ? "s" : "");
 

@@ -20,7 +20,7 @@
       :loading="btnLoadMoreLoading"
       @click="goToNextPage()"
     >
-      {{"Load " + $store.state.ui.accountList.paging.count +" More"}}
+      {{"Load "  +" More"}}
       <v-icon right>mdi-chevron-down</v-icon>
     </v-btn>
   </div>
