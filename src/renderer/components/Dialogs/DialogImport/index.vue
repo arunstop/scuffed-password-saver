@@ -3,7 +3,7 @@
     v-model="importDialog"
     max-width="600"
     scrollable
-    :fullscreen="$vuetify.breakpoint.smAndDown"
+    :fullscreen="$vuetify.breakpoint.smAndDown&&fileAccountList.length ? true : false"
     transition="slide-y-reverse-transition"
   >
     <v-card outlined>

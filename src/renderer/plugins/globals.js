@@ -1,10 +1,12 @@
 import { shell, remote } from 'electron'
 import _ from 'lodash'
 import { nanoid } from 'nanoid'
-import { jsonToTxt } from 'json-to-txt'
-export default ({ app }, inject) => {
+export default ({ app,$date }, inject) => {
   const renderer = require('electron').ipcRenderer
   const window = remote.getCurrentWindow()
+
+  const jsonToTxt = (data) => require('json-to-txt')({ data })
+  const jsonToCsv = (data) => require('papaparse').unparse(data, { quotes: true })
 
   inject('globals', {
     lodash: _,
@@ -57,17 +59,38 @@ export default ({ app }, inject) => {
         .replaceAll(",", '\\')
       return path
     },
-    jsonToTxt(data) {
-      return require('json-to-txt')({ data })
+    getBackupAccountFile(ext, accList, url = true) {
+      // ex. output : sps_backup_2021-11-26@23-11-36
+      const name = `sps_backup_${$date.moment().format("YYYY-MM-DD@HH-mm-ss")}${ext}`
+      let data; let mimeType; let body = null
+      if (ext === '.json') {
+        mimeType = "text/json"
+        body = JSON.stringify(accList)
+        // if url return string
+        if (url) data = `data:${mimeType};charset=utf-8,` + encodeURIComponent(body)
+        // if not url return object
+        else data = { mimeType, body }
+      } else if (ext === '.txt') {
+        mimeType = "text/plain"
+        body = jsonToTxt(accList)
+        // if url return string
+        if (url) data = `data:${mimeType};charset=utf-8,` + encodeURIComponent(body)
+        else data = { mimeType, body }
+        // if not url return object
+      } else if (ext === '.csv') {
+        mimeType = "text/csv"
+        body = jsonToCsv(accList)
+        // if url return string
+        if (url) data = `data:${mimeType};charset=utf-8,` + encodeURIComponent(body)
+        else data = { mimeType, body }
+      }
+      return { name, data }
     },
+    jsonToTxt,
     txtToJson(filePath) {
       return require('txt-file-to-json')({ filePath })
     },
-    jsonToCsv(data) {
-      return require('papaparse').unparse(data, {
-        quotes: true
-      })
-    },
+    jsonToCsv,
     async csvToJson(files, funk) {
       return await new Promise((resolve) => {
         require('papaparse').parse(files, {

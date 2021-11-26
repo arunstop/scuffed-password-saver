@@ -21,7 +21,7 @@
     @mouseleave="timer.resume()"
   >
     <div class="d-flex align-center pa-2 font-weight-regular">
-      <span class="ms-4">{{ snackbar.label }}</span>
+      <span class="ms-4" v-html="snackbar.label"></span>
       <v-spacer />  
       <v-btn class="ms-4" color="white" outlined @click="removeSnackbar()">
         Close
@@ -83,7 +83,7 @@ export default {
 
       return new Timer(() => {
         this.removeSnackbar()
-      }, 2121)
+      }, 4343)
     },
     removeSnackbar () {
       // alert(123);

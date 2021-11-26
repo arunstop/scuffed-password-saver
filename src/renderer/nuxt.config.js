@@ -16,8 +16,9 @@ module.exports = {
   plugins: [
     { ssr: true, src: '@/plugins/icons.js' },
     '~/plugins/local-storage',
-    '~/plugins/globals',
+    // ********** ORDER MATTERS.*************
     '~/plugins/date',
+    '~/plugins/globals',
     '~/plugins/infinite-scroll',
     '~/plugins/api-gdrive',
   ],

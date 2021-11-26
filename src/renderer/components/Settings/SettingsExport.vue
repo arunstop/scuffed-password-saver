@@ -7,11 +7,11 @@
           Export accounts
         </v-list-item-title>
         <v-list-item-subtitle class="text-break normal-white-space subtitle-2">
-          Export all of your accounts into number of file formats.
+          Export all of your accounts into number of file formats into your device or Google Drive account.
         </v-list-item-subtitle>
       </v-list-item-content>
       <div class="ms-2" style="max-width: 180px">
-        <v-dialog v-model="dialog" max-width="420px">
+        <v-dialog v-model="dialog" max-width="600px" :persistent="isLoading">
           <template #activator="{ on, attrs }">
             <v-btn
               class="ms-2"
@@ -26,6 +26,12 @@
             </v-btn>
           </template>
           <v-card outlined>
+            <v-overlay :value="isLoading" :opacity="0.9" color="indigo">
+              <div class="text-center d-table">
+                <v-progress-circular color="orange" :size="96" indeterminate :width="12"/>
+                <div class="mt-2 font-weight-medium text-h5">Saving backup file...</div>
+              </div>
+            </v-overlay>
             <v-card-title class="primary--text">
               Choose file format
             </v-card-title>
@@ -34,7 +40,7 @@
               v-model="formExportAccs"
               @submit.prevent="exportAccs()"
             >
-              <v-card-text class="pb-0">
+              <v-card-text class="pb-0 mb-6">
                 <v-select
                   v-model="fileFormatModel"
                   :items="fileFormatItems"
@@ -43,6 +49,35 @@
                   outlined
                   label="Choose File Format"
                 />
+
+                <v-list-item class="px-0">
+                  <v-list-item-icon class="ma-0 me-2 my-auto">
+                    <v-icon> mdi-crosshairs-gps </v-icon>
+                  </v-list-item-icon>
+                  <v-item-group v-model="destination" mandatory>
+                    <div class="mb-2 subtitle-1 font-weight-medium">
+                      Backup Destination :
+                    </div>
+                    <v-item
+                      v-for="dest in destinationList"
+                      :key="dest.val"
+                      v-slot="{ active, toggle }"
+                      :value="dest.val"
+                    >
+                      <v-btn
+                        class="text-none me-2 mb-2 font-weight-bold"
+                        :class="active ? 'primary' : ''"
+                        :outlined="!active"
+                        large
+                        :input-value="active"
+                        @click="toggle"
+                      >
+                        <v-icon left>{{ dest.icon }}</v-icon>
+                        {{ dest.label }}
+                      </v-btn>
+                    </v-item>
+                  </v-item-group>
+                </v-list-item>
               </v-card-text>
             </v-form>
             <v-card-actions class="px-6 pb-6">
@@ -68,86 +103,95 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 export default {
-  data () {
+  data() {
     return {
       dialog: false,
-      fileFormatModel: '',
-      formExportAccs: false
-    }
+      isLoading: false,
+      fileFormatModel: "",
+      formExportAccs: false,
+      destination: "",
+      destinationList: [
+        { val: "my-device", label: "My Device", icon: "mdi-monitor" },
+        { val: "g-drive", label: "Google Drive", icon: "mdi-google-drive" },
+      ],
+    };
   },
   computed: {
-    ...mapState('settings', ['reminderFreq', 'vaultPath']),
+    ...mapState("settings", ["reminderFreq", "vaultPath"]),
     reminderFreqModel: {
-      get () {
-        const v = this.reminderFreq
-        return v + (v * 1 === 1 ? ' month' : ' months')
+      get() {
+        const v = this.reminderFreq;
+        return v + (v * 1 === 1 ? " month" : " months");
       },
-      set (v) {
-        this.$store.dispatch('settings/setReminderFreq', v)
-      }
+      set(v) {
+        this.$store.dispatch("settings/setReminderFreq", v);
+      },
     },
-    fileFormatItems () {
-      const ff = ['.JSON', '.TXT', '.CSV']
-      return ff
-    }
+    fileFormatItems() {
+      const ff = [".JSON", ".TXT", ".CSV"];
+      return ff;
+    },
   },
   methods: {
-    toggleDialog () {
-      this.dialog = !this.dialog
+    toggleDialog() {
+      this.isLoading = false;
+      this.dialog = !this.dialog;
     },
-    exportAccs () {
-      this.$refs.formExportAccs.validate()
+    exportAccs() {
+      this.$refs.formExportAccs.validate();
       if (this.formExportAccs) {
-        const accList = JSON.stringify(this.$store.state.account.accountList)
-        const ext = this.fileFormatModel.toLowerCase()
+        this.isLoading = true;
+        const ext = this.fileFormatModel.toLowerCase();
 
-        const url = () => {
-          if (ext === '.json') {
-            return (
-              'data:text/json;charset=utf-8,' + encodeURIComponent(accList)
-            )
-          } else if (ext === '.txt') {
-            return (
-              'data:text/plain;charset=utf-8,' +
-              encodeURIComponent(
-                this.$globals.jsonToTxt(this.$store.state.account.accountList)
-              )
-            )
-          } else if (ext === '.csv') {
-            return (
-              'data:text/csv;charset=utf-8,' +
-              encodeURIComponent(
-                this.$globals.jsonToCsv(this.$store.state.account.accountList)
-              )
-            )
-          }
+        const file = this.$globals.getBackupAccountFile(
+          ext,
+          this.$store.state.account.accountList,
+          true
+        );
+
+        if (this.destination === "my-device") {
+          // If offline
+          this.$globals.download({
+            url: file.data,
+            filename: file.name,
+            directory: this.vaultPath,
+            successAction: (path) => {
+              this.$store.dispatch("ui/showSnackbar", {
+                label: "Exported to vault successfully",
+                color: "success",
+              });
+              this.toggleDialog();
+            },
+          });
+        } else if (this.destination === "g-drive") {
+          // If google drive
+          this.$API_gdrive.backupToDrive(
+            ext,
+            this.$store.state.account.accountList,
+            (err, file) => {
+              if (err) {
+                // Handle error
+                console.error(err);
+              } else {
+                // If folder created, then upload the backup file
+                console.log(file.data.name + " has been created");
+                this.$store.dispatch("ui/showSnackbar", {
+                  label: `<b><u>${file.data.name}</u></b> has been saved to your Google Drive account`,
+                  color: "success",
+                });
+                this.toggleDialog();
+
+                // console.log(file)
+              }
+            }
+          );
         }
-
-        const filename = () => {
-          return `sps_backup_${this.$date
-            .moment()
-            .format('YYYY-MM-DD@HH-mm-ss')}${ext}`
-        }
-
-        this.$globals.download({
-          url: url(),
-          filename: filename(),
-          directory: this.vaultPath,
-          successAction: (path) => {
-            this.$store.dispatch('ui/showSnackbar', {
-              label: 'Exported to vault successfully',
-              color: 'success'
-            })
-          }
-        })
-
-        this.toggleDialog()
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style>

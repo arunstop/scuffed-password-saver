@@ -96,7 +96,8 @@ body {
 }
 
 /* OVERLAY ADJUSTING THE HEIGHT OF CUSTOM WINDOW BAR */
-.v-overlay{
+/* Selecting overlay that is v-application child directly */
+.v-application > .v-overlay{
   top:28px !important;
 }
 

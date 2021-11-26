@@ -6,15 +6,15 @@
           <v-icon class="mb-1" :class="!driveToken || 'primary--text'">
             mdi-google-drive
           </v-icon>
-          Google Drive API Key
+          Set up Google Drive Authorization
         </v-list-item-title>
         <v-list-item-subtitle class="text-break normal-white-space subtitle-2">
-          Set up your Google Drive API Key to set up Google Drive Backup.
+          Set up your Google Drive Authorization to set up Google Drive Backup.
         </v-list-item-subtitle>
       </v-list-item-content>
 
       <div style="max-width: 180px">
-        <v-dialog v-model="dialog" max-width="420px">
+        <v-dialog v-model="dialog" max-width="600px">
           <template #activator="{ on, attrs }">
             <v-btn
               class="ms-2"
@@ -30,7 +30,7 @@
           </template>
           <v-card outlined>
             <v-card-title class="primary--text">
-              Set up Google Drive API KEY
+              Set up Google Drive Authorization
             </v-card-title>
             <v-form
               ref="formSetDriveApi"
@@ -65,6 +65,7 @@
                   placeholder="Enter Authorization Code"
                 />
               </v-card-text>
+              
             </v-form>
             <v-card-actions class="px-6 pb-6">
               <v-spacer />
@@ -78,12 +79,6 @@
                 @click="setDriveToken()"
               >
                 OK
-              </v-btn>
-              <v-btn
-                color="primary"
-                @click="showFiles()"
-              >
-                Show Files
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -110,7 +105,7 @@ export default {
     driveTokenRules: () => [(v) => !!v.trim() || "Key cannot be empty"],
   },
   created() {
-    this.driveTokenModel = '';
+    this.driveTokenModel = "";
   },
   methods: {
     hideDialog() {
@@ -133,9 +128,6 @@ export default {
         this.btnLinkProps = {};
       }, 2000);
     },
-    showFiles(){
-      this.$API_gdrive.getDriveFiles()
-    }
   },
 };
 </script>
