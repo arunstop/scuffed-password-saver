@@ -1,6 +1,7 @@
 export const state = () => ({
   filesRaw: [],
-  fileAccountList: []
+  fileAccountList: [],
+  isLoading: false
   // fileAccountList: [],
 })
 
@@ -90,25 +91,25 @@ export const getters = {
       {
         value: 'REPLACE',
         label:
-                    'Replace existing/duplicate accounts ONLY (' +
-                    upRes().totalDuplicate +
-                    ' accounts)',
+          'Replace existing/duplicate accounts ONLY (' +
+          upRes().totalDuplicate +
+          ' accounts)',
         disabled: !upRes().totalDuplicate
       },
       {
         value: 'REPLACE_ADD',
         label:
-                    'Replace ALL duplicates & add NEW ones (' +
-                    upRes().totalUnique +
-                    ' accounts)',
+          'Replace ALL duplicates & add NEW ones (' +
+          upRes().totalUnique +
+          ' accounts)',
         disabled: !upRes().totalDuplicate || !upRes().totalNew
       },
       {
         value: 'ADD',
         label:
-                    'ONLY add new accounts (' +
-                    upRes().totalNew +
-                    ' accounts)',
+          'ONLY add new accounts (' +
+          upRes().totalNew +
+          ' accounts)',
         disabled: !upRes().totalNew
       }
     ]
@@ -117,59 +118,73 @@ export const getters = {
 }
 
 export const mutations = {
-  SET_FILES_RAW (state, v) {
+  SET_IS_LOADING(state, v) {
+    state.isLoading = v
+  },
+  SET_FILES_RAW(state, v) {
     state.filesRaw = v
   },
-  SET_FILE_ACCOUNT_LIST (state, v) {
+  SET_FILE_ACCOUNT_LIST(state, v) {
     state.fileAccountList.push(v)
     state.fileAccountList = require('lodash').uniqBy(state.fileAccountList, 'path')
   },
-  REMOVE_FILE (state, name) {
+  REMOVE_FILE(state, name) {
     state.fileAccountList = state.fileAccountList.filter(f => f.name !== name)
   },
-  CLEAR_FILES (state) {
+  CLEAR_FILES(state) {
     state.filesRaw = []
     state.fileAccountList = []
   }
 }
 export const actions = {
-  setFilesRaw ({ commit, rootState }, v) {
+  setIsLoading({ commit }, v) {
+    commit('SET_IS_LOADING', v)
+  },
+  setFilesRaw({ commit, rootState }, v) {
     v = v.filter(e =>
       rootState.account.extList
         .includes(e.name.toLowerCase().trim().split('.').reverse()[0])
     )
     commit('SET_FILES_RAW', v)
   },
-  setFileAccountList ({ commit }, fileRawList) {
-    const fileDetailList = []
-    // 1. json-file.JSON
-    // 2. csv-file.CSV
-    fileRawList.forEach(async (e) => {
-      let accList = []
-      const ext = e.name.toLowerCase().trim().split('.').reverse()[0]
-      if (ext === 'json') {
-        const accListFound = JSON.parse(require('fs').readFileSync(e.path))
-        // if there is no account
-        if (accListFound[0]?.id) { accList = accListFound }
-      } else if (ext === 'txt') {
-        const accListFound = this.$globals.txtToJson(e.path)
-        // if there is no account
-        if (accListFound[0]?.id) { accList = accListFound }
-        // commit('SET_FILES', require('lodash').assign(e, { accList }))
-      } else if (ext === 'csv') {
-        const accListFound = await this.$globals.csvToJson(e)
-        // if there is no account
-        if (accListFound[0]?.id) { accList = accListFound }
-        // commit('SET_FILES', require('lodash').assign(e, { accList }))
-      }
-      // SET
-      if (accList.length !== 0) { commit('SET_FILE_ACCOUNT_LIST', require('lodash').assign(e, { accList })) }
-    })
+  setFileAccountList({ commit }, fileRawList) {
+    commit('SET_IS_LOADING', true)
+
+    setTimeout(() => {
+      // 1. json-file.JSON
+      // 2. csv-file.CSV
+      fileRawList.forEach(async (e) => {
+
+        let accList = []
+        const ext = e.name.toLowerCase().trim().split('.').reverse()[0]
+        if (ext === 'json') {
+          const accListFound = JSON.parse(require('fs').readFileSync(e.path))
+          // if there is no account
+          if (accListFound[0]?.id) { accList = accListFound }
+        } else if (ext === 'txt') {
+          const accListFound = this.$globals.txtToJson(e.path)
+          // if there is no account
+          if (accListFound[0]?.id) { accList = accListFound }
+          // commit('SET_FILES', require('lodash').assign(e, { accList }))
+        } else if (ext === 'csv') {
+          const accListFound = await this.$globals.csvToJson(e)
+          // if there is no account
+          if (accListFound[0]?.id) { accList = accListFound }
+          // commit('SET_FILES', require('lodash').assign(e, { accList }))
+        }
+        // SET
+        if (accList.length !== 0) {
+          commit('SET_FILE_ACCOUNT_LIST', require('lodash').assign(e, { accList }))
+        }
+      })
+      commit('SET_IS_LOADING', false)
+    }, 1212)
+
   },
-  removeFile ({ commit }, name) {
+  removeFile({ commit }, name) {
     commit('REMOVE_FILE', name)
   },
-  clearFiles ({ commit }) {
+  clearFiles({ commit }) {
     commit('CLEAR_FILES')
   }
 }

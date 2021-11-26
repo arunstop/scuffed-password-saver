@@ -26,12 +26,7 @@
             </v-btn>
           </template>
           <v-card outlined>
-            <v-overlay :value="isLoading" :opacity="0.9" color="indigo">
-              <div class="text-center d-table">
-                <v-progress-circular color="orange" :size="96" indeterminate :width="12"/>
-                <div class="mt-2 font-weight-medium text-h5">Saving backup file...</div>
-              </div>
-            </v-overlay>
+            <UtilOverlay :show="isLoading" :label="'Saving backup file...'"/>
             <v-card-title class="primary--text">
               Choose file format
             </v-card-title>
@@ -65,7 +60,7 @@
                       :value="dest.val"
                     >
                       <v-btn
-                        class="text-none me-2 mb-2 font-weight-bold"
+                        class="me-2 mb-2 font-weight-medium"
                         :class="active ? 'primary' : ''"
                         :outlined="!active"
                         large
