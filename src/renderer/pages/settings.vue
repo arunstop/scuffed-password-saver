@@ -18,8 +18,8 @@
     <SettingsPwDuplication />
     <!-- Password duplication limit -->
     <SettingsPwDupLimit />
-    <!-- Drive API Key -->
-    <SettingsDriveApi />
+    <!-- Drive Auth -->
+    <SettingsDriveAuth />
     <!-- Export -->
     <SettingsExport />
     <!-- Export -->

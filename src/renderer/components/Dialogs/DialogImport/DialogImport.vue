@@ -10,7 +10,7 @@
     :persistent="isLoading"
   >
     <v-card outlined>
-      <UtilOverlay :show="isLoading" :label="loadingLabel" />
+      <UtilLoadingOverlay :show="isLoading" :label="loadingLabel" />
       <v-card-title class="primary--text">
         Import accounts
         <UtilDialogCloseBtn :action="() => hideDialog()" />

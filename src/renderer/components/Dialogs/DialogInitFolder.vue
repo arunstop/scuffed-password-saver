@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="initFolderDialog" max-width="600">
+  <v-dialog v-model="initFolderDialog" max-width="600px" transition="slide-y-reverse-transition">
     <v-card outlined>
       <v-card-title class="text-break text-center">
         Where do you want to save your passwords?

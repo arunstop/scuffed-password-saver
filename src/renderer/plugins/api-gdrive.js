@@ -34,13 +34,18 @@ export default ({ app, $globals, store }, inject) => {
 
   inject('API_gdrive', {
     init: () => getAuthCode(),
-    getToken: (authCode) => {
+    authorizeAccess: (authCode,mainCallback) => {
       oAuth2Client.getToken(authCode, (err, token) => {
-        if (err) return console.log('Error retrieving token, try again')
+        // if error occurs
+        if (err) {
+          return mainCallback(err)
+        }
         // if not error
         oAuth2Client.setCredentials(token)
-        console.log(token)
+        // save the token
         store.dispatch('settings/setDriveToken', token)
+        // notify user
+        mainCallback(err)
       })
     },
     getDriveFiles: () => {
@@ -66,7 +71,7 @@ export default ({ app, $globals, store }, inject) => {
       });
     },
     backupToDrive(ext, accList, mainCallback) {
-      
+
       oAuth2Client.setCredentials(store.state.settings.driveToken)
       const drive = google.drive({ version: 'v3', auth: oAuth2Client })
 

@@ -20,7 +20,7 @@
       </v-list-item-content>
 
       <div style="max-width: 180px">
-        <v-dialog v-model="pwDuplicationDialog" max-width="420px">
+        <v-dialog v-model="pwDuplicationDialog" max-width="600px" transition="slide-y-reverse-transition">
           <template #activator="{ on, attrs }">
             <v-btn
               class="ms-2"

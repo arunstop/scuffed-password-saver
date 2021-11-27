@@ -11,7 +11,7 @@
         </v-list-item-subtitle>
       </v-list-item-content>
       <div class="ms-2" style="max-width: 180px">
-        <v-dialog v-model="dialog" max-width="600px" :persistent="isLoading">
+        <v-dialog v-model="dialog" max-width="600px" transition="slide-y-reverse-transition" :persistent="isLoading">
           <template #activator="{ on, attrs }">
             <v-btn
               class="ms-2"
@@ -26,7 +26,7 @@
             </v-btn>
           </template>
           <v-card outlined>
-            <UtilOverlay :show="isLoading" :label="'Saving backup file...'"/>
+            <UtilLoadingOverlay :show="isLoading" :label="'Saving backup file...'"/>
             <v-card-title class="primary--text">
               Choose file format
             </v-card-title>
@@ -173,7 +173,8 @@ export default {
                 // If folder created, then upload the backup file
                 console.log(file.data.name + " has been created");
                 this.$store.dispatch("ui/showSnackbar", {
-                  label: `<b><u>${file.data.name}</u></b> has been saved to your Google Drive account`,
+                  // label: `<b><u>${file.data.name}</u></b> has been saved to your Google Drive account`,
+                  label:'The backup file has been saved to your Google Drive account',
                   color: "success",
                 });
                 this.toggleDialog();

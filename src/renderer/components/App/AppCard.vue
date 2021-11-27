@@ -107,7 +107,7 @@ export default {
         data: {
           color: "error",
           title: "Delete application",
-          desc: `Are u sure you want to delete application: ${name}?`,
+          desc: `Are you sure you want to delete application: ${name}?`,
           actions: {
             y: () => {
               this.deleteApp(name);
