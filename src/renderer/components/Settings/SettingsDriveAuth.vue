@@ -14,7 +14,7 @@
       </v-list-item-content>
 
       <div style="max-width: 180px">
-        <v-dialog v-model="dialog" max-width="600px" transition="slide-y-reverse-transition">
+        <v-dialog v-model="dialog" max-width="600px" transition="slide-y-reverse-transition" :persistent="isLoading">
           <template #activator="{ on, attrs }">
             <v-btn
               class="ms-2"

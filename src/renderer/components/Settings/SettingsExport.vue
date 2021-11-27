@@ -7,11 +7,17 @@
           Export accounts
         </v-list-item-title>
         <v-list-item-subtitle class="text-break normal-white-space subtitle-2">
-          Export all of your accounts into number of file formats into your device or Google Drive account.
+          Export all of your accounts into number of file formats into your
+          device or Google Drive account.
         </v-list-item-subtitle>
       </v-list-item-content>
       <div class="ms-2" style="max-width: 180px">
-        <v-dialog v-model="dialog" max-width="600px" transition="slide-y-reverse-transition" :persistent="isLoading">
+        <v-dialog
+          v-model="dialog"
+          max-width="600px"
+          transition="slide-y-reverse-transition"
+          :persistent="isLoading"
+        >
           <template #activator="{ on, attrs }">
             <v-btn
               class="ms-2"
@@ -26,7 +32,10 @@
             </v-btn>
           </template>
           <v-card outlined>
-            <UtilLoadingOverlay :show="isLoading" :label="'Saving backup file...'"/>
+            <UtilLoadingOverlay
+              :show="isLoading"
+              :label="'Saving backup file...'"
+            />
             <v-card-title class="primary--text">
               Choose file format
             </v-card-title>
@@ -49,7 +58,7 @@
                   <v-list-item-icon class="ma-0 me-2 my-auto">
                     <v-icon> mdi-crosshairs-gps </v-icon>
                   </v-list-item-icon>
-                  <v-item-group v-model="destination" mandatory>
+                  <v-item-group v-model="destinationModel" mandatory>
                     <div class="mb-2 subtitle-1 font-weight-medium">
                       Backup Destination :
                     </div>
@@ -106,7 +115,7 @@ export default {
       isLoading: false,
       fileFormatModel: "",
       formExportAccs: false,
-      destination: "",
+      destinationModel: "",
       destinationList: [
         { val: "my-device", label: "My Device", icon: "mdi-monitor" },
         { val: "g-drive", label: "Google Drive", icon: "mdi-google-drive" },
@@ -131,6 +140,8 @@ export default {
   },
   methods: {
     toggleDialog() {
+      this.fileFormatModel = "";
+      this.destinationModel = "";
       this.isLoading = false;
       this.dialog = !this.dialog;
     },
@@ -146,7 +157,7 @@ export default {
           true
         );
 
-        if (this.destination === "my-device") {
+        if (this.destinationModel === "my-device") {
           // If offline
           this.$globals.download({
             url: file.data,
@@ -160,7 +171,7 @@ export default {
               this.toggleDialog();
             },
           });
-        } else if (this.destination === "g-drive") {
+        } else if (this.destinationModel === "g-drive") {
           // If google drive
           this.$API_gdrive.backupToDrive(
             ext,
@@ -174,7 +185,8 @@ export default {
                 console.log(file.data.name + " has been created");
                 this.$store.dispatch("ui/showSnackbar", {
                   // label: `<b><u>${file.data.name}</u></b> has been saved to your Google Drive account`,
-                  label:'The backup file has been saved to your Google Drive account',
+                  label:
+                    "The backup file has been saved to your Google Drive account",
                   color: "success",
                 });
                 this.toggleDialog();
