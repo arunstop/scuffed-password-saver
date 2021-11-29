@@ -14,7 +14,12 @@
       </v-list-item-content>
 
       <div style="max-width: 180px">
-        <v-dialog v-model="dialog" max-width="600px" transition="slide-y-reverse-transition" :persistent="isLoading">
+        <v-dialog
+          v-model="dialog"
+          max-width="600px"
+          transition="slide-y-reverse-transition"
+          :persistent="isLoading"
+        >
           <template #activator="{ on, attrs }">
             <v-btn
               class="ms-2"
@@ -57,7 +62,7 @@
                       v-if="!isAuthed"
                       class="mt-2"
                       large
-                      color="primary"
+                      color="success"
                       v-bind="btnLinkProps"
                       @click.stop="goToLink()"
                     >
@@ -76,6 +81,19 @@
                     <div>
                       You have authorized this app into your Google Drive
                       account, now you can backup data to it.
+                      <br />
+                      <v-chip class="my-2" label color="orange" outlined>
+                        Expiration Date :
+                        <span
+                          class="
+                            ms-2
+                            font-weight-bold
+                            text-decoration-underline
+                          "
+                        >
+                          {{ tokenExpiryDate }}
+                        </span>
+                      </v-chip>
                     </div>
                     <v-btn
                       v-if="isAuthed"
@@ -87,6 +105,34 @@
                     >
                       Remove access
                       <v-icon right size="20">mdi-close-thick</v-icon>
+                    </v-btn>
+                  </v-alert>
+                  <v-alert
+                    v-if="isAuthed && isExpired"
+                    key="alertDialogDaExpired"
+                    type="error"
+                    prominent
+                    dense
+                    text
+                  >
+                    <div>
+                      Your authorization access has expired at
+                      <span
+                        class="ms-2 font-weight-bold text-decoration-underline"
+                      >
+                        {{ tokenExpiryDate }} </span
+                      >. Please do redo the authorization process.
+                    </div>
+                    <v-btn
+                      v-if="isAuthed"
+                      class="mt-2"
+                      large
+                      color="info"
+                      v-bind="btnLinkProps"
+                      @click="reauthorize()"
+                    >
+                      Re-Authorize
+                      <v-icon right size="20">mdi-reload</v-icon>
                     </v-btn>
                   </v-alert>
                   <v-text-field
@@ -142,9 +188,19 @@ export default {
   },
   computed: {
     ...mapState("settings", ["driveToken"]),
-    driveTokenRules: () => [(v) => !!v.trim() || "Authorization code cannot be empty"],
+    driveTokenRules: () => [
+      (v) => !!v.trim() || "Authorization code cannot be empty",
+    ],
     isAuthed() {
       return this.$store.state.settings.driveToken.access_token && true;
+    },
+    isExpired() {
+      return this.$date.moment().format("x") > this.driveToken.expiry_date;
+    },
+    tokenExpiryDate() {
+      return this.$date
+        .moment(this.driveToken.expiry_date)
+        .format("dddd, DD MMMM YYYY [at] HH:mm");
     },
   },
   created() {
@@ -204,24 +260,30 @@ export default {
           desc: `Are you sure you want to remove your Google Drive authorization access ?`,
           actions: {
             y: () => {
-              this.isLoadingLabel = "Removing access...";
-              this.isLoading = true;
-              setTimeout(() => {
-                this.$store.dispatch("settings/setDriveToken", "");
-                this.$store.dispatch("ui/showSnackbar", {
-                  label:
-                    "Access to your Google Drive account has been successfully removed",
-                  color: "success",
-                });
-                this.isLoading = false;
-              }, 1212);
+              this.deleteToken();
             },
           },
         },
       });
-
       // this.hideDialog()
     },
+    deleteToken() {
+      this.isLoadingLabel = "Removing access...";
+      this.isLoading = true;
+      setTimeout(() => {
+        this.$store.dispatch("settings/setDriveToken", "");
+        this.$store.dispatch("ui/showSnackbar", {
+          label:
+            "Access to your Google Drive account has been successfully removed",
+          color: "success",
+        });
+        this.isLoading = false;
+      }, 1212);
+    },
+    reauthorize(){
+      this.deleteToken()
+      this.goToLink()
+    }
   },
 };
 </script>
