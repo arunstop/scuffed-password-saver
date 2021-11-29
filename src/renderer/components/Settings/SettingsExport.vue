@@ -149,6 +149,22 @@ export default {
       this.$refs.formExportAccs.validate();
       if (this.formExportAccs) {
         this.isLoading = true;
+
+        // if token expired, set the token first
+        const isExpired =
+          this.$date.moment().format("x") >
+          this.$store.state.settings.driveToken.expiry_date;
+
+        if (isExpired) {
+          this.$store.dispatch("ui/showSnackbar", {
+            label:
+              "Authorization access to your Google Drive account has expired. Please redo authorization process.",
+            color: "error",
+          });
+          this.toggleDialog()
+          return;
+        }
+
         const ext = this.fileFormatModel.toLowerCase();
 
         const file = this.$globals.getBackupAccountFile(
