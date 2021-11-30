@@ -16,7 +16,10 @@ export default ({ app, $globals, $date, store }, inject) => {
 
 
 
-  const cred = API_CREDENTIALS.web
+  // for web
+  // const cred = API_CREDENTIALS.web
+  // for desktop (current form)
+  const cred = API_CREDENTIALS.installed
   const oAuth2Client = new google.auth.OAuth2(
     cred.client_id,
     cred.client_secret,
