@@ -155,21 +155,19 @@ export default {
           this.$date.moment().format("x") >
           this.$store.state.settings.driveToken.expiry_date;
 
-        if (isExpired) {
-          this.$store.dispatch("ui/showSnackbar", {
-            label:
-              "Authorization access to your Google Drive account has expired. Please redo authorization process.",
-            color: "error",
-          });
-          this.toggleDialog()
-          return;
-        }
-
         const ext = this.fileFormatModel.toLowerCase();
 
+        // add accountTags
+        const normalizeProps = (list) => {
+          return list.map((e) => {
+            if (!e.accountTags) require('lodash').assign(e,{ accountTags: "" });
+            return e;
+          });
+        };
+        // console.log();
         const file = this.$globals.getBackupAccountFile(
           ext,
-          this.$store.state.account.accountList,
+          normalizeProps(this.$store.state.account.accountList),
           true
         );
 
@@ -194,8 +192,23 @@ export default {
             this.$store.state.account.accountList,
             (err, file) => {
               if (err) {
-                // Handle error
-                console.error(err);
+                // // Handle error
+                // console.error(err);
+                // if (isExpired) {
+                //   this.$store.dispatch("ui/showSnackbar", {
+                //     label:
+                //       `Authorization access to your Google Drive account has expired.
+                //       Please redo authorization process.`,
+                //     color: "error",
+                //   });
+                //   this.toggleDialog();
+                //   return;
+                // }
+                this.$store.dispatch("ui/showSnackbar", {
+                  label: err,
+                  color: "error",
+                });
+                this.toggleDialog();
               } else {
                 // If folder created, then upload the backup file
                 console.log(file.data.name + " has been created");

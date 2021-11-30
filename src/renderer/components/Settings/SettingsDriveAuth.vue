@@ -71,7 +71,7 @@
                     </v-btn>
                   </v-alert>
                   <v-alert
-                    v-if="isAuthed"
+                    v-if="isAuthed && !isExpired"
                     key="alertDialogDaHasAccess"
                     type="success"
                     prominent
@@ -82,7 +82,7 @@
                       You have authorized this app into your Google Drive
                       account, now you can backup data to it.
                       <br />
-                      <v-chip class="my-2" label color="orange" outlined>
+                      <v-chip v-if="!driveToken.refresh_token" class="my-2" label color="orange" outlined>
                         Expiration Date :
                         <span
                           class="
@@ -96,7 +96,6 @@
                       </v-chip>
                     </div>
                     <v-btn
-                      v-if="isAuthed"
                       class="mt-2"
                       large
                       color="error"
@@ -195,7 +194,7 @@ export default {
       return this.$store.state.settings.driveToken.access_token && true;
     },
     isExpired() {
-      return this.$date.moment().format("x") > this.driveToken.expiry_date;
+      return this.$date.moment().format("x") > this.driveToken.expiry_date && !this.driveToken.refresh_token;
     },
     tokenExpiryDate() {
       return this.$date
@@ -233,9 +232,9 @@ export default {
               label: "Access to your Google Drive account has been authorized",
               color: "success",
             });
+            this.driveTokenModel = "";
             this.isLoading = false;
           });
-          this.driveTokenModel = "";
         }, 1212);
         // this.hideDialog();
       }
@@ -280,10 +279,10 @@ export default {
         this.isLoading = false;
       }, 1212);
     },
-    reauthorize(){
-      this.deleteToken()
-      this.goToLink()
-    }
+    reauthorize() {
+      this.deleteToken();
+      this.goToLink();
+    },
   },
 };
 </script>

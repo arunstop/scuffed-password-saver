@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-export default ({ app, $globals, store }, inject) => {
+export default ({ app, $globals, $date, store }, inject) => {
   const readline = require('readline')
   const fs = require('fs')
   const { google } = require('googleapis')
@@ -34,7 +34,7 @@ export default ({ app, $globals, store }, inject) => {
 
   inject('API_gdrive', {
     init: () => getAuthCode(),
-    authorizeAccess: (authCode,mainCallback) => {
+    authorizeAccess: (authCode, mainCallback) => {
       oAuth2Client.getToken(authCode, (err, token) => {
         // if error occurs
         if (err) {
@@ -48,31 +48,19 @@ export default ({ app, $globals, store }, inject) => {
         mainCallback(err)
       })
     },
-    getDriveFiles: () => {
-      oAuth2Client.setCredentials(store.state.settings.driveToken)
-      // const auth = oAuth2Client
-      // get token from state drive key
-      const drive = google.drive({ version: 'v3', auth: oAuth2Client })
-      drive.files.list({
-        q: "mimeType='application/vnd.google-apps.folder'",
-        pageSize: 10,
-        fields: 'nextPageToken, files(id, name)',
-      }, (err, res) => {
-        if (err) return console.log('The API returned an error: ' + err);
-        const files = res.data.files;
-        if (files.length) {
-          console.log('Files:');
-          files.forEach((file) => {
-            console.log(`${file.name} (${file.id})`);
-          });
-        } else {
-          console.log('No files found.');
-        }
-      });
-    },
     backupToDrive(ext, accList, mainCallback) {
 
-      oAuth2Client.setCredentials(store.state.settings.driveToken)
+      const driveToken = store.state.settings.driveToken
+      // if token has expired
+      // and it has no refresh token
+      if ($date.moment().format('x') > driveToken.expiry_date && !driveToken.refresh_token) {
+        // alert('expired')
+        // oAuth2Client.setCredentials(driveToken)
+        return mainCallback(`Authorization access to your Google Drive account has expired. 
+        Please redo authorization process.`)
+      }
+      oAuth2Client.setCredentials(driveToken)
+      // console.log(oAuth2Client)
       const drive = google.drive({ version: 'v3', auth: oAuth2Client })
 
       const createBackupFolder = (callback) => {
@@ -101,7 +89,7 @@ export default ({ app, $globals, store }, inject) => {
       }
 
       drive.files.list({ q: "mimeType = 'application/vnd.google-apps.folder' and trashed = false", }, (err, res) => {
-        if (err) return alert('The API returned an error: ' + err);
+        if (err) return mainCallback('The API returned an error: ' + err);
         const fileList = res.data.files;
         const backupFolder = fileList.find(e => e.name === DRIVE_BACKUP_FOLDER_NAME)
         if (backupFolder) {

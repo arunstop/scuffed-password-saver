@@ -1,7 +1,7 @@
 import { shell, remote } from 'electron'
 import _ from 'lodash'
 import { nanoid } from 'nanoid'
-export default ({ app,$date }, inject) => {
+export default ({ app, $date }, inject) => {
   const renderer = require('electron').ipcRenderer
   const window = remote.getCurrentWindow()
 

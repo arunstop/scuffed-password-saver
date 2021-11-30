@@ -306,7 +306,7 @@ export default {
     this.accountId = this.accountEditValue.accountId;
     this.accountPw = this.accountEditValue.accountPw;
     this.accountNote = this.accountEditValue.accountNote;
-    this.accountTags = this.accountEditValue.accountTags;
+    this.accountTags = this.accountEditValue.accountTags||[];
   },
   mounted() {
     // console.log(this.getAppList());
