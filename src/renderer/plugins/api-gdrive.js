@@ -14,6 +14,29 @@ export default ({ app, $globals, $date, store }, inject) => {
   const SCOPES = 'https://www.googleapis.com/auth/drive'
   const DRIVE_BACKUP_FOLDER_NAME = "Scuffed-Password-Saver_Backup"
 
+  // filter 
+  const filter = {
+    urls: ['https://www.googleapis.com/drive/v3/*']
+  };
+  const session = require('electron').remote.session
+  // session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
+  //   // details.requestHeaders.Origin = null;
+  //   // details.headers.Origin = null;
+  //   // alert('CALLING')
+  //   console.log(details)
+  //   const cbParam = { requestHeaders: { ...details.requestHeaders, Origin: '*' } }
+  //   callback(cbParam)
+  // });
+
+  // session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+  //   const cbParam = {
+  //     responseHeaders: {
+  //       ...details.responseHeaders,
+  //       'Access-Control-Allow-Origin': ['*'],
+  //     },
+  //   }
+  //   callback(cbParam);
+  // });
 
 
   // for web

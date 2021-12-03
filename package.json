@@ -1,6 +1,6 @@
 {
   "name": "scuffed-password-saver",
-  "version": "0.0.31",
+  "version": "0.0.50",
   "description": "Scuffed Password Saver",
   "main": "./dist/main/index.js",
   "scripts": {
@@ -59,6 +59,7 @@
     "nanoid": "^3.1.30",
     "papaparse": "^5.3.1",
     "txt-file-to-json": "^3.0.6",
+    "vue-gapi": "1.1.1",
     "vue-infinite-scroll": "^2.0.2",
     "vue2-storage": "^6.1.3"
   },

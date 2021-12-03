@@ -107,6 +107,7 @@
 </template>
 
 <script>
+import { ipcRenderer } from "electron";
 import { mapState } from "vuex";
 export default {
   data() {
@@ -160,7 +161,8 @@ export default {
         // add accountTags
         const normalizeProps = (list) => {
           return list.map((e) => {
-            if (!e.accountTags) require('lodash').assign(e,{ accountTags: "" });
+            if (!e.accountTags)
+              require("lodash").assign(e, { accountTags: "" });
             return e;
           });
         };
@@ -187,43 +189,70 @@ export default {
           });
         } else if (this.destinationModel === "g-drive") {
           // If google drive
-          this.$API_gdrive.backupToDrive(
-            ext,
-            this.$store.state.account.accountList,
-            (err, file) => {
-              if (err) {
-                // // Handle error
-                // console.error(err);
-                // if (isExpired) {
-                //   this.$store.dispatch("ui/showSnackbar", {
-                //     label:
-                //       `Authorization access to your Google Drive account has expired.
-                //       Please redo authorization process.`,
-                //     color: "error",
-                //   });
-                //   this.toggleDialog();
-                //   return;
-                // }
-                this.$store.dispatch("ui/showSnackbar", {
-                  label: err,
-                  color: "error",
-                });
-                this.toggleDialog();
-              } else {
-                // If folder created, then upload the backup file
-                console.log(file.data.name + " has been created");
-                this.$store.dispatch("ui/showSnackbar", {
-                  // label: `<b><u>${file.data.name}</u></b> has been saved to your Google Drive account`,
-                  label:
-                    "The backup file has been saved to your Google Drive account",
-                  color: "success",
-                });
-                this.toggleDialog();
 
-                // console.log(file)
-              }
+          (async () => {
+            const result = JSON.parse(
+              await ipcRenderer.invoke(
+                "api-gdrive-backup-to-drive",
+                JSON.stringify(this.$store.state.settings.driveToken)
+              )
+            );
+            console.log(result)
+            // IF ERROR
+            if(result.error){
+              this.$store.dispatch("ui/showSnackbar", {
+                label: result.message,
+                color: "error",
+              });
             }
-          );
+            // IF SUCCESS
+            else{
+              this.$store.dispatch("ui/showSnackbar", {
+                label: "Backup file has been created in your Google Drive Account",
+                color: "success",
+              });
+            }
+
+            this.toggleDialog()
+          })();
+
+          // this.$API_gdrive.backupToDrive(
+          //   ext,
+          //   this.$store.state.account.accountList,
+          //   (err, file) => {
+          //     if (err) {
+          //       // // Handle error
+          //       // console.error(err);
+          //       // if (isExpired) {
+          //       //   this.$store.dispatch("ui/showSnackbar", {
+          //       //     label:
+          //       //       `Authorization access to your Google Drive account has expired.
+          //       //       Please redo authorization process.`,
+          //       //     color: "error",
+          //       //   });
+          //       //   this.toggleDialog();
+          //       //   return;
+          //       // }
+          //       this.$store.dispatch("ui/showSnackbar", {
+          //         label: err,
+          //         color: "error",
+          //       });
+          //       this.toggleDialog();
+          //     } else {
+          //       // If folder created, then upload the backup file
+          //       console.log(file.data.name + " has been created");
+          //       this.$store.dispatch("ui/showSnackbar", {
+          //         // label: `<b><u>${file.data.name}</u></b> has been saved to your Google Drive account`,
+          //         label:
+          //           "The backup file has been saved to your Google Drive account",
+          //         color: "success",
+          //       });
+          //       this.toggleDialog();
+
+          //       // console.log(file)
+          //     }
+          //   }
+          // );
         }
       }
     },

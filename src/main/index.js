@@ -25,5 +25,9 @@ ipcMain.on('download', async (event, { url, filename, directory }) => {
   })
 })
 
+// api GDrive
+require('./apiGDrive')
+
 // Load here all startup windows
 require('./mainWindow')
+

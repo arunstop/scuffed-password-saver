@@ -6,7 +6,7 @@ const winHandler = new BrowserWinHandler({
   minHeight: 600,
   minWidth: 600,
   // titleBarStyle:'hidden',
-  frame: false
+  frame: false,
 
 })
 
