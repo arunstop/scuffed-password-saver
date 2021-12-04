@@ -28,95 +28,89 @@ const getAuthCode = () => {
     shell.openExternal(authUrl)
 }
 
-ipcMain.handle('api-gdrive-backup-to-drive', async (event, strToken) => {
-    let result = {error:true, message : "Error occurred"};
-    console.log(strToken)
-    oAuth2Client.setCredentials(JSON.parse(strToken))
+ipcMain.handle('api-gdrive-backup-to-drive', async (event, payload) => {
+
+    let result = { error: true, message: "Error occurred" };
+    payload = JSON.parse(payload)
+    console.log(payload)
+    const token = payload.token
+    oAuth2Client.setCredentials(token)
     const drive = google.drive({ version: 'v3', auth: oAuth2Client })
 
+    const callError = (message) => {
+        // set error message
+        mainCallback('The API returned an error: ' + message)
+    }
 
-    // const createBackupFolder = (callback) => {
-    //     const requestBody = {
-    //       name: DRIVE_BACKUP_FOLDER_NAME,
-    //       mimeType: 'application/vnd.google-apps.folder'
-    //     }
-    //     drive.files.create({
-    //       requestBody
-    //     }, (err, folder) => {
-    //       return callback(err, folder)
-    //     })
-    //   }
+    const callOk = (response) => {
+        // set response
+        mainCallback(null, response)
+    }
 
-    //   const uploadFile = (parentFolderId, callback) => {
-    //     // const accList = store.state.account.accountList
-    //     const backupFile = $globals.getBackupAccountFile(ext, accList, false)
-    //     drive.files.create({
-    //       requestBody: {
-    //         mimeType: backupFile.data.mimeType,
-    //         parents: [parentFolderId],
-    //         name: backupFile.name,
-    //       },
-    //       media: backupFile.data
-    //     }, callback)
-    //   }
+    const mainCallback = (error = null, response) => {
+        result = JSON.stringify({ error, response })
+        console.log(JSON.parse(result))
+    }
 
-    const response = await drive.files.list(
+    const createBackupFolder = async (callback) => {
+        const requestBody = {
+            name: DRIVE_BACKUP_FOLDER_NAME,
+            mimeType: 'application/vnd.google-apps.folder'
+        }
+        await drive.files.create({
+            requestBody
+        }).then(async res => {
+            const folder = res
+            console.log(folder.data.name + " has been created")
+            // console.log(folder)
+            // If folder created, then upload the backup file
+            await uploadFile(folder.data.id, mainCallback)
+            callOk(folder)
+        }).catch(err => {
+            console.error(err);
+            callError(err)
+        })
+    }
+
+    const uploadFile = async (parentFolderId, callback) => {
+        // const accList = store.state.account.accountList
+        const backupFile = payload.backupFile
+        await drive.files.create({
+            requestBody: {
+                mimeType: backupFile.data.mimeType,
+                parents: [parentFolderId],
+                name: backupFile.name,
+            },
+            media: backupFile.data
+        }).then(callOk).catch(callError)
+    }
+
+    await drive.files.list(
         { q: "mimeType = 'application/vnd.google-apps.folder' and trashed = false", },
-        // (err, res) => {
-        //     if (err) { result = 'The API returned an error: ' + err; }
-        //     const fileList = res.data.files;
-        //     result = fileList
-        //     const backupFolder = fileList.find(e => e.name === DRIVE_BACKUP_FOLDER_NAME)
-        //     // if (backupFolder) {
-        //     //   // If there is backup folder then upload
-        //     //   console.log(backupFolder.name + " is already created")
-        //     //   uploadFile(backupFolder.id, mainCallback)
-        //     // } else {
-        //     //   // If there isn't create first and then upload
-        //     //   createBackupFolder((err, folder) => {
-        //     //     if (err) {
-        //     //       // Handle error
-        //     //       console.error(err);
-        //     //     } else {
-        //     //       console.log(folder.data.name + " has been created")
-        //     //       // console.log(folder)
-        //     //       // If folder created, then upload the backup file
-        //     //       uploadFile(folder.data.id, mainCallback)
-        //     //     }
-        //     //   })
-        //     // }
-        // }
-    ).
-    then(res=>{
-        result = {
-            error: false,
-            message: res.statusText,
-            data: res.data
+    ).then(async (res) => {
+        // mainCallback(null)
+        const fileList = res.data.files;
+        const backupFolder = fileList.find(e => e.name === DRIVE_BACKUP_FOLDER_NAME)
+        if (backupFolder) {
+            // If there is backup folder then upload
+            console.log(backupFolder.name + " is already created")
+            await uploadFile(backupFolder.id, mainCallback)
+        } else {
+            // If there isn't create first and then upload
+            await createBackupFolder(async (err, folder) => {
+                if (err) {
+                    // Handle error
+                    console.error(err);
+                    callError(err)
+                } else {
+                    console.log(folder.data.name + " has been created")
+                    // console.log(folder)
+                    // If folder created, then upload the backup file
+                    await uploadFile(folder.data.id, mainCallback)
+                }
+            })
         }
-    })
-    .catch(err => {
-        // console.log(JSON.stringify(err.message))
-        result = {
-            error: true,
-            message: err.message
-        }
-    })
+    }).catch(callError)
 
-    return JSON.stringify(result)
-    // console.log(result)
-
-
-    // if (result.status === 200) {
-    //     return JSON.stringify({
-    //         error: false,
-    //         message: result.statusText,
-    //         data: result.data
-    //     })
-    // } else {
-    //     return JSON.stringify({
-    //         error: true,
-    //         message: result
-    //     })
-    // }
-    // return "KEKL"
+    return result
 })

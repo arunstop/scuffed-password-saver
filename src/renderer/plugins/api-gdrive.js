@@ -1,3 +1,5 @@
+import { ipcRenderer } from 'electron'
+
 /* eslint-disable camelcase */
 export default ({ app, $globals, $date, store }, inject) => {
   const readline = require('readline')
@@ -11,14 +13,14 @@ export default ({ app, $globals, $date, store }, inject) => {
 
   // Authorization scopes required by the API; multiple scopes can be
   // included, separated by spaces.
-  const SCOPES = 'https://www.googleapis.com/auth/drive'
+  const SCOPES = 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/userinfo.email'
   const DRIVE_BACKUP_FOLDER_NAME = "Scuffed-Password-Saver_Backup"
 
   // filter 
-  const filter = {
-    urls: ['https://www.googleapis.com/drive/v3/*']
-  };
-  const session = require('electron').remote.session
+  // const filter = {
+  //   urls: ['https://www.googleapis.com/drive/v3/*']
+  // };
+  // const session = require('electron').remote.session
   // session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
   //   // details.requestHeaders.Origin = null;
   //   // details.headers.Origin = null;
@@ -49,6 +51,16 @@ export default ({ app, $globals, $date, store }, inject) => {
     cred.redirect_uris[0]
   );
 
+  // oAuth2Client.setCredentials(store.state.settings.driveToken)
+  // console.log(oAuth2Client)
+  // const oauth2 = google.oauth2({version:"v2", auth:oAuth2Client})
+  // oauth2.userinfo.v2.me.get(
+  //   (err,res)=>{
+  //     if(err) {return console.log(err)}
+  //     console.log(res)
+  //   }
+  // )
+
   const getAuthCode = () => {
     const authUrl = oAuth2Client.generateAuthUrl({
       access_type: "offline",
@@ -74,69 +86,35 @@ export default ({ app, $globals, $date, store }, inject) => {
         mainCallback(err)
       })
     },
-    backupToDrive(ext, accList, mainCallback) {
+    async backupToDrive(ext,accList,callback) {
 
-      const driveToken = store.state.settings.driveToken
-      // if token has expired
-      // and it has no refresh token
-      if ($date.moment().format('x') > driveToken.expiry_date && !driveToken.refresh_token) {
-        // alert('expired')
-        // oAuth2Client.setCredentials(driveToken)
-        return mainCallback(`Authorization access to your Google Drive account has expired. 
-        Please redo authorization process.`)
-      }
-      oAuth2Client.setCredentials(driveToken)
+      // oAuth2Client.setCredentials(store.state.settings.driveToken)
       // console.log(oAuth2Client)
-      const drive = google.drive({ version: 'v3', auth: oAuth2Client })
+      // const oauth2 = google.oauth2({version:"v2", auth:oAuth2Client})
+      // oauth2.userinfo.v2.me.get(
+      //   (err,res)=>{
+      //     if(err) {return console.log(err)}
+      //     console.log(res)
+      //   }
+      // )
 
-      const createBackupFolder = (callback) => {
-        const requestBody = {
-          name: DRIVE_BACKUP_FOLDER_NAME,
-          mimeType: 'application/vnd.google-apps.folder'
-        }
-        drive.files.create({
-          requestBody
-        }, (err, folder) => {
-          return callback(err, folder)
-        })
-      }
+      const backupFile = $globals.getBackupAccountFile(
+        ext,
+        accList,
+        true
+      );
 
-      const uploadFile = (parentFolderId, callback) => {
-        // const accList = store.state.account.accountList
-        const backupFile = $globals.getBackupAccountFile(ext, accList, false)
-        drive.files.create({
-          requestBody: {
-            mimeType: backupFile.data.mimeType,
-            parents: [parentFolderId],
-            name: backupFile.name,
-          },
-          media: backupFile.data
-        }, callback)
-      }
-
-      drive.files.list({ q: "mimeType = 'application/vnd.google-apps.folder' and trashed = false", }, (err, res) => {
-        if (err) return mainCallback('The API returned an error: ' + err);
-        const fileList = res.data.files;
-        const backupFolder = fileList.find(e => e.name === DRIVE_BACKUP_FOLDER_NAME)
-        if (backupFolder) {
-          // If there is backup folder then upload
-          console.log(backupFolder.name + " is already created")
-          uploadFile(backupFolder.id, mainCallback)
-        } else {
-          // If there isn't create first and then upload
-          createBackupFolder((err, folder) => {
-            if (err) {
-              // Handle error
-              console.error(err);
-            } else {
-              console.log(folder.data.name + " has been created")
-              // console.log(folder)
-              // If folder created, then upload the backup file
-              uploadFile(folder.data.id, mainCallback)
-            }
+      const result = JSON.parse(
+        await ipcRenderer.invoke(
+          "api-gdrive-backup-to-drive",
+          JSON.stringify({
+            token: store.state.settings.driveToken,
+            backupFile,
           })
-        }
-      })
+        )
+      );
+      // console.log(result);
+      callback(result)
     }
   })
 }

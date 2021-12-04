@@ -167,7 +167,7 @@ export default {
           });
         };
         // console.log();
-        const file = this.$globals.getBackupAccountFile(
+        const backupFile = this.$globals.getBackupAccountFile(
           ext,
           normalizeProps(this.$store.state.account.accountList),
           true
@@ -176,8 +176,8 @@ export default {
         if (this.destinationModel === "my-device") {
           // If offline
           this.$globals.download({
-            url: file.data,
-            filename: file.name,
+            url: backupFile.data,
+            filename: backupFile.name,
             directory: this.vaultPath,
             successAction: (path) => {
               this.$store.dispatch("ui/showSnackbar", {
@@ -190,69 +190,27 @@ export default {
         } else if (this.destinationModel === "g-drive") {
           // If google drive
 
-          (async () => {
-            const result = JSON.parse(
-              await ipcRenderer.invoke(
-                "api-gdrive-backup-to-drive",
-                JSON.stringify(this.$store.state.settings.driveToken)
-              )
-            );
-            console.log(result)
-            // IF ERROR
-            if(result.error){
-              this.$store.dispatch("ui/showSnackbar", {
-                label: result.message,
-                color: "error",
-              });
+          this.$API_gdrive.backupToDrive(
+            ext,
+            normalizeProps(this.$store.state.account.accountList),
+            (result) => {
+              if (result.error) {
+                this.$store.dispatch("ui/showSnackbar", {
+                  label: result.error,
+                  color: "error",
+                });
+              }
+              // IF SUCCESS
+              else {
+                this.$store.dispatch("ui/showSnackbar", {
+                  label:
+                    "Backup file has been created in your Google Drive Account",
+                  color: "success",
+                });
+              }
+              this.toggleDialog();
             }
-            // IF SUCCESS
-            else{
-              this.$store.dispatch("ui/showSnackbar", {
-                label: "Backup file has been created in your Google Drive Account",
-                color: "success",
-              });
-            }
-
-            this.toggleDialog()
-          })();
-
-          // this.$API_gdrive.backupToDrive(
-          //   ext,
-          //   this.$store.state.account.accountList,
-          //   (err, file) => {
-          //     if (err) {
-          //       // // Handle error
-          //       // console.error(err);
-          //       // if (isExpired) {
-          //       //   this.$store.dispatch("ui/showSnackbar", {
-          //       //     label:
-          //       //       `Authorization access to your Google Drive account has expired.
-          //       //       Please redo authorization process.`,
-          //       //     color: "error",
-          //       //   });
-          //       //   this.toggleDialog();
-          //       //   return;
-          //       // }
-          //       this.$store.dispatch("ui/showSnackbar", {
-          //         label: err,
-          //         color: "error",
-          //       });
-          //       this.toggleDialog();
-          //     } else {
-          //       // If folder created, then upload the backup file
-          //       console.log(file.data.name + " has been created");
-          //       this.$store.dispatch("ui/showSnackbar", {
-          //         // label: `<b><u>${file.data.name}</u></b> has been saved to your Google Drive account`,
-          //         label:
-          //           "The backup file has been saved to your Google Drive account",
-          //         color: "success",
-          //       });
-          //       this.toggleDialog();
-
-          //       // console.log(file)
-          //     }
-          //   }
-          // );
+          );
         }
       }
     },
