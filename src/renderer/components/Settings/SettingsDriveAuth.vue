@@ -3,7 +3,7 @@
     <v-list-item class="">
       <v-list-item-content>
         <v-list-item-title class="font-weight-black normal-white-space text-h5">
-          <v-icon class="mb-1" :class="!driveToken || 'primary--text'">
+          <v-icon class="mb-1" :class="!gapiToken || 'primary--text'">
             mdi-google-drive
           </v-icon>
           Set up Google Drive Authorization
@@ -41,10 +41,10 @@
             <v-form
               ref="formSetDriveApi"
               v-model="formSetDriveApi"
-              @submit="setDriveToken()"
+              @submit="setGapiToken()"
             >
               <v-card-text class="pb-0">
-                <!-- {{$store.state.settings.driveToken}} -->
+                <!-- {{$store.state.settings.gapiToken}} -->
                 <v-fade-transition leave-absolute group>
                   <v-alert
                     v-if="!isAuthed"
@@ -71,8 +71,9 @@
                     </v-btn>
                   </v-alert>
                   <v-alert
-                    v-if="isAuthed && !isExpired"
+                  v-if="isAuthed && !isExpired"
                     key="alertDialogDaHasAccess"
+                    class="py-4"
                     type="success"
                     prominent
                     dense
@@ -82,7 +83,7 @@
                       You have authorized this app into your Google Drive
                       account, now you can backup data to it.
                       <br />
-                      <v-chip v-if="!driveToken.refresh_token" class="my-2" label color="orange" outlined>
+                      <v-chip v-if="!gapiToken.refresh_token" class="my-2" label color="orange" outlined>
                         Expiration Date :
                         <span
                           class="
@@ -95,8 +96,19 @@
                         </span>
                       </v-chip>
                     </div>
+                    <v-card class="mt-4" :light="!$vuetify.theme.dark">
+                      <v-list-item>
+                        <v-list-item-avatar>
+                          <v-img :src="gapiProfile.picture" sizes="40px"/>
+                        </v-list-item-avatar>
+                        <v-list-item-content>
+                          <v-list-item-title>{{gapiProfile.name}}</v-list-item-title>
+                          <v-list-item-subtitle>{{gapiProfile.email}}</v-list-item-subtitle>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-card>
                     <v-btn
-                      class="mt-2"
+                      class="mt-4"
                       large
                       color="error"
                       v-bind="btnLinkProps"
@@ -107,8 +119,9 @@
                     </v-btn>
                   </v-alert>
                   <v-alert
-                    v-if="isAuthed && isExpired"
+                  v-if="isAuthed && isExpired"
                     key="alertDialogDaExpired"
+                    class="py-2"
                     type="error"
                     prominent
                     dense
@@ -137,8 +150,8 @@
                   <v-text-field
                     v-if="!isAuthed"
                     key="inputDialogDaNoAccess"
-                    v-model="driveTokenModel"
-                    :rules="driveTokenRules"
+                    v-model="gapiTokenModel"
+                    :rules="gapiTokenRules"
                     class="mt-4 mb-0"
                     autofocus
                     outlined
@@ -158,7 +171,7 @@
                 ref="btnDialogDaY"
                 color="primary"
                 :disabled="!formSetDriveApi"
-                @click="setDriveToken()"
+                @click="authorizeAccess()"
               >
                 {{ isAuthed ? "OK" : "Authorize" }}
               </v-btn>
@@ -179,38 +192,38 @@ export default {
       dialog: false,
       isLoading: false,
       isLoadingLabel: "",
-      driveTokenModel: "",
+      gapiTokenModel: "",
       formSetDriveApi: false,
       btnLinkProps: {},
       // isAuthed: false,
     };
   },
   computed: {
-    ...mapState("settings", ["driveToken"]),
-    driveTokenRules: () => [
+    ...mapState("settings", ["gapiToken","gapiProfile"]),
+    gapiTokenRules: () => [
       (v) => !!v.trim() || "Authorization code cannot be empty",
     ],
     isAuthed() {
-      return this.$store.state.settings.driveToken.access_token && true;
+      return this.$store.state.settings.gapiToken?.access_token && true;
     },
     isExpired() {
-      return this.$date.moment().format("x") > this.driveToken.expiry_date && !this.driveToken.refresh_token;
+      return this.$date.moment().format("x") > this.gapiToken.expiry_date && !this.gapiToken.refresh_token;
     },
     tokenExpiryDate() {
       return this.$date
-        .moment(this.driveToken.expiry_date)
+        .moment(this.gapiToken.expiry_date)
         .format("dddd, DD MMMM YYYY [at] HH:mm");
     },
   },
   created() {
-    this.driveTokenModel = "";
-    // console.log(this.$store.state.settings.driveToken.access_token)
+    this.gapiTokenModel = "";
+    // console.log(this.$store.state.settings.gapiToken.access_token)
   },
   methods: {
     hideDialog() {
       this.dialog = !this.dialog;
     },
-    setDriveToken() {
+    authorizeAccess() {
       if (this.isAuthed) {
         return this.hideDialog();
       }
@@ -219,10 +232,10 @@ export default {
         this.isLoadingLabel = "Validating the code...";
         this.isLoading = true;
         setTimeout(() => {
-          this.$API_gdrive.authorizeAccess(this.driveTokenModel, (err) => {
-            if (err) {
+          this.$API_gdrive.authorizeAccess(this.gapiTokenModel, (result) => {
+            if (result.error) {
               this.$store.dispatch("ui/showSnackbar", {
-                label: "Error retrieving token, try again",
+                label: result.error,
                 color: "error",
               });
               this.isLoading = false;
@@ -232,7 +245,7 @@ export default {
               label: "Access to your Google Drive account has been authorized",
               color: "success",
             });
-            this.driveTokenModel = "";
+            this.gapiTokenModel = "";
             this.isLoading = false;
           });
         }, 1212);
@@ -270,7 +283,8 @@ export default {
       this.isLoadingLabel = "Removing access...";
       this.isLoading = true;
       setTimeout(() => {
-        this.$store.dispatch("settings/setDriveToken", "");
+        this.$store.dispatch("settings/setGapiToken", "");
+        this.$store.dispatch("settings/setGapiProfile", "");
         this.$store.dispatch("ui/showSnackbar", {
           label:
             "Access to your Google Drive account has been successfully removed",

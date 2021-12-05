@@ -154,7 +154,7 @@ export default {
         // if token expired, set the token first
         const isExpired =
           this.$date.moment().format("x") >
-          this.$store.state.settings.driveToken.expiry_date;
+          this.$store.state.settings.gapiToken.expiry_date;
 
         const ext = this.fileFormatModel.toLowerCase();
 
@@ -189,7 +189,7 @@ export default {
           });
         } else if (this.destinationModel === "g-drive") {
           // If google drive
-
+          // this.$API_gdrive.getEmail();
           this.$API_gdrive.backupToDrive(
             ext,
             normalizeProps(this.$store.state.account.accountList),

@@ -32,7 +32,7 @@ ipcMain.handle('api-gdrive-backup-to-drive', async (event, payload) => {
 
     let result = { error: true, message: "Error occurred" };
     payload = JSON.parse(payload)
-    console.log(payload)
+    // console.log(payload)
     const token = payload.token
     oAuth2Client.setCredentials(token)
     const drive = google.drive({ version: 'v3', auth: oAuth2Client })
@@ -49,7 +49,7 @@ ipcMain.handle('api-gdrive-backup-to-drive', async (event, payload) => {
 
     const mainCallback = (error = null, response) => {
         result = JSON.stringify({ error, response })
-        console.log(JSON.parse(result))
+        // console.log(JSON.parse(result))
     }
 
     const createBackupFolder = async (callback) => {

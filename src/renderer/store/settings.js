@@ -7,7 +7,8 @@ export const state = () => ({
     reminderFreq: 3,
     pwDuplication: false,
     pwDupLimit: 2,
-    driveToken: '',
+    gapiToken: '',
+    gapiProfile: '',
     accListView: 'table',
     scrollAutoLoad:false,
 })
@@ -50,8 +51,11 @@ export const mutations = {
     SET_PW_DUP_LIMIT(state, val) {
         state.pwDupLimit = val
     },
-    SET_DRIVE_TOKEN(state, val) {
-        state.driveToken = val
+    SET_GAPI_TOKEN(state, val) {
+        state.gapiToken = val
+    },
+    SET_GAPI_PROFILE(state, val) {
+        state.gapiProfile = val
     },
     SET_ACC_LIST_VIEW(state, val) {
         state.accListView = val
@@ -71,7 +75,8 @@ export const actions = {
             dispatch('setReminderFreq', payload.reminderFreq)
             dispatch('togglePwDuplication', payload.pwDuplication)
             dispatch('setPwDupLimit', payload.pwDupLimit)
-            dispatch('setDriveToken', payload.driveToken)
+            dispatch('setGapiToken', payload.gapiToken)
+            dispatch('setGapiProfile', payload.gapiProfile)
             dispatch('setAccListView', payload.accListView)
         } else {
             dispatch('setVaultPath', this.$globals.getAppPath())
@@ -124,8 +129,12 @@ export const actions = {
         commit('SET_PW_DUP_LIMIT', val)
         commit('SET_LOCAL_SETTINGS')
     },
-    setDriveToken({ commit }, val) {
-        commit('SET_DRIVE_TOKEN', val)
+    setGapiToken({ commit }, val) {
+        commit('SET_GAPI_TOKEN', val)
+        commit('SET_LOCAL_SETTINGS')
+    },
+    setGapiProfile({ commit }, val) {
+        commit('SET_GAPI_PROFILE', val)
         commit('SET_LOCAL_SETTINGS')
     },
     setAccListView({ commit }, val) {
