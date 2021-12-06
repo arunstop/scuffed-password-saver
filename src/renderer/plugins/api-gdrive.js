@@ -75,46 +75,21 @@ export default ({ app, $globals, $date, store }, inject) => {
   inject('API_gdrive', {
     init: () => getAuthCode(),
     authorizeAccess: async (authCode, callback) => {
-      const act = async () => {
-        let result = { error: true, message: "Error occurred" };
-        const callError = (message) => {
-          // set error message
-          mainCallback('The API returned an error: ' + message)
+      // callbackof Electron's API
+      ipcRenderer.on('gapi-drive-auth-callback',(event,payload)=>{
+        payload = JSON.parse(payload)
+        if(payload.error){
+          return callback(payload.error)
         }
-
-        const callOk = (response) => {
-          // set response
-          mainCallback(null, response)
-        }
-
-        const mainCallback = (error = null, response) => {
-          result = JSON.stringify({ error, response })
-          // console.log(JSON.parse(result))
-        }
-        await oAuth2Client.getToken(authCode)
-          .then(async (resToken) => {
-            // const token = response.res.data
-            oAuth2Client.setCredentials(resToken.tokens)
-            // save the token
-            // console.log(res)
-            store.dispatch('settings/setGapiToken', resToken.tokens)
-            // get user profile
-            const oauth2 = google.oauth2({ version: "v2", auth: oAuth2Client })
-            await oauth2.userinfo.v2.me.get().then(
-              (resUserinfo) => {
-                store.dispatch('settings/setGapiProfile', resUserinfo.data)
-                callOk(resUserinfo.data)
-              }
-            ).catch(callError)
-          })
-          .catch(callError)
-
-        return result
-      }
-      // eslint-disable-next-line node/no-callback-literal
-      callback(await act())
+        const resp = payload.response
+        store.dispatch('settings/setGapiToken', resp.token)
+        store.dispatch('settings/setGapiProfile', resp.profile)
+        callback()
+      })
+      // authenticate via Electron's API
+      ipcRenderer.send('gapi-drive-auth', {authCode})
     },
-    async backupToDrive(ext, accList, callback) {
+    backupToDrive: async (ext, accList, callback) => {
 
       const backupFile = $globals.getBackupAccountFile(
         ext,
@@ -124,7 +99,7 @@ export default ({ app, $globals, $date, store }, inject) => {
 
       const result = JSON.parse(
         await ipcRenderer.invoke(
-          "api-gdrive-backup-to-drive",
+          "gapi-drive-backup",
           JSON.stringify({
             token: store.state.settings.gapiToken,
             backupFile,

@@ -28,7 +28,7 @@ const getAuthCode = () => {
     shell.openExternal(authUrl)
 }
 
-ipcMain.handle('api-gdrive-backup-to-drive', async (event, payload) => {
+ipcMain.handle('gapi-drive-backup', async (event, payload) => {
 
     let result = { error: true, message: "Error occurred" };
     payload = JSON.parse(payload)
@@ -113,4 +113,46 @@ ipcMain.handle('api-gdrive-backup-to-drive', async (event, payload) => {
     }).catch(callError)
 
     return result
+})
+
+ipcMain.on('gapi-drive-auth', async (event, payload) => {
+    // change String payload into Object
+    // console.log(payload)
+    // payload = JSON.parse(payload)
+    let gapiToken = ""
+    let gapiProfile = ""
+    const callError = (message) => {
+        // set error message
+        mainCallback('The API returned an error: ' + message)
+    }
+
+    const callOk = (response = '') => {
+        // set response
+        mainCallback(null, { token: gapiToken, profile: gapiProfile })
+    }
+
+    const mainCallback = (error = null, response) => {
+        event.reply(
+            'gapi-drive-auth-callback',
+            JSON.stringify({ error, response})
+        )
+        // console.log(JSON.parse(result))
+    }
+    await oAuth2Client.getToken(payload.authCode)
+        .then(async (resToken) => {
+            // const token = response.res.data
+            oAuth2Client.setCredentials(resToken.tokens)
+            // save the token
+            // console.log(res)
+            gapiToken = resToken.tokens
+            // get user profile
+            const oauth2 = google.oauth2({ version: "v2", auth: oAuth2Client })
+            await oauth2.userinfo.v2.me.get().then(
+                (resUserinfo) => {
+                    gapiProfile = resUserinfo.data
+                    callOk(resUserinfo.statusText)
+                }
+            ).catch(callError)
+        })
+        .catch(callError)
 })
