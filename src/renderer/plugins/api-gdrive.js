@@ -74,9 +74,9 @@ export default ({ app, $globals, $date, store }, inject) => {
 
   inject('API_gdrive', {
     init: () => getAuthCode(),
-    authorizeAccess: async (authCode, callback) => {
+    authorizeAccess: (authCode, callback) => {
       // callbackof Electron's API
-      ipcRenderer.on('gapi-drive-auth-callback',(event,payload)=>{
+      ipcRenderer.once('gapi-drive-auth-callback',(event,payload)=>{
         payload = JSON.parse(payload)
         if(payload.error){
           return callback(payload.error)
