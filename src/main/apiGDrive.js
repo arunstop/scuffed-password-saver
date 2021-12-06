@@ -28,10 +28,10 @@ const getAuthCode = () => {
     shell.openExternal(authUrl)
 }
 
-ipcMain.handle('gapi-drive-backup', async (event, payload) => {
+ipcMain.on('gapi-drive-backup', async (event, payload) => {
 
-    let result = { error: true, message: "Error occurred" };
-    payload = JSON.parse(payload)
+    // let result = { error: true, message: "Error occurred" };
+    // payload = JSON.parse(payload)
     // console.log(payload)
     const token = payload.token
     oAuth2Client.setCredentials(token)
@@ -48,7 +48,10 @@ ipcMain.handle('gapi-drive-backup', async (event, payload) => {
     }
 
     const mainCallback = (error = null, response) => {
-        result = JSON.stringify({ error, response })
+        event.reply(
+            'gapi-drive-backup-callback',
+            JSON.stringify({ error, response })
+        )
         // console.log(JSON.parse(result))
     }
 
@@ -111,8 +114,6 @@ ipcMain.handle('gapi-drive-backup', async (event, payload) => {
             })
         }
     }).catch(callError)
-
-    return result
 })
 
 ipcMain.on('gapi-drive-auth', async (event, payload) => {
@@ -134,7 +135,7 @@ ipcMain.on('gapi-drive-auth', async (event, payload) => {
     const mainCallback = (error = null, response) => {
         event.reply(
             'gapi-drive-auth-callback',
-            JSON.stringify({ error, response})
+            JSON.stringify({ error, response })
         )
         // console.log(JSON.parse(result))
     }

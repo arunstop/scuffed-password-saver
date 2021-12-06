@@ -76,9 +76,9 @@ export default ({ app, $globals, $date, store }, inject) => {
     init: () => getAuthCode(),
     authorizeAccess: (authCode, callback) => {
       // callbackof Electron's API
-      ipcRenderer.once('gapi-drive-auth-callback',(event,payload)=>{
+      ipcRenderer.once('gapi-drive-auth-callback', (event, payload) => {
         payload = JSON.parse(payload)
-        if(payload.error){
+        if (payload.error) {
           return callback(payload.error)
         }
         const resp = payload.response
@@ -87,7 +87,7 @@ export default ({ app, $globals, $date, store }, inject) => {
         callback()
       })
       // authenticate via Electron's API
-      ipcRenderer.send('gapi-drive-auth', {authCode})
+      ipcRenderer.send('gapi-drive-auth', { authCode })
     },
     backupToDrive: async (ext, accList, callback) => {
 
@@ -97,17 +97,17 @@ export default ({ app, $globals, $date, store }, inject) => {
         false
       );
 
-      const result = JSON.parse(
-        await ipcRenderer.invoke(
-          "gapi-drive-backup",
-          JSON.stringify({
-            token: store.state.settings.gapiToken,
-            backupFile,
-          })
-        )
-      );
-      // console.log(result);
-      callback(result)
+      ipcRenderer.once('gapi-drive-backup-callback', (event, payload) => {
+        payload = JSON.parse(payload)
+        if (payload.error) {
+          return callback(payload.error)
+        }
+        callback()
+      })
+      ipcRenderer.send('gapi-drive-backup', {
+        token: store.state.settings.gapiToken,
+        backupFile,
+      })
     },
 
     async getEmail() {

@@ -193,10 +193,10 @@ export default {
           this.$API_gdrive.backupToDrive(
             ext,
             normalizeProps(this.$store.state.account.accountList),
-            (result) => {
-              if (result.error) {
+            (error=null,result) => {
+              if (error) {
                 this.$store.dispatch("ui/showSnackbar", {
-                  label: result.error,
+                  label: error,
                   color: "error",
                 });
               }

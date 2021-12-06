@@ -232,10 +232,10 @@ export default {
         this.isLoadingLabel = "Validating the code...";
         this.isLoading = true;
         setTimeout(() => {
-          this.$API_gdrive.authorizeAccess(this.gapiTokenModel, (err=null,res) => {
-            if (err) {
+          this.$API_gdrive.authorizeAccess(this.gapiTokenModel, (error=null,result) => {
+            if (error) {
               this.$store.dispatch("ui/showSnackbar", {
-                label: err,
+                label: error,
                 color: "error",
               });
               this.isLoading = false;
