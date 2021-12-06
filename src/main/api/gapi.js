@@ -1,6 +1,6 @@
 const { shell, ipcMain } = require('electron');
 const { google } = require('googleapis')
-const API_CREDENTIALS = require('../renderer/assets/sps-gdrive-credentials.json')
+const API_CREDENTIALS = require('../../renderer/assets/sps-gdrive-credentials.json')
 
 // Array of API discovery doc URLs for APIs used by the quickstart
 const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];

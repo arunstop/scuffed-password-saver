@@ -71,7 +71,7 @@
                     </v-btn>
                   </v-alert>
                   <v-alert
-                  v-if="isAuthed && !isExpired"
+                    v-if="isAuthed && !isExpired"
                     key="alertDialogDaHasAccess"
                     class="py-4"
                     type="success"
@@ -83,7 +83,13 @@
                       You have authorized this app into your Google Drive
                       account, now you can backup data to it.
                       <br />
-                      <v-chip v-if="!gapiToken.refresh_token" class="my-2" label color="orange" outlined>
+                      <v-chip
+                        v-if="!gapiToken.refresh_token"
+                        class="my-2"
+                        label
+                        color="orange"
+                        outlined
+                      >
                         Expiration Date :
                         <span
                           class="
@@ -96,16 +102,32 @@
                         </span>
                       </v-chip>
                     </div>
-                    <v-card class="mt-4" :light="!$vuetify.theme.dark">
-                      <v-list-item>
-                        <v-list-item-avatar>
-                          <v-img :src="gapiProfile.picture" sizes="40px"/>
-                        </v-list-item-avatar>
-                        <v-list-item-content>
-                          <v-list-item-title>{{gapiProfile.name}}</v-list-item-title>
-                          <v-list-item-subtitle>{{gapiProfile.email}}</v-list-item-subtitle>
-                        </v-list-item-content>
-                      </v-list-item>
+                    <!-- Userinfo card -->
+                    <v-card
+                      class="mt-4 elevation-0"
+                      :light="!$vuetify.theme.dark"
+                    >
+                      <v-alert
+                        class="mb-0 pa-2"
+                        border="left"
+                        color="success"
+                        text
+                        outlined
+                      >
+                        <v-list-item>
+                          <v-list-item-avatar>
+                            <v-img :src="gapiProfile.picture" sizes="40px" />
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title class="font-weight-bold">
+                              {{ gapiProfile.name }}
+                            </v-list-item-title>
+                            <v-list-item-subtitle>
+                              {{ gapiProfile.email }}
+                            </v-list-item-subtitle>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-alert>
                     </v-card>
                     <v-btn
                       class="mt-4"
@@ -119,7 +141,7 @@
                     </v-btn>
                   </v-alert>
                   <v-alert
-                  v-if="isAuthed && isExpired"
+                    v-if="isAuthed && isExpired"
                     key="alertDialogDaExpired"
                     class="py-2"
                     type="error"
@@ -199,7 +221,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("settings", ["gapiToken","gapiProfile"]),
+    ...mapState("settings", ["gapiToken", "gapiProfile"]),
     gapiTokenRules: () => [
       (v) => !!v.trim() || "Authorization code cannot be empty",
     ],
@@ -207,7 +229,10 @@ export default {
       return this.$store.state.settings.gapiToken?.access_token && true;
     },
     isExpired() {
-      return this.$date.moment().format("x") > this.gapiToken.expiry_date && !this.gapiToken.refresh_token;
+      return (
+        this.$date.moment().format("x") > this.gapiToken.expiry_date &&
+        !this.gapiToken.refresh_token
+      );
     },
     tokenExpiryDate() {
       return this.$date
@@ -232,22 +257,26 @@ export default {
         this.isLoadingLabel = "Validating the code...";
         this.isLoading = true;
         setTimeout(() => {
-          this.$API_gdrive.authorizeAccess(this.gapiTokenModel, (error=null,result) => {
-            if (error) {
+          this.$API_gdrive.authorizeAccess(
+            this.gapiTokenModel,
+            (error = null, result) => {
+              if (error) {
+                this.$store.dispatch("ui/showSnackbar", {
+                  label: error,
+                  color: "error",
+                });
+                this.isLoading = false;
+                return;
+              }
               this.$store.dispatch("ui/showSnackbar", {
-                label: error,
-                color: "error",
+                label:
+                  "Access to your Google Drive account has been authorized",
+                color: "success",
               });
+              this.gapiTokenModel = "";
               this.isLoading = false;
-              return;
             }
-            this.$store.dispatch("ui/showSnackbar", {
-              label: "Access to your Google Drive account has been authorized",
-              color: "success",
-            });
-            this.gapiTokenModel = "";
-            this.isLoading = false;
-          });
+          );
         }, 1212);
         // this.hideDialog();
       }

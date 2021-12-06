@@ -1,6 +1,6 @@
 {
   "name": "scuffed-password-saver",
-  "version": "0.0.50",
+  "version": "0.0.51",
   "description": "Scuffed Password Saver",
   "main": "./dist/main/index.js",
   "scripts": {
