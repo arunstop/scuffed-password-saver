@@ -309,6 +309,7 @@ export default {
     this.accountTags = this.accountEditValue.accountTags||[];
   },
   mounted() {
+    console.log(this.accountEditValue.accountTags)
     // console.log(this.getAppList());
     // window.addEventListener("keyup", (e) => {
     //   if (

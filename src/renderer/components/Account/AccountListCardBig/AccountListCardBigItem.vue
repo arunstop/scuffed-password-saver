@@ -1,0 +1,162 @@
+<template>
+  <v-col class="pa-2" lg="4" md="4" sm="6">
+    <v-hover v-slot="{ hover }">
+      <v-card
+        max-width="350px"
+        class="ma-auto pa-0 elevation-6 transparent"
+        link
+        @contextmenu.prevent="!selectionMode && selectItem(acc.id)"
+        @dblclick="!selectionMode && (!dblClickToEdit || showEditDialog(acc))"
+        @click="selectionMode && selectItem(acc.id)"
+      >
+        <v-alert
+          class="mb-0 pa-0 alc-item-outlined elevation-2"
+          v-bind="getSelectedStyle(acc.id)"
+          border="top"
+        >
+          
+            <v-card-text class="d-flex flex-column justify-center">
+            <v-list-item-avatar height="90" width="90">
+              <UtilProfile :alpha="acc.appName" :color="color" :size="90" />
+            </v-list-item-avatar>
+          </v-card-text>
+
+          <v-list-item>
+            <v-list-item-content class="d-block">
+              <v-list-item-title
+                class="font-weight-bold text-truncate mb-2"
+                :class="color + '--text'"
+              >
+                {{ acc.accountId }}
+              </v-list-item-title>
+              <v-list-item-title
+                class="text-truncate sps-acc-pw mb-2"
+                :style="!hover && 'letter-spacing:1.4px; font-weight:bolder;'"
+              >
+                {{ hover && hoverToShowPw ? acc.accountPw : hiddenPw }}
+              </v-list-item-title>
+              <v-list-item-title class="font-weight-bold mb-2">
+                <v-chip :outlined="!inSelection" small label color="primary">
+                  {{ acc.appName }}
+                </v-chip>
+                <v-chip
+                  class="ms-1 font-weight-bold"
+                  :color="color"
+                  :outlined="!inSelection"
+                  small
+                >
+                  <v-icon left small>mdi-shield-plus-outline</v-icon>
+                  {{ acc.durab.percentage + "%" }}
+                </v-chip>
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-alert>
+        <div class="sps-alcbi-option">
+              <v-slide-x-reverse-transition origin="center center">
+                <div v-if="hover" class="d-flex flex-column justify-end pa-1">
+                  <v-btn
+                    class="rounded-lg mb-1"
+                    color="primary"
+                    small
+                    @click.prevent="showEditDialog(acc)"
+                  >
+                    Edit
+                    <v-icon right>mdi-pencil</v-icon>
+                  </v-btn>
+                  <v-btn
+                    class="rounded-lg mb-1"
+                    color="error"
+                    small
+                    @click="!dialogToDelete || showDeleteDialog(acc)"
+                    @dblclick.stop="dialogToDelete || deleteAccount(acc)"
+                  >
+                    Delete
+                    <v-icon right>mdi-delete</v-icon>
+                  </v-btn>
+                </div>
+              </v-slide-x-reverse-transition>
+            </div>
+      </v-card>
+    </v-hover>
+  </v-col>
+</template>
+
+<script>
+import { mapState, mapActions, mapGetters } from "vuex";
+export default {
+  props: {
+    acc: { type: Object, default: () => {} },
+  },
+  computed: {
+    ...mapState("ui/accountList", ["selectionMode"]),
+    ...mapGetters("ui/accountList", ["isSelected"]),
+    ...mapState("settings", [
+      "hoverToShowPw",
+      "dialogToDelete",
+      "dblClickToEdit",
+      "darkTheme",
+    ]),
+    inSelection() {
+      return this.isSelected(this.acc.id);
+    },
+    color() {
+      return this.acc.durab.status;
+    },
+    hiddenPw() {
+      let stars = "";
+      for (let index = 0; index < this.acc.accountPw.length; index++) {
+        stars = stars + "•";
+      }
+      return stars;
+    },
+  },
+  methods: {
+    ...mapActions("ui/accountList", [
+      "selectItem",
+      "clearSelection",
+      "showEditDialog",
+      "showDeleteDialog",
+      "deleteAccount",
+    ]),
+    // :light="isSelectedInDark(acc.id)"
+    //     :dark="isSelectedInLight(acc.id)"
+    isSelectedInDark(id) {
+      // IN DARK MODE
+      // IF selected
+      // TURN card into LIGHT THEME
+      return this.$vuetify.theme.dark && this.isSelected(id);
+    },
+    isSelectedInLight(id) {
+      // IN LIGHT MODE
+      // IF selected
+      // TURN card into DARK THEME
+      return !this.$vuetify.theme.dark && this.isSelected(id);
+    },
+    getSelectedStyle(id) {
+      return this.isSelected(id)
+        ? {
+            text: true,
+            coloredBorder: false,
+            outlined: true,
+            class: !this.$vuetify.theme.dark ? "alc-item-selected" : "",
+            color: "primary",
+          }
+        : { text: false, coloredBorder: true, color: this.color };
+    },
+  },
+};
+</script>
+
+<style>
+.sps-alcbi-option {
+  position: absolute;
+  right: 0;
+  top: 0;
+  /* z-index: 1; */
+}
+
+.alc-item-outlined .v-alert__wrapper{
+  display:block !important;
+}
+</style>

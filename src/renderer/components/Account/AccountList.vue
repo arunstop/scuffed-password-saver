@@ -81,6 +81,11 @@
           :key="'al-card'"
           :data="pagedAccountList"
         />
+        <LazyAccountListCardBig
+          v-else-if="$store.state.settings.accListView === 'grid'"
+          :key="'al-grid'"
+          :data="pagedAccountList"
+        />
       </v-fade-transition>
     </v-slide-y-transition>
     <!-- More items Loader -->

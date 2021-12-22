@@ -1,8 +1,8 @@
 <template>
   <v-card
     class="d-flex align-center justify-center"
-    min-height="40"
-    min-width="40"
+    :min-height="size"
+    :min-width="size"
     :color="color"
   >
     <div>
@@ -23,7 +23,8 @@
 export default {
   props: {
     alpha: { type: String, default: 'A' },
-    color: { type: String, default: 'grey' }
+    color: { type: String, default: 'grey' },
+    size:  {type: Number, default: 40 },
   }
 }
 </script>
