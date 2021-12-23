@@ -21,14 +21,12 @@
             <v-list-item-content class="d-block">
               <v-list-item-title
                 class="font-weight-bold text-truncate"
-                style="max-width: 150px"
                 :class="color + '--text'"
               >
                 {{ acc.accountId }}
               </v-list-item-title>
               <v-list-item-title
                 class="text-truncate sps-acc-pw"
-                style="max-width: 150px"
                 :style="!hover && 'letter-spacing:1.4px; font-weight:bolder;'"
               >
                 {{ hover && hoverToShowPw ? acc.accountPw : hiddenPw }}
