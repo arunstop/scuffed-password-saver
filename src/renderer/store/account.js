@@ -35,7 +35,7 @@ export const getters = {
     })
 
     // console.log(require('lodash').uniqBy(tl))
-    return _.uniqBy(tl)
+    return _.sortedUniq(tl)
   },
   isAccountExist: state => (appName, accountId) => {
     // console.log(appName)

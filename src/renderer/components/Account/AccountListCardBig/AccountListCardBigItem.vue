@@ -15,27 +15,36 @@
           border="top"
         >
           <v-card-text class="pt-6 d-flex flex-column justify-center">
-            <v-list-item-avatar class="mx-0" height="90" width="90">
+            <v-list-item-avatar class="mx-0 mb-4" height="90" width="90">
+              <!-- Icon -->
               <UtilProfile :alpha="acc.appName" :color="color" :size="90" />
             </v-list-item-avatar>
+            <v-chip
+              :outlined="!inSelection"
+              class="mx-auto font-weight-bold"
+              label
+              color="primary"
+            >
+              {{ acc.appName }}
+            </v-chip>
             <v-list-item class="px-0">
               <v-list-item-content class="d-block pb-0">
+                <!-- Username -->
                 <v-list-item-title
                   class="font-weight-bold text-truncate mb-2"
                   :class="color + '--text'"
                 >
                   {{ acc.accountId }}
                 </v-list-item-title>
+                <!-- Password -->
                 <v-list-item-title
                   class="text-truncate sps-acc-pw mb-2"
                   :style="!hover && 'letter-spacing:1.4px; font-weight:bolder;'"
                 >
                   {{ hover && hoverToShowPw ? acc.accountPw : hiddenPw }}
                 </v-list-item-title>
+                <!-- Pw durability -->
                 <v-list-item-title class="font-weight-bold mb-2">
-                  <v-chip :outlined="!inSelection" small label color="primary">
-                    {{ acc.appName }}
-                  </v-chip>
                   <v-chip
                     class="font-weight-bold"
                     :color="color"
@@ -46,25 +55,37 @@
                     {{ acc.durab.percentage + "%" }}
                   </v-chip>
                 </v-list-item-title>
+                <!-- Added date -->
                 <div class="mb-2">
                   <v-icon small class="me-1">mdi-plus</v-icon>
                   {{ dates().created.fromNow }}
                 </div>
+                <!-- Edited date -->
                 <div class="mb-2">
                   <v-icon small class="me-1">mdi-pencil</v-icon>
                   {{ dates().edited.fromNow }}
                 </div>
-                <div>
+                <!-- Tags -->
+                <div class="d-flex flex-wrap">
                   <v-icon v-if="acc.accountTags.length" small class="me-1 mb-1"
                     >mdi-tag</v-icon
                   >
                   <v-chip
-                    v-for="(tag, idx) in acc.accountTags"
+                    v-for="(tag, idx) in tagList"
                     :key="idx"
                     small
                     class="me-1 mb-1"
                   >
                     {{ tag }}
+                  </v-chip>
+                  <v-chip
+                    v-if="acc.accountTags.length >= 10"
+                    small
+                    class="me-1 mb-1"
+                    outlined
+                    color="grey darken-2"
+                  >
+                    <v-icon>mdi-dots-horizontal</v-icon>
                   </v-chip>
                 </div>
               </v-list-item-content>
@@ -116,6 +137,9 @@ export default {
       "dblClickToEdit",
       "darkTheme",
     ]),
+    tagList() {
+      return this.acc.accountTags.slice(0, 10);
+    },
     inSelection() {
       return this.isSelected(this.acc.id);
     },
