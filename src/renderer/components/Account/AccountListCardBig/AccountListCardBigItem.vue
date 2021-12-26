@@ -12,22 +12,23 @@
         <v-alert
           class="mb-0 pa-0 alc-item-outlined elevation-2"
           v-bind="getSelectedStyle(acc.id)"
-          border="top"
+          border="bottom"
         >
-          <v-card-text class="pt-6 d-flex flex-column justify-center">
-            <v-list-item-avatar class="mx-0 mb-4" height="90" width="90">
+          <v-card-text class="pa-0 d-flex flex-column justify-center">
+            <v-sheet class="alcbi-bg rounded">
+              <v-overlay v-if="inSelection" absolute color="primary" />
               <!-- Icon -->
-              <UtilProfile :alpha="acc.appName" :color="color" :size="90" />
-            </v-list-item-avatar>
-            <v-chip
-              :outlined="!inSelection"
-              class="mx-auto font-weight-bold"
-              label
-              color="primary"
-            >
-              {{ acc.appName }}
-            </v-chip>
-            <v-list-item class="px-0">
+              <!-- <UtilProfile :alpha="acc.appName" :color="color" :size="90" /> -->
+              <!-- <v-img :src="require('@/assets/Reddit.png')"/> -->
+              <v-card
+                class="pa-2 font-weight-medium text-h6 rounded-lg"
+                label
+                color="primary"
+              >
+                {{ acc.appName }}
+              </v-card>
+            </v-sheet>
+            <v-list-item class="pa-4">
               <v-list-item-content class="d-block pb-0">
                 <!-- Username -->
                 <v-list-item-title
@@ -215,5 +216,24 @@ export default {
 
 .alc-item-outlined .v-alert__wrapper {
   display: block !important;
+}
+
+.alcbi-bg {
+  position: relative;
+  background: url("@/assets/Reddit.png");
+  background-repeat: repeat;
+  background-size: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-size: 200%; */
+  /* position: absolute; */
+  top: 0;
+  width: 100%;
+  height: 180px;
+}
+
+.alcbi-bg > .v-overlay {
+  z-index: 0 !important;
 }
 </style>

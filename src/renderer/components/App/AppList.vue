@@ -22,14 +22,23 @@
           Add them by clicking the items below.
           <br>
         </v-alert>
-        <v-row no-gutters align="center" justify="space-around">
+        <!-- <v-row no-gutters align="center" justify="space-around">
           <AppCard
             v-for="app in $store.state.app.appList"
             :key="app.name + '0'"
             :app="app"
             :click="() => openAppEditDialog(app.name)"
-            :rclick="() => deleteApp(app.name)"
           />
+        </v-row> -->
+        <v-row justify="center" no-gutters>
+         <v-expansion-panels accordion inset>
+           <AppItem
+            v-for="app in $store.state.app.appList"
+            :key="app.name + '0'"
+            :app="app"
+            :click="() => openAppEditDialog(app.name)"
+          />
+         </v-expansion-panels>
         </v-row>
       </template>
     </DialogBigTemplate>
