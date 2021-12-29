@@ -15,7 +15,10 @@
           border="bottom"
         >
           <v-card-text class="pa-0 d-flex flex-column justify-center">
-            <v-sheet class="alcbi-bg rounded">
+            <v-sheet
+              class="alcbi-bg rounded"
+              :style="`background-image:url(${getAppIcon(acc.appName)})`"
+            >
               <v-overlay v-if="inSelection" absolute color="primary" />
               <!-- Icon -->
               <!-- <UtilProfile :alpha="acc.appName" :color="color" :size="90" /> -->
@@ -132,6 +135,7 @@ export default {
   computed: {
     ...mapState("ui/accountList", ["selectionMode"]),
     ...mapGetters("ui/accountList", ["isSelected"]),
+    ...mapGetters("app", ["getAppIcon"]),
     ...mapState("settings", [
       "hoverToShowPw",
       "dialogToDelete",
@@ -207,33 +211,4 @@ export default {
 </script>
 
 <style>
-.sps-alcbi-option {
-  position: absolute;
-  right: 0;
-  top: 0;
-  /* z-index: 1; */
-}
-
-.alc-item-outlined .v-alert__wrapper {
-  display: block !important;
-}
-
-.alcbi-bg {
-  position: relative;
-  background: url("@/assets/Reddit.png");
-  background-repeat: repeat;
-  background-size: 32px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* background-size: 200%; */
-  /* position: absolute; */
-  top: 0;
-  width: 100%;
-  height: 180px;
-}
-
-.alcbi-bg > .v-overlay {
-  z-index: 0 !important;
-}
 </style>

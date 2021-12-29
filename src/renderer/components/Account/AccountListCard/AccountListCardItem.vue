@@ -145,15 +145,5 @@ export default {
 </script>
 
 <style>
-.alc-item-outlined {
-  box-sizing: border-box !important;
-  -moz-box-sizing: border-box !important;
-  -webkit-box-sizing: border-box !important;
-  border: thin solid;
-}
-.alc-item-selected {
-  background-color: var(--v-primary-lighten4) !important;
-  /* border-color: var(--v-error-lighten4) !important; */
-}
 
 </style>

@@ -28,7 +28,7 @@ ipcMain.on('download', async (event, { url, filename, directory }) => {
 // api GDrive
 require('./api/gapi')
 
-require('./api/iconCrawlerApi')
+require('./api/appiconApi')
 
 // Load here all startup windows
 require('./mainWindow')

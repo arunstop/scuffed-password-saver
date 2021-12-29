@@ -99,6 +99,7 @@
 <script>
 import { mapState, mapGetters, mapActions } from "vuex";
 import _ from "lodash";
+import { ipcRenderer } from 'electron';
 export default {
   computed: {
     ...mapGetters("account", ["getAccountList"]),
@@ -142,6 +143,9 @@ export default {
         return "Showing all " + total + itemLabel() + " found";
       return "Showing " + tPaged + " out of " + total + itemLabel() + " found";
     },
+  },
+  mounted(){
+    
   },
   methods: {
     pwDurab(edited) {

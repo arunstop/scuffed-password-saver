@@ -1,54 +1,67 @@
 [
     {
         "name": "Google",
-        "urls": ["www.google.com"]
+        "urls": ["www.google.com"],
+        "icon": ""
     },
     {
         "name": "Facebook",
-        "urls": ["www.facebook.com"]
+        "urls": ["www.facebook.com"],
+        "icon": ""
     },
     {
         "name": "Instagram",
-        "urls": ["www.instagram.com"]
+        "urls": ["www.instagram.com"],
+        "icon": ""
     },
     {
         "name": "Twitter",
-        "urls": ["www.twitter.com"]
+        "urls": ["www.twitter.com"],
+        "icon": ""
     },
     {
         "name": "Steam",
-        "urls": ["www.steamcommunity.com"]
+        "urls": ["www.steamcommunity.com"],
+        "icon": ""
     },
     {
         "name": "Outlook",
-        "urls": ["www.outlook.live.com"]
+        "urls": ["www.outlook.live.com"],
+        "icon": ""
     },
     {
         "name": "Discord",
-        "urls": ["www.discord.com"]
+        "urls": ["www.discord.com"],
+        "icon": ""
     },
     {
         "name": "Github",
-        "urls": ["www.github.com"]
+        "urls": ["www.github.com"],
+        "icon": ""
     },
     {
         "name": "Reddit",
-        "urls": ["www.reddit.com"]
+        "urls": ["www.reddit.com"],
+        "icon": ""
     },
     {
         "name": "Gitlab",
-        "urls": ["www.gitlab.com"]
+        "urls": ["www.gitlab.com"],
+        "icon": ""
     },
     {
         "name": "Protonmail",
-        "urls": ["www.protonmail.com"]
+        "urls": ["www.protonmail.com"],
+        "icon": ""
     },
     {
         "name": "Twitch",
-        "urls": ["www.twitch.com"]
+        "urls": ["www.twitch.com"],
+        "icon": ""
     },
     {
         "name": "Figma",
-        "urls": ["www.figma.com"]
+        "urls": ["www.figma.com"],
+        "icon": ""
     }
 ]

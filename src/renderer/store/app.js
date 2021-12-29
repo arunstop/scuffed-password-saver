@@ -16,6 +16,9 @@ export const getters = {
     // console.log(rootGetters)
     return state.appList
   },
+  getAppIcon: (state, getters) => (name) => {
+    return state.appList.find(e => e.name.toLowerCase().trim() === name.toLowerCase().trim())?.icon || ""
+  },
   getAppListByAccount: (state, getters, rootState) => () => {
     const accList = _.uniqBy(rootState.account.accountList.map(e => ({ name: e.appName, urls: '' })), 'name')
     // console.log(accList)
@@ -50,9 +53,12 @@ export const getters = {
 }
 
 export const mutations = {
+  SET_LOCAL_APPLIST(state, payload) {
+    this.$localStorage.set('appList', state.appList)
+  },
   INIT_APP_LIST(state, payload) {
     state.appList = payload
-    this.$localStorage.set('appList', state.appList)
+    // this.$localStorage.set('appList', state.appList)
     // console.log(this.$localStorage.get('appList'))
   },
   SET_APP_EDIT_VALUE(state, name) {
@@ -62,19 +68,19 @@ export const mutations = {
   ADD_APP(state, payload) {
     // console.log(payload)
     state.appList.push(payload)
-    this.$localStorage.set('appList', state.appList)
+    // this.$localStorage.set('appList', state.appList)
     // console.log(this.$localStorage.get('appList'))
   },
   EDIT_APP(state, payload) {
     const targetedApp = state.appList.find(e => e.name.toLowerCase() === payload.oldName.toLowerCase())
     targetedApp.name = payload.name
     targetedApp.urls = payload.urls
-    this.$localStorage.set('appList', state.appList)
+    // this.$localStorage.set('appList', state.appList)
     // console.log(targetedApp)
   },
   DELETE_APP(state, name) {
     state.appList = state.appList.filter(e => e.name.toLowerCase() !== name.toLowerCase())
-    this.$localStorage.set('appList', state.appList)
+    // this.$localStorage.set('appList', state.appList)
   },
   IMPORT_APPS(state, payload) {
     payload = _.uniqBy(payload.map(e => ({ name: e.appName, urls: '' })), 'name')
@@ -82,19 +88,32 @@ export const mutations = {
     const newApps = _.differenceBy(payload, state.appList, 'name')
     // console.log(newApps)
     state.appList = state.appList.concat(newApps)
+  },
+  SET_ICON(state, payload) {
+    // console.log(payload)
+    const target = state.appList.find(e => e.name === payload.name)
+    // set icon
+    target.icon = payload.url
+    console.log(target)
+    state.appList = state.appList.filter(e => e.name !== payload.name)
+    state.appList.push(target)
+    // console.log(state.appList)
+
   }
 }
 
 export const actions = {
   initAppList({ commit }, payload) {
     commit('INIT_APP_LIST', payload)
+    commit('SET_LOCAL_APPLIST')
   },
   setAppEditValue({ commit }, val) {
     commit('SET_APP_EDIT_VALUE', val)
   },
   addApp({ commit, dispatch }, payload) {
     payload.urls = require('lodash').uniqBy(payload.urls)
-    commit('ADD_APP', payload)
+    commit('ADD_APP', { ...payload, icon: "" })
+    commit('SET_LOCAL_APPLIST')
     if (!payload.noSnackbar) {
       dispatch('ui/showSnackbar', {
         label: 'App : ' + payload.name + ' has been added',
@@ -106,6 +125,7 @@ export const actions = {
   editApp({ commit, dispatch }, payload) {
     // console.log(payload)
     commit('EDIT_APP', payload)
+    commit('SET_LOCAL_APPLIST')
     dispatch('ui/showSnackbar',
       {
         label: payload.oldName + ' has been updated',
@@ -115,6 +135,7 @@ export const actions = {
   },
   deleteApp({ commit, dispatch }, name) {
     commit('DELETE_APP', name)
+    commit('SET_LOCAL_APPLIST')
     dispatch('ui/showSnackbar',
       {
         label: name + '  has been deleted',
@@ -125,6 +146,16 @@ export const actions = {
   importApps({ commit }, payload) {
     commit('IMPORT_APPS', payload)
   },
+  setIcon({ commit }, payload) {
+    console.log(payload)
+    // commit('SET_ICON', {
+    //   "name": "Facebook",
+    //   "url": "https://static.xx.fbcdn.net/rsrc.php/yv/r/B8BxsscfVBr.ico"
+    // })
+    commit('SET_ICON', payload)
+    commit('SET_LOCAL_APPLIST')
+
+  },
   completeAppListing({ dispatch }, unlistedAppList) {
     // if only 1 app to be added
     if (unlistedAppList.length === 1) {
@@ -134,7 +165,7 @@ export const actions = {
         urls: '',
       }
       )
-    } 
+    }
     // if multiple apps to be added
     else {
       unlistedAppList.forEach((e) => {

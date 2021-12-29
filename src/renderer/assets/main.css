@@ -113,3 +113,44 @@ body {
   bottom: 0;
   right: 0;
 }
+
+.alc-item-outlined {
+  box-sizing: border-box !important;
+  -moz-box-sizing: border-box !important;
+  -webkit-box-sizing: border-box !important;
+  border: thin solid;
+}
+.alc-item-selected {
+  background-color: var(--v-primary-lighten4) !important;
+  /* border-color: var(--v-error-lighten4) !important; */
+}
+
+.sps-alcbi-option {
+  position: absolute;
+  right: 0;
+  top: 0;
+  /* z-index: 1; */
+}
+
+.alc-item-outlined .v-alert__wrapper {
+  display: block !important;
+}
+
+.alcbi-bg {
+  position: relative;
+  /* background: url("@/assets/Reddit.png"); */
+  background-repeat: repeat;
+  background-size: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-size: 200%; */
+  /* position: absolute; */
+  top: 0;
+  width: 100%;
+  height: 180px;
+}
+
+.alcbi-bg > .v-overlay {
+  z-index: 0 !important;
+}

@@ -21,6 +21,7 @@ module.exports = {
     '~/plugins/globals',
     '~/plugins/infinite-scroll',
     '~/plugins/api-gdrive',
+    '~/plugins/api-appicon',
   ],
   css: [
     '~/assets/main.css'

@@ -157,6 +157,8 @@ export default {
   mounted() {
     // Detect keydown
     window.addEventListener("keydown", (event) => {
+      // IF there's no account
+      if (!this.data.length) return
       // IF not in home page
       // AND there is dialog
       // THEN keydown does nothing

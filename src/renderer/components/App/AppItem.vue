@@ -36,14 +36,14 @@
         >
           {{ url.trimmedUrl }}
         </v-chip>
-        <v-chip
+        <!-- <v-chip
           v-if="!hover && app.urls.length > 1"
           class="mb-1"
           small
           outlined
         >
           {{ "+ " + (app.urls.length - 1) + " more" }}
-        </v-chip>
+        </v-chip> -->
       </div>
     </v-expansion-panel-content>
   </v-expansion-panel>
