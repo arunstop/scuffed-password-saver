@@ -2,8 +2,8 @@ const Crawler = require('crawler');
 const { ipcMain } = require('electron');
 
 const webCrawler = new Crawler({
-    maxConnections: 20,
-    retries: 0,
+    maxConnections: 10,
+    retries: 1,
 })
 
 const mainCallback = (event, name, url) => {
@@ -60,7 +60,7 @@ ipcMain.on('appiconApi-get-urls', (event, payload) => {
             uri: "https://" + app.urls[0],
             callback: (error, res, done) => wcCallback(error, res, done, event, {
                 name: app.name,
-                url: iconUrl
+                url: "https://" + app.urls[0] + "/favicon.ico"
             }
             )
         }
