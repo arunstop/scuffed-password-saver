@@ -11,24 +11,29 @@
       >
         <v-alert
           class="mb-0 pa-0 alc-item-outlined elevation-2"
-          v-bind="getSelectedStyle(acc.id)"
+          v-bind="inSelectionStyle.card"
           border="bottom"
         >
-          <v-card-text class="pa-0 d-flex flex-column justify-center">
+          <v-card-text
+            class="pa-0 d-flex flex-column justify-center"
+          >
             <v-sheet
               class="alcbi-bg rounded"
-              :style="`background-image:url(${getAppIcon(acc.appName)})`"
+              :style="`background-image:${appIcon}`"
             >
               <v-overlay v-if="inSelection" absolute color="primary" />
               <!-- Icon -->
               <!-- <UtilProfile :alpha="acc.appName" :color="color" :size="90" /> -->
               <!-- <v-img :src="require('@/assets/Reddit.png')"/> -->
-              <v-card
-                class="pa-2 font-weight-medium text-h6 rounded-lg"
-                label
-                color="primary"
-              >
-                {{ acc.appName }}
+              <v-card class="d-flex rounded-lg">
+                <v-chip
+                  class="pa-2 font-weight-medium text-h6 elevation-6"
+                  label
+                  v-bind="inSelectionStyle.appName"
+                  large
+                >
+                  {{ acc.appName }}
+                </v-chip>
               </v-card>
             </v-sheet>
             <v-list-item class="pa-4">
@@ -151,12 +156,36 @@ export default {
     color() {
       return this.acc.durab.status;
     },
+    appIcon() {
+      const themedColor = this.$vuetify.theme.dark ? "grey" : "grey";
+      return this.getAppIcon(this.acc.appName).replaceAll("currentColor", themedColor);
+    },
     hiddenPw() {
       let stars = "";
       for (let index = 0; index < this.acc.accountPw.length; index++) {
         stars = stars + "•";
       }
       return stars;
+    },
+    inSelectionStyle() {
+      const card = this.inSelection
+        ? {
+            text: true,
+            coloredBorder: false,
+            outlined: true,
+            class: !this.$vuetify.theme.dark ? "alc-item-selected" : "",
+            color: "primary",
+          }
+        : { text: false, coloredBorder: true, color: this.color };
+      const appName = {
+        outlined: !this.inSelection,
+        color: this.inSelection
+          ? "primary"
+          : this.$vuetify.theme.dark
+          ? "white"
+          : "black",
+      };
+      return { card, appName };
     },
   },
   methods: {
@@ -173,24 +202,13 @@ export default {
       // IN DARK MODE
       // IF selected
       // TURN card into LIGHT THEME
-      return this.$vuetify.theme.dark && this.isSelected(id);
+      return this.$vuetify.theme.dark && this.inSelection;
     },
     isSelectedInLight(id) {
       // IN LIGHT MODE
       // IF selected
       // TURN card into DARK THEME
-      return !this.$vuetify.theme.dark && this.isSelected(id);
-    },
-    getSelectedStyle(id) {
-      return this.isSelected(id)
-        ? {
-            text: true,
-            coloredBorder: false,
-            outlined: true,
-            class: !this.$vuetify.theme.dark ? "alc-item-selected" : "",
-            color: "primary",
-          }
-        : { text: false, coloredBorder: true, color: this.color };
+      return !this.$vuetify.theme.dark && this.inSelection;
     },
     dates() {
       const created = this.$date.moment(this.acc.created);
