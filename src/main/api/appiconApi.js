@@ -51,7 +51,7 @@ const wcCallback = (error, res, done, event, payload) => {
 
 
 ipcMain.on('appiconApi-get-urls', (event, payload) => {
-    console.log(payload)
+    // console.log(payload)
     // payload = JSON.parse(payload)
     webCrawler.queue(payload.appList.map((app) => {
         const iconUrl = "https://" + app.urls[0] + "/favicon.ico"

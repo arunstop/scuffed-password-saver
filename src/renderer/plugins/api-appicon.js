@@ -11,7 +11,7 @@ export default ({ store }, inject) => {
     inject('API_appicon', {
         getUrls() {
             ipcRenderer.send('appiconApi-get-urls', {
-                appList: store.state.app.appList
+                appList: store.state.app.appList.filter(e=>e.urls.length && !e.icon)
             })
             // store.dispatch('app/setIcon', '')
 
