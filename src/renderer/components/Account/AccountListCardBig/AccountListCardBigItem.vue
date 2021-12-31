@@ -14,23 +14,76 @@
           v-bind="inSelectionStyle.card"
           border="bottom"
         >
-          <v-card-text
-            class="pa-0 d-flex flex-column justify-center"
-          >
+          <v-card-text class="pa-0 d-flex flex-column justify-center">
             <v-sheet
               class="alcbi-bg rounded"
               :style="`background-image:${appIcon}`"
             >
               <v-overlay v-if="inSelection" absolute color="primary" />
-              <!-- Icon -->
-              <!-- <UtilProfile :alpha="acc.appName" :color="color" :size="90" /> -->
-              <!-- <v-img :src="require('@/assets/Reddit.png')"/> -->
-              <v-card class="d-flex rounded-lg">
+              <!-- AppName -->
+              <!-- <v-card
+                class="d-flex rounded-0 elevation-0 justify-center transparent"
+                width="100%"
+              >
+                <v-overlay
+                  absolute
+                  :color="
+                    inSelection
+                      ? 'primary'
+                      : $vuetify.theme.dark
+                      ? 'grey darken-4'
+                      : 'grey lighten-4'
+                  "
+                  opacity="0.9"
+                  z-index="0"
+                />
                 <v-chip
-                  class="pa-2 font-weight-medium text-h6 elevation-6"
+                  class="
+                    pa-2
+                    font-weight-medium
+                    text-h6
+                    elevation-0
+                    pointer-events-none
+                    user-select-none
+                    transparent
+                  "
                   label
+                  :class="
+                    inSelection
+                      ? 'white--text'
+                      : $vuetify.theme.dark
+                      ? 'grey--text text--lighten-4'
+                      : 'grey--text text--darken-4'
+                  "
+                  large
+                  style="z-index: 0"
+                >
+                  {{ acc.appName }}
+                </v-chip>
+              </v-card> -->
+              <v-card
+                class="d-flex rounded-lg elevation-2 justify-center"
+              >
+                <v-chip
+                  class="
+                    pa-2
+                    font-weight-medium
+                    text-h6
+                    elevation-0
+                    pointer-events-none
+                    user-select-none
+                  "
+                  label
+                  :class="
+                    inSelection
+                      ? 'white--text'
+                      : $vuetify.theme.dark
+                      ? 'grey--text text--lighten-4'
+                      : 'grey--text text--darken-4'
+                  "
                   v-bind="inSelectionStyle.appName"
                   large
+                  style="z-index: 0"
                 >
                   {{ acc.appName }}
                 </v-chip>
@@ -158,7 +211,10 @@ export default {
     },
     appIcon() {
       const themedColor = this.$vuetify.theme.dark ? "grey" : "grey";
-      return this.getAppIcon(this.acc.appName).replaceAll("currentColor", themedColor);
+      return this.getAppIcon(this.acc.appName).css.replaceAll(
+        "currentColor",
+        themedColor
+      );
     },
     hiddenPw() {
       let stars = "";

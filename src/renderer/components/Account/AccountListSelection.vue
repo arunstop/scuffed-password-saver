@@ -8,7 +8,7 @@
       >
         <!-- SORTING BUTTONS -->
         <div>
-          <div class="my-3 ms-4">
+          <div class="my-3">
             <v-menu>
               <template #activator="{ on, attrs }">
                 <v-btn
@@ -79,7 +79,7 @@
         <div class="ms-auto">
           <v-slide-x-transition>
             <div v-if="selectionMode" class="d-flex justify-end">
-              <div class="px-4 py-3">
+              <div class="py-3">
                 <v-btn
                   class="font-weight-bold sps-lite-transition"
                   color="error"
@@ -207,6 +207,7 @@ export default {
         selectionBox.toggle("sps-selection-opt-pinned", pinned);
         selectionBox.toggle("elevation-0", !pinned);
         selectionBox.toggle("elevation-6", pinned);
+        selectionBox.toggle("px-4", pinned);
       },
       { threshold: [1] }
     );

@@ -15,8 +15,8 @@
           border="left"
         >
           <v-list-item class="align-stretch">
-            <v-list-item-avatar>
-              <UtilProfile :alpha="acc.appName" :color="color" />
+            <v-list-item-avatar :style="`background-image:${appIcon};background-size:contain;`">
+              <!-- <UtilProfile :alpha="acc.appName" :color="color" /> -->
             </v-list-item-avatar>
             <v-list-item-content class="d-block">
               <v-list-item-title
@@ -87,6 +87,7 @@ export default {
   computed: {
     ...mapState("ui/accountList", ["selectionMode"]),
     ...mapGetters("ui/accountList", ["isSelected"]),
+    ...mapGetters("app", ["getAppIcon"]),
     ...mapState("settings", [
       "hoverToShowPw",
       "dialogToDelete",
@@ -105,6 +106,13 @@ export default {
         stars = stars + "•";
       }
       return stars;
+    },
+    appIcon() {
+      const themedColor = this.$vuetify.theme.dark ? "grey" : "grey";
+      return this.getAppIcon(this.acc.appName).css.replaceAll(
+        "currentColor",
+        themedColor
+      );
     },
   },
   methods: {

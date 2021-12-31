@@ -19,7 +19,7 @@
         <v-card-text class="pt-4">
           <v-combobox
             v-model="appName"
-            :items="getAppList()"
+            :items="appList"
             :rules="appNameRules"
             :search-input.sync="appNameSearch"
             item-text="name"
@@ -32,7 +32,13 @@
           >
             <template #item="data">
               <v-list-item-avatar>
-                <UtilProfile :alpha="data.item.name" :color="'primary'" />
+                <!-- <UtilProfile :alpha="data.item.name" :color="'primary'" /> -->
+                <v-img
+                  :style="`background-image:${data.item.iconProcessed};background-size:contain;`"
+                  width="100%"
+                  height="100%"
+                >
+                </v-img>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>
@@ -74,7 +80,7 @@
             prepend-icon="mdi-tag"
             clearable
           >
-          <template v-if="(accTagsSearch||'').trim()!==''" #no-data>
+            <template v-if="(accTagsSearch || '').trim() !== ''" #no-data>
               <v-list-item>
                 <span class="subtitle-1">Add</span>
                 <v-chip class="mx-2 white--text" small label color="indigo">
@@ -88,7 +94,8 @@
                 v-bind="attrs"
                 class="white--text"
                 close
-                small label
+                small
+                label
                 color="indigo"
                 @click:close="accTagsDeleteItem(item)"
               >
@@ -148,7 +155,12 @@ export default {
   }),
   computed: {
     ...mapGetters("app", ["getAppByName", "getAppList"]),
-    ...mapGetters("account", ["isAccountExist", "countPwDuplicates","getTagList"]),
+    ...mapGetters("account", [
+      "isAccountExist",
+      "countPwDuplicates",
+      "getTagList",
+    ]),
+    ...mapGetters("app", ["getAppIcon"]),
     ...mapState("settings", ["reminderFreq", "pwDuplication"]),
     accountAddDialog: {
       get() {
@@ -157,6 +169,18 @@ export default {
       set(v) {
         this.hideDialog();
       },
+    },
+    appList() {
+      const appIcon = (name) => {
+        const themedColor = this.$vuetify.theme.dark ? "grey" : "grey";
+        return this.getAppIcon(name).css.replaceAll(
+          "currentColor",
+          themedColor
+        );
+      };
+      return this.getAppList().map((e) => {
+        return { ...e, iconProcessed: appIcon(e.name) };
+      });
     },
     appNameRules: () => [
       // IF appName is falsey (null,0,undefined) then it's error
@@ -218,7 +242,7 @@ export default {
         };
       }
       return null;
-    }
+    },
   },
   watch: {
     appName(v) {
@@ -250,7 +274,7 @@ export default {
     },
     accTagsDeleteItem(tag) {
       this.accountTags = this.accountTags.filter((e) => e !== tag);
-      this.accountTagsSearch=''
+      this.accountTagsSearch = "";
     },
     accountAdd() {
       this.$refs.formAccountAdd.validate();
@@ -273,7 +297,7 @@ export default {
           appName: targetedApp,
           accountId: this.accountId,
           accountPw: this.accountPw,
-          accountTags: require('lodash').compact(this.accountTags),
+          accountTags: require("lodash").compact(this.accountTags),
           accountNote: this.accountNote,
         });
         // this.$store.dispatch("ui/showSnackbar", {

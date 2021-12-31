@@ -1,15 +1,23 @@
 <template>
   <v-expansion-panel
-  :readonly="!app.urls.length"
-    :class="
-      !app.urls.length &&
-      'v-alert--border v-alert--text warning--text'
-    "
+    :readonly="!app.urls.length"
+    :class="!app.urls.length && 'v-alert--border v-alert--text warning--text'"
     active-class="v-alert--border v-alert--outlined v-alert--text primary--text"
   >
     <v-expansion-panel-header>
       <div class="d-flex align-center">
-        <div class="font-weight-medium">{{ app.name }}</div>
+        <v-list-item class="ps-0">
+          <v-list-item-avatar
+            rounded="0"
+            :style="`background-image:${
+              getAppIcon(app.name).css.replaceAll('currentColor', 'grey')
+            };background-size:contain;`"
+          >
+          </v-list-item-avatar>
+          <v-list-item-title>
+            {{ app.name }}
+          </v-list-item-title>
+        </v-list-item>
         <v-spacer />
         <v-btn class="me-1" icon small color="primary" @click.stop="click()">
           <v-icon>mdi-pencil</v-icon>
@@ -50,6 +58,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   props: {
     app: { type: Object, default: () => {} },
@@ -62,6 +71,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters("app", ["getAppIcon"]),
     color() {
       return this.app.urls.toString() ? "primary" : "warning";
     },

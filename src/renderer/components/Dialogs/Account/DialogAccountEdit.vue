@@ -52,7 +52,7 @@
           </v-alert>
           <v-combobox
             v-model="appName"
-            :items="getAppList()"
+            :items="appList"
             :rules="appNameRules"
             :search-input.sync="appNameSearch"
             item-text="name"
@@ -65,7 +65,13 @@
           >
             <template #item="data">
               <v-list-item-avatar>
-                <UtilProfile :alpha="data.item.name" :color="'primary'" />
+                <!-- <UtilProfile :alpha="data.item.name" :color="'primary'" /> -->
+                <v-img
+                  :style="`background-image:${data.item.iconProcessed};background-size:contain;`"
+                  width="100%"
+                  height="100%"
+                >
+                </v-img>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>
@@ -189,6 +195,7 @@ export default {
       "countPwDuplicates",
       "getTagList",
     ]),
+    ...mapGetters("app", ["getAppIcon"]),
     ...mapState("account", ["accountEditValue"]),
     ...mapState("settings", ["reminderFreq", "pwDuplication"]),
     accountEditDialog: {
@@ -198,6 +205,18 @@ export default {
       set(v) {
         this.hideDialog();
       },
+    },
+    appList() {
+      const appIcon = (name) => {
+        const themedColor = this.$vuetify.theme.dark ? "grey" : "grey";
+        return this.getAppIcon(name).css.replaceAll(
+          "currentColor",
+          themedColor
+        );
+      };
+      return this.getAppList().map((e) => {
+        return { ...e, iconProcessed: appIcon(e.name) };
+      });
     },
     appNameRules: () => [
       // IF appName is falsey (null,0,undefined) then it's error

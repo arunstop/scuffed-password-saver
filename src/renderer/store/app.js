@@ -19,7 +19,10 @@ export const getters = {
   getAppIcon: (state, getters) => (name) => {
     const appiconDefaultSvg = require('~/assets/appicon-default-svg.json').val
     const icon = state.appList.find(e => e.name.toLowerCase().trim() === name.toLowerCase().trim())?.icon
-    return icon ? `url(${icon}), url(${appiconDefaultSvg})` : `url(${appiconDefaultSvg})`;
+    return {
+      css : icon ? `url(${icon}), url(${appiconDefaultSvg})` : `url(${appiconDefaultSvg})`,
+      raw : icon || ''
+    }
   },
   getAppListByAccount: (state, getters, rootState) => () => {
     const accList = _.uniqBy(rootState.account.accountList.map(e => ({ name: e.appName, urls: '' })), 'name')

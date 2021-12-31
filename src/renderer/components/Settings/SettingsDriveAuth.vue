@@ -115,7 +115,7 @@
                         outlined
                       >
                         <v-list-item>
-                          <v-list-item-avatar>
+                          <v-list-item-avatar color="secondary">
                             <v-img :src="gapiProfile.picture" sizes="40px" />
                           </v-list-item-avatar>
                           <v-list-item-content>
