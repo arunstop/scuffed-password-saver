@@ -1,7 +1,7 @@
 <template>
   <v-chip
     v-if="countAccountByApp(app.name)"
-    class="mx-1 my-2 font-weight-bold"
+    class="me-2 mb-2 font-weight-bold"
     :class="isSearched ? 'white--text' : ''"
     :color="color"
     label

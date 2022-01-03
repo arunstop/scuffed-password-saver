@@ -8,7 +8,7 @@ const webCrawler = new Crawler({
 
 const mainCallback = (event, name, url) => {
     event.reply('appiconApi-get-urls-callback',
-        JSON.stringify({ name, url })
+        JSON.stringify({ name, url:url||'failed' })
     )
 }
 

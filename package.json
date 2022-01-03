@@ -1,6 +1,6 @@
 {
   "name": "scuffed-password-saver",
-  "version": "0.0.65",
+  "version": "0.0.66",
   "description": "Scuffed Password Saver",
   "main": "./dist/main/index.js",
   "scripts": {
@@ -56,6 +56,8 @@
     "eslint-plugin-nuxt": "^2.0.0",
     "googleapis": "^91.0.0",
     "json-to-txt": "^2.1.1",
+    "lodash": "^4.17.21",
+    "mitt": "^3.0.0",
     "moment": "^2.29.1",
     "nanoid": "^3.1.30",
     "papaparse": "^5.3.1",

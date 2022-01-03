@@ -95,9 +95,9 @@ export const mutations = {
     state.appList = state.appList.concat(newApps)
   },
   SET_ICON(state, payload) {
-    // console.log(payload)
+    // select the taget
     const target = state.appList.find(e => e.name === payload.name)
-    // set icon
+    // set icon from payload url
     target.icon = payload.url
     console.log(target)
     state.appList = state.appList.filter(e => e.name !== payload.name)

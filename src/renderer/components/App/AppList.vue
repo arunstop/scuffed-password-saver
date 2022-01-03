@@ -41,6 +41,21 @@
             />
           </v-expansion-panels>
         </v-row>
+        <v-overlay v-if="isGettingIcons" absolute>
+          <v-card>
+            <v-card-text>
+              <v-btn
+                v-for="app in loadingAppList"
+                :key="app.name"
+                class="text-none me-2 mb-2"
+                v-bind="loadingAppStyle(app.icon)"
+              >
+                {{ app.name }}
+              </v-btn>
+              <v-btn @click="toggleIsGettingIcons()">STOP</v-btn>
+            </v-card-text>
+          </v-card>
+        </v-overlay>
       </template>
     </DialogBigTemplate>
   </div>
@@ -48,14 +63,30 @@
 
 <script>
 import { mapGetters, mapActions, mapState } from "vuex";
+import _ from "lodash";
 
 export default {
   data: () => ({
     dialogType: "APP_LIST_DIALOG",
+    isGettingIcons: false,
+    loadingAppList: [],
   }),
   computed: {
     ...mapGetters("ui", ["isDialogActive"]),
     ...mapGetters("app", ["getUrllessApp"]),
+  },
+  mounted() {
+    this.$nuxt.$on("app-list-set-icon", (payload) => {
+      // alert(payload.name)
+      const target = this.loadingAppList.find((e) => e.name === payload.name);
+      target.icon = payload.url;
+      // console.log(target)
+      this.$store.dispatch('app/setIcon', target)
+      // Check if all app is processed
+      if(!this.loadingAppList.filter((e) => e.urls.length && !e.icon).length){
+        // this.loadingAppList=[]
+      }
+    });
   },
   methods: {
     act() {
@@ -87,8 +118,31 @@ export default {
       this.$store.dispatch("app/deleteApp", name);
     },
     getIcons() {
-      console.log(this.$store.state.app.appList);
-      this.$API_appicon.getUrls();
+      // console.log(this.$store.state.app.appList);
+      // Get list of app that has no icon but has links
+      const iconlessAppList = this.$store.state.app.appList.filter(
+        (e) => e.urls.length && !e.icon
+      );
+      this.loadingAppList = _.cloneDeep(iconlessAppList);
+      // setTimeout(() => {
+      //   this.$nuxt.$emit("app-list-set-icon", { name: "Steam" });
+      //   this.$nuxt.$emit("app-list-set-icon", { name: "Outlook" });
+      //   this.$nuxt.$emit("app-list-set-icon", { name: "Protonmail" });
+      // }, 1212);
+      this.$API_appicon.getUrls(iconlessAppList);
+      this.toggleIsGettingIcons();
+    },
+    toggleIsGettingIcons() {
+      this.isGettingIcons = !this.isGettingIcons;
+    },
+    loadingAppStyle(icon) {
+      return {
+        // if failed color = error
+        // if sucess color = green
+        // if waiting color = default (black)
+        color: icon === "failed" ? "error" : icon ? "success" : "",
+        loading: !icon,
+      };
     },
   },
 };
