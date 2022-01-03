@@ -98,7 +98,7 @@ export const mutations = {
     // select the taget
     const target = state.appList.find(e => e.name === payload.name)
     // set icon from payload url
-    target.icon = payload.url
+    target.icon = payload.icon
     console.log(target)
     state.appList = state.appList.filter(e => e.name !== payload.name)
     state.appList.push(target)
