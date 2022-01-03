@@ -95,7 +95,8 @@ export const mutations = {
     state.appList = state.appList.concat(newApps)
   },
   SET_ICON(state, payload) {
-    // select the taget
+    // select the target
+    if(payload.icon === "failed") return
     const target = state.appList.find(e => e.name === payload.name)
     // set icon from payload url
     target.icon = payload.icon
