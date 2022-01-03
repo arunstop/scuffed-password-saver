@@ -59,11 +59,12 @@
         <v-slide-x-reverse-transition>
           <v-btn
             v-if="$store.state.account.filterByAppList.length"
-            class="ms-1 my-auto font-weight-black"
+            class="font-weight-black"
             color="error"
             small
             outlined
             rounded
+            height="32"
             @click="removeFilterByApp('*')"
           >
             Clear
