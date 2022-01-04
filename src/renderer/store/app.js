@@ -96,7 +96,7 @@ export const mutations = {
   },
   SET_ICON(state, payload) {
     // select the target
-    if(payload.icon === "failed") return
+    // if(payload.icon === "failed") return
     const target = state.appList.find(e => e.name === payload.name)
     // set icon from payload url
     target.icon = payload.icon

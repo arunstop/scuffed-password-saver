@@ -16,6 +16,7 @@
           />
           <v-textarea
             v-model="appUrls"
+            autofocus
             placeholder="Enter app or website url, press Enter to add another one"
             label="URL (optional)"
             outlined

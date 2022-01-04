@@ -2,8 +2,8 @@ const Crawler = require('crawler');
 const { ipcMain } = require('electron');
 
 const webCrawler = new Crawler({
-    maxConnections: 10,
-    retries: 1,
+    maxConnections: 3,
+    retries: 0,
 })
 
 const mainCallback = (event, name, url) => {

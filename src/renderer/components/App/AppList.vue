@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn color="success" @click="doShowAppListDialog()">
+    <v-btn color="success" @click="showDialog()">
       <v-icon left>mdi-application-outline</v-icon>
       Application List
     </v-btn>
@@ -22,7 +22,10 @@
           Add them by clicking the items below.
           <br />
         </v-alert>
-        <v-btn @click="getIcons()"> GET ICONS </v-btn>
+        <v-btn class="mb-4" @click="getIcons()">
+          GET ICONS
+          <v-icon class="ms-2">mdi-download</v-icon>
+        </v-btn>
         <!-- <v-row no-gutters align="center" justify="space-around">
           <AppCard
             v-for="app in $store.state.app.appList"
@@ -34,28 +37,59 @@
         <v-row justify="center" no-gutters>
           <v-expansion-panels accordion inset>
             <AppItem
-              v-for="app in $store.state.app.appList"
+              v-for="app in appList"
               :key="app.name + '0'"
               :app="app"
               :click="() => openAppEditDialog(app.name)"
             />
           </v-expansion-panels>
         </v-row>
-        <v-overlay v-if="isGettingIcons" absolute>
+        <v-dialog v-model="isGettingIcons" width="520" scrollable persistent>
           <v-card>
-            <v-card-text>
-              <v-btn
+            <v-card-title>Getting icons please wait...</v-card-title>
+            <v-card-text
+              class="d-flex justify-center align-content-center flex-wrap"
+              style="height: 300px"
+            >
+              <!-- <v-btn
                 v-for="app in loadingAppList"
                 :key="app.name"
                 class="text-none me-2 mb-2"
                 v-bind="loadingAppStyle(app.icon)"
               >
                 {{ app.name }}
-              </v-btn>
-              <v-btn @click="toggleIsGettingIcons()">STOP</v-btn>
+              </v-btn> -->
+              <AppItemIconLoading
+                v-for="app in loadingAppList"
+                :key="app.name"
+                :app="app"
+              />
             </v-card-text>
+            <v-card-actions class="d-flex pa-4 pt-0 justify-center">
+              <v-btn
+                v-if="isDone"
+                class=""
+                outlined
+                tabindex="-1"
+                @click="toggleIsGettingIcons()"
+              >
+                Done
+              </v-btn>
+              <v-btn
+                v-else
+                class=""
+                color="primary"
+                @click="
+                  () => {
+                    hideDialog();
+                  }
+                "
+              >
+                Run in Background
+              </v-btn>
+            </v-card-actions>
           </v-card>
-        </v-overlay>
+        </v-dialog>
       </template>
     </DialogBigTemplate>
   </div>
@@ -70,32 +104,43 @@ export default {
     dialogType: "APP_LIST_DIALOG",
     isGettingIcons: false,
     loadingAppList: [],
+    isDone: false,
   }),
   computed: {
     ...mapGetters("ui", ["isDialogActive"]),
     ...mapGetters("app", ["getUrllessApp"]),
+    appList() {
+      return _.sortBy(this.$store.state.app.appList, [(e)=>e.urls.length, "name"]);
+    },
   },
   mounted() {
     this.$nuxt.$on("app-list-set-icon", (payload) => {
       // alert(payload.name)
       const target = this.loadingAppList.find((e) => e.name === payload.name);
+      // end if target not found
+      if(!target) return
+      // console.log(target);
       target.icon = payload.url;
       // console.log(target)
-      this.$store.dispatch('app/setIcon', target)
+      if (payload.url !== "failed") this.$store.dispatch("app/setIcon", target);
+
       // Check if all app is processed
-      if(!this.loadingAppList.filter((e) => e.urls.length && !e.icon).length){
-        // this.loadingAppList=[]
+      if (!this.loadingAppList.filter((e) => e.urls.length && !e.icon).length) {
+        this.isDone=true
       }
     });
   },
   methods: {
-    act() {
-      alert("act");
-    },
-    doShowAppListDialog() {
+    showDialog() {
       this.$store.dispatch("ui/toggleDialog", {
         type: this.dialogType,
         val: true,
+      });
+    },
+    hideDialog() {
+      this.$store.dispatch("ui/toggleDialog", {
+        type: this.dialogType,
+        val: false,
       });
     },
     ...mapActions("ui", ["toggleDialog"]),
@@ -118,9 +163,10 @@ export default {
       this.$store.dispatch("app/deleteApp", name);
     },
     getIcons() {
+      this.isDone=false
       // console.log(this.$store.state.app.appList);
       // Get list of app that has no icon but has links
-      const iconlessAppList = this.$store.state.app.appList.filter(
+      const iconlessAppList = this.appList.filter(
         (e) => e.urls.length && !e.icon
       );
       this.loadingAppList = _.cloneDeep(iconlessAppList);
@@ -129,20 +175,11 @@ export default {
       //   this.$nuxt.$emit("app-list-set-icon", { name: "Outlook" });
       //   this.$nuxt.$emit("app-list-set-icon", { name: "Protonmail" });
       // }, 1212);
-      this.$API_appicon.getUrls(iconlessAppList);
       this.toggleIsGettingIcons();
+      this.$API_appicon.getUrls(iconlessAppList);
     },
     toggleIsGettingIcons() {
       this.isGettingIcons = !this.isGettingIcons;
-    },
-    loadingAppStyle(icon) {
-      return {
-        // if failed color = error
-        // if sucess color = green
-        // if waiting color = default (black)
-        color: icon === "failed" ? "error" : icon ? "success" : "",
-        loading: !icon,
-      };
     },
   },
 };

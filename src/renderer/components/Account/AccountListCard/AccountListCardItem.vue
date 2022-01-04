@@ -15,7 +15,7 @@
           border="left"
         >
           <v-list-item class="align-stretch">
-            <v-list-item-avatar :style="`background-image:${appIcon};background-size:contain;`">
+            <v-list-item-avatar rounded="lg" :style="`background-image:${appIcon};background-size:contain;`">
               <!-- <UtilProfile :alpha="acc.appName" :color="color" /> -->
             </v-list-item-avatar>
             <v-list-item-content class="d-block">
