@@ -171,3 +171,7 @@ body {
 -ms-user-select: none; /* IE10+/Edge */
 user-select: none; /* Standard */
 }
+
+.z-index-0{
+  z-index: 1 !important;
+}

@@ -1,5 +1,5 @@
 <template>
-  <div class="snackbar-container mb-4" no-gutters style="z-index: 203 !important">
+  <div class="snackbar-container mb-4" no-gutters style="z-index: 210 !important">
     <v-scale-transition
       group
       class="d-flex flex-column flex-column-reverse align-center px-2"

@@ -11,7 +11,7 @@
         {{ title }}
         <UtilDialogCloseBtn :action="() => hideDialog()" />
       </v-card-title>
-      <v-card-text class="mt-4">
+      <v-card-text class="pt-4">
         <slot name="body" />
         <v-card-actions v-if="!noAction" class="d-flex px-0">
           <v-btn

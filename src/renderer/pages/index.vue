@@ -5,10 +5,6 @@
         <v-icon left>mdi-lock</v-icon>
         Save New Account
       </v-btn>
-      <v-btn class="me-4 mt-4" color="primary" @click.stop="openAppAddDialog()">
-        <v-icon left>mdi-plus</v-icon>
-        Add New Application
-      </v-btn>
       <AppList class="me-4 mt-4" />
     </div>
 
@@ -38,9 +34,6 @@ export default {
     //     color: "success",
     //   });
     // },
-    openAppAddDialog () {
-      this.toggleDialog({ type: 'APP_ADD_DIALOG', val: true })
-    },
     openAppEditDialog (name) {
       this.toggleDialog({ type: 'APP_EDIT_DIALOG', val: true, name })
     },
