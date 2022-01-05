@@ -83,7 +83,7 @@ export default {
 
       return new Timer(() => {
         this.removeSnackbar()
-      }, 4343)
+      }, 43433)
     },
     removeSnackbar () {
       // alert(123);

@@ -283,7 +283,7 @@ export default {
         let targetedApp = this.getAppByName(this.appNameSearch);
         if (!targetedApp) {
           // NO = adding the app first
-          alert("add first");
+          // alert("add first");
           targetedApp = this.appNameSearch;
           this.$store.dispatch("app/addApp", {
             name: targetedApp,

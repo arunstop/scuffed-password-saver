@@ -1,67 +1,67 @@
 [
     {
         "name": "Google",
-        "urls": ["www.google.com"],
+        "urls": ["google.com"],
         "icon": ""
     },
     {
         "name": "Facebook",
-        "urls": ["www.facebook.com"],
+        "urls": ["facebook.com"],
         "icon": ""
     },
     {
         "name": "Instagram",
-        "urls": ["www.instagram.com"],
+        "urls": ["instagram.com"],
         "icon": ""
     },
     {
         "name": "Twitter",
-        "urls": ["www.twitter.com"],
+        "urls": ["twitter.com"],
         "icon": ""
     },
     {
         "name": "Steam",
-        "urls": ["www.steamcommunity.com"],
+        "urls": ["store.steampowered.com"],
         "icon": ""
     },
     {
         "name": "Outlook",
-        "urls": ["www.outlook.live.com"],
+        "urls": ["outlook.live.com"],
         "icon": ""
     },
     {
         "name": "Discord",
-        "urls": ["www.discord.com"],
+        "urls": ["discord.com"],
         "icon": ""
     },
     {
         "name": "Github",
-        "urls": ["www.github.com"],
+        "urls": ["github.com"],
         "icon": ""
     },
     {
         "name": "Reddit",
-        "urls": ["www.reddit.com"],
+        "urls": ["reddit.com"],
         "icon": ""
     },
     {
         "name": "Gitlab",
-        "urls": ["www.gitlab.com"],
+        "urls": ["gitlab.com"],
         "icon": ""
     },
     {
         "name": "Protonmail",
-        "urls": ["www.protonmail.com"],
+        "urls": ["protonmail.com"],
         "icon": ""
     },
     {
         "name": "Twitch",
-        "urls": ["www.twitch.com"],
+        "urls": ["twitch.com"],
         "icon": ""
     },
     {
         "name": "Figma",
-        "urls": ["www.figma.com"],
+        "urls": ["figma.com"],
         "icon": ""
     }
 ]

@@ -44,11 +44,11 @@
             />
           </v-expansion-panels>
         </v-row>
-        <v-dialog v-model="isGettingIcons" width="520" scrollable persistent>
+        <v-dialog v-model="isGettingIcons" width="520" scrollable>
           <v-card>
             <v-card-title>Getting icons please wait...</v-card-title>
             <v-card-text
-              class="d-flex justify-center align-content-center flex-wrap"
+              class="d-flex"
               style="height: 300px"
             >
               <!-- <v-btn
@@ -59,13 +59,15 @@
               >
                 {{ app.name }}
               </v-btn> -->
-              <AppItemIconLoading
+              <div class="d-flex justify-center flex-wrap ma-auto">
+                <AppItemIconLoading
                 v-for="app in loadingAppList"
                 :key="app.name"
                 :app="app"
               />
+              </div>
             </v-card-text>
-            <v-card-actions class="d-flex pa-4 pt-0 justify-center">
+            <v-card-actions class="d-flex pa-4 justify-center">
               <v-btn
                 v-if="isDone"
                 class=""
@@ -127,6 +129,12 @@ export default {
       // Check if all app is processed
       if (!this.loadingAppList.filter((e) => e.urls.length && !e.icon).length) {
         this.isDone=true
+        this.$store.dispatch('ui/showSnackbar',
+        {
+          label: `Icons successfully loaded`,
+          color: 'success'
+        }
+      )
       }
     });
   },
