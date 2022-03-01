@@ -243,6 +243,12 @@ export default {
   created() {
     this.gapiTokenModel = "";
     // console.log(this.$store.state.settings.gapiToken.access_token)
+    this.$nuxt.$on("showDriveAuthDialog", () => {
+      this.dialog = !this.dialog;
+    });
+  },
+  beforeDestroy() {
+    this.$nuxt.$off("showDriveAuthDialog");
   },
   methods: {
     hideDialog() {

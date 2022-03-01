@@ -189,11 +189,21 @@ export default {
           });
         } else if (this.destinationModel === "g-drive") {
           // If google drive
-          // this.$API_gdrive.getEmail();
+
+          if (this.$store.state.settings.gapiToken === "") {
+            this.$store.dispatch("ui/showSnackbar", {
+              label: "Google account needs to be set first.",
+              color: "error",
+            });
+            this.$nuxt.$emit("showDriveAuthDialog");
+            this.toggleDialog();
+            return;
+          }
+
           this.$API_gdrive.backupToDrive(
             ext,
             normalizeProps(this.$store.state.account.accountList),
-            (error=null,result) => {
+            (error = null, result) => {
               if (error) {
                 this.$store.dispatch("ui/showSnackbar", {
                   label: error,

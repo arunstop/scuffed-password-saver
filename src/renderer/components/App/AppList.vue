@@ -25,7 +25,7 @@
         </v-alert>
         <!-- BTN GET ICONS  -->
         <v-badge
-        class="z-index-0"
+          class="z-index-1"
           :value="iconlessAppList.length"
           bordered
           overlap
@@ -189,14 +189,8 @@ export default {
     },
     getIcons() {
       this.isDone = false;
-      // console.log(this.$store.state.app.appList);
       // Get list of app that has no icon but has links
       this.loadingAppList = _.cloneDeep(this.iconlessAppList);
-      // setTimeout(() => {
-      //   this.$nuxt.$emit("app-list-set-icon", { name: "Steam" });
-      //   this.$nuxt.$emit("app-list-set-icon", { name: "Outlook" });
-      //   this.$nuxt.$emit("app-list-set-icon", { name: "Protonmail" });
-      // }, 1212);
       this.toggleIsGettingIcons();
       this.$API_appicon.getUrls(this.iconlessAppList);
     },

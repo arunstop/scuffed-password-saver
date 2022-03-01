@@ -20,7 +20,7 @@ module.exports = {
     // StandardJS — The Rules
     // indent: ['error', 2], // 2 spaces – for indentation
     'max-len': ['error', { code: 120 }],
-    'no-console': 'off',
+    'no-console': 1,
     // 'arrow-parens': ['error', 'as-needed'],
     // curly: ['error', 'multi-line'],
     'import/no-extraneous-dependencies': 'off',
@@ -38,7 +38,7 @@ module.exports = {
     'vue/valid-v-slot': ['error', {
       allowModifiers: true,
     }],
-    'no-unused-vars': 'off',
+    'no-unused-vars': 1,
   }
 }
 
