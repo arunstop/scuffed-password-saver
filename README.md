@@ -21,7 +21,7 @@
 
 #### You can download the app here : [Scuffed Password Saver v0.0.68](https://github.com/arunstop/scuffed-password-saver/releases/download/v0.0.68-alpha/setup-scuffed-password-saver-0.0.68.exe)
 
-#### All releases : [SCUFFED Password Saver v0.0.68](https://github.com/arunstop/scuffed-password-saver/releases)
+#### All releases : [All versions](https://github.com/arunstop/scuffed-password-saver/releases)
 
 ---
 
