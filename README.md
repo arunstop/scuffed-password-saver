@@ -1,24 +1,25 @@
 # scuffed-password-saver
 
-> Scuffed Password Saver
+> Scuffed Password Saver is an app that manages your accounts and passwords. This runs purely on your computer so, it is 100% safe, though uploading/storing your data to your Google Drive is optional, just one click, your local account data will be saved in your Google Drive account.
 
-#### Build Setup
+#### Features
 
 ``` bash
-# install dependencies
-yarn install
-
-# serve app with hot reload
-yarn run dev
-
-# build electron application for production
-yarn run build
-
-
-# lint all JS/Vue component files in `src/`
-yarn run lint
-
+- Local backup
+- Google Drive backup
+- Account grouping by app
+- Account grouping by tag
+- Password age reminder
+- And more...
 ```
+
+#### Tech Stack :
+- Vue.js
+- Electron.js
+- Vuetify
+- Nuxt.js
+
+#### You can download the app here : 
 
 ---
 
