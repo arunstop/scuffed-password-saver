@@ -1,6 +1,6 @@
-# scuffed-password-saver
+# SCUFFED Password Saver
 
-> Scuffed Password Saver is an app that manages your accounts and passwords. This runs purely on your computer so, it is 100% safe, though uploading/storing your data to your Google Drive is optional, just one click, your local account data will be saved in your Google Drive account.
+> SCUFFED Password Saver is an app that manages your accounts and passwords. This runs purely on your computer so, it is 100% safe, though uploading/storing your data to your Google Drive is optional, just one click, your local account data will be saved in your Google Drive account.
 
 #### Features
 
@@ -21,7 +21,7 @@
 
 #### You can download the app here : [Scuffed Password Saver v0.0.68](https://github.com/arunstop/scuffed-password-saver/releases/download/v0.0.68-alpha/setup-scuffed-password-saver-0.0.68.exe)
 
-#### All releases : [Scuffed Password Saver v0.0.68](https://github.com/arunstop/scuffed-password-saver/releases)
+#### All releases : [SCUFFED Password Saver v0.0.68](https://github.com/arunstop/scuffed-password-saver/releases)
 
 ---
 
