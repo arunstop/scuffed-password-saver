@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+            "label": "Yarn run build",
+            "type": "shell",
+            "command": "yarn run build",
+            "args": [],
+            "group": "build",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": "$msCompile"
+        },
+	]
+}
