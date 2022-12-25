@@ -18,10 +18,13 @@
 #### What Did I Learn ?
 
 - Nuxt ecosystem
-- Advanced Vue.js
+- Further understanding of more advanced Vue.js
 - Integrating Electron.js with Vue.js/Nuxt
-- Doing Web Crawling with Electron.js
-- Using Vuetify efficiently as your main UI framework
+- Implementing read/write file with Electron.js
+- Integrating Google Auth with an Electron app
+- Integrating Google Drive API file management (CRUD) with Electron App
+- Implementing Web Crawling with Electron.js
+- Implementing Vuetify efficiently as your main UI framework
 
 #### Tech Stack :
 - Vue.js
